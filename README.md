@@ -33,16 +33,16 @@ Here are step-by-step instructions for setting up and running the project locall
 git clone https://github.com/your-username/eCommerceApp.git
 
 2. **Navigate to the project directory**: 
-cd eCommerceApp
+`cd eCommerceApp`
 
 3. **Install dependencies**: 
-npm install
+`npm install`
 
 4. **To build the project for production**: 
-npm run build
+`npm run build`
 
 5. **To start a development server**: 
-npm run dev
+`npm run dev`
 
 ### Additional Notes:
 
