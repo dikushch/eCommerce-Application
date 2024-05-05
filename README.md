@@ -30,7 +30,7 @@ We have several scripts available to facilitate development, testing, and deploy
 
 Here are step-by-step instructions for setting up and running the project locally:
 1. **Clone the repository to your local machine**: 
-`git clone https://github.com/your-username/eCommerceApp.git`
+`https://github.com/dikushch/eCommerce-Application.git`
 
 2. **Navigate to the project directory**: 
 `cd eCommerceApp`
