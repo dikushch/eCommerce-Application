@@ -33,7 +33,7 @@ Here are step-by-step instructions for setting up and running the project locall
 `https://github.com/dikushch/eCommerce-Application.git`
 
 2. **Navigate to the project directory**: 
-`cd eCommerceApp`
+`cd eCommerce-Application`
 
 3. **Install dependencies**: 
 `npm install`
