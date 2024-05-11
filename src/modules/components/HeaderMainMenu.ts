@@ -39,6 +39,13 @@ export default class HeaderMainMenu extends BaseComponent {
       this.aboutLink,
     );
 
-    this.appendChildren([mainLinkLi, catalogLinkLi, aboutLinkLi]);
+    const list = new BaseComponent(
+      { tag: 'ul', classes: ['nav__list'] },
+      mainLinkLi,
+      catalogLinkLi,
+      aboutLinkLi,
+    );
+
+    this.append(list);
   }
 }
