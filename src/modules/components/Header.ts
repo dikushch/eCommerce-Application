@@ -9,7 +9,7 @@ export default class Header extends BaseComponent {
   userMenu: HeaderUserMenu;
 
   constructor() {
-    super({ tag: 'heeader', classes: ['header'] });
+    super({ tag: 'heeader', classes: ['header', 'container'] });
     const logo = new HeaderLogo();
     this.mainMenu = new HeaderMainMenu();
     this.userMenu = new HeaderUserMenu();
