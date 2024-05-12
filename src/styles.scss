@@ -47,13 +47,63 @@ ul {
   }
 }
 
+.brg {
+  justify-self: end;
+  width: 50px;
+  height: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: $c-accent;
+    transform-origin: center;
+    transition: width 0.2s ease-out, transform 0.2s ease-out;
+  }
+  &::before {
+    align-self: flex-end;
+    width: 70%;
+  }
+  &.open {
+    gap: 0;
+    &::after {
+      transform: rotate(-45deg);
+    }
+    &::before {
+      width: 100%;
+      transform: rotate(45deg);
+    }
+  }
+}
+
 .header {
   width: 100%;
-  display: flex;
+  border-bottom: 1px solid $c-accent;
+  background-color: $c-bg;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
   align-items: center;
-  justify-content: space-between;
+  grid-template-areas: "logo m-nav u-nav";
+  @media (max-width: 768px) {
+    gap: 0;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: "logo brg" "m-nav m-nav" "u-nav u-nav";
+  }
 
   &__logo {
+    grid-area: logo;
+    justify-self: start;
     height: 50px;
     svg {
       width: 120px;
@@ -63,11 +113,25 @@ ul {
 }
 
 .nav {
+  grid-area: m-nav;
+  justify-self: center;
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-out;
+    &.open {
+      grid-template-rows: 1fr;
+    }
+  }
   &__list {
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 
   &__item {
@@ -107,16 +171,42 @@ ul {
 }
 
 .u-links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
+  grid-area: u-nav;
+  justify-self: end;
+  
+  @media (max-width: 768px) {
+    justify-self: center;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease-out;
+    &.open {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      overflow: hidden;
+      span {
+        display: none;
+      }
+    }
+  }
 
   &__box {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
 
     &.hide {
       display: none;
