@@ -1,6 +1,6 @@
 import BaseComponent from './BaseComponent';
 
-export default class Label extends BaseComponent<HTMLButtonElement> {
+export default class Label extends BaseComponent<HTMLLabelElement> {
   constructor(props: {
     forStr: string;
     text?: string;
