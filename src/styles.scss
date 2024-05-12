@@ -25,6 +25,8 @@ body {
   font-weight: 400;
   font-size: 16px;
   background-color: $c-bg;
+  position: relative;
+  padding: 70px 0 0 0;
 }
 
 a {
@@ -87,6 +89,12 @@ ul {
 }
 
 .header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+
   width: 100%;
   border-bottom: 1px solid $c-accent;
   background-color: $c-bg;
