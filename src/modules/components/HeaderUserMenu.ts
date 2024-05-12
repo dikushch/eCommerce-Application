@@ -12,7 +12,7 @@ export default class HeaderUserMenu extends BaseComponent {
   logout: BaseComponent;
 
   constructor() {
-    super({ tag: 'ul', classes: ['header__user-links', 'u-links'] });
+    super({ tag: 'nav', classes: ['header__user-links', 'u-links'] });
     this.cart = new BaseComponent({
       tag: 'a',
       text: 'cart',
@@ -62,6 +62,14 @@ export default class HeaderUserMenu extends BaseComponent {
       this.logout,
     );
 
-    this.appendChildren([this.cart, devider1, unregLinks, regLinks]);
+    const container = new BaseComponent(
+      { classes: ['u-links__container'] },
+      this.cart,
+      devider1,
+      unregLinks,
+      regLinks,
+    );
+
+    this.append(container);
   }
 }
