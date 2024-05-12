@@ -21,5 +21,15 @@ export default class Header extends BaseComponent {
     this.append(this.mainMenu);
     this.append(this.userMenu);
     this.append(this.brg);
+
+    this.brg.addListener('click', () => {
+      this.openMenu();
+    });
+  }
+
+  openMenu(): void {
+    this.brg.toggleClass('open');
+    this.mainMenu.toggleClass('open');
+    this.userMenu.toggleClass('open');
   }
 }
