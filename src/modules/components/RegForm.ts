@@ -20,7 +20,6 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
   postalCodeInput: Input;
 
-  // ???
   countryInput: Select;
 
   submitBtn: Button;
@@ -170,10 +169,6 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
       { value: 'au', text: 'Australia' },
     ];
 
-    // Create an instance of the Selector with the options
-    /* const countrySelector = new Select(countryOptions, 'Select Country', {
-      classes: ['county-selrector'],
-    }); */
     this.countryInput = new Select(countryOptions, {
       classes: ['inputs__box-selector'],
       id: 'country',
