@@ -8,12 +8,14 @@
 
 $c-white: #fff;
 $c-black: #000;
-$c-bg: #F9F0E1;
-$c-accent: #FC7353;
+$c-bg: #f9f0e1;
+$c-accent: #fc7353;
 $c-err: #961200;
-$c-ok: #008D58;
-$c-accent2: #9FBDF9;
-$c-accent3: #F3D7FD;
+$c-ok: #008d58;
+$c-accent2: #9fbdf9;
+$c-accent3: #f3d7fd;
+
+$bg-image-url: 'https://s3-alpha-sig.figma.com/img/5e11/d35e/904cba106d3096beefd222c9d1b6c347?Expires=1716163200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=fvtxrD5q4p0G84AGyWhFNbqtzVA5oe1XPVVO18QolUuRiFOjA0LyBO~a6r9E7Jtbv3mFgKNsQQ4Xe~RWb5PtHro1eNXH-SrCqdWIlTIZs~gA1-gRPvSTCUFn3ieNGJJZtISd4nTR~TiiVGyEtRPb0~aWEiGjBXlBtcA-q-QtOnb7IW52SHOsBUEJWM1GyX-ecm6l3tRrhnpUXREyhGi07il5mT6SuvDcKo-CB9Sb8gKNHarv25VQPEb5RIUXq0N48ogREwNkdsHmNNaNa4EzxcL3k-9kQngY9w2nkX~XqixpsxR5V7S8rFdgrAM~zbTSpyUzRQOWXqdpcjmLF4J3zg__';
 
 html,
 body {
@@ -21,7 +23,7 @@ body {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 400;
   font-size: 16px;
   background-color: $c-bg;
@@ -38,6 +40,24 @@ ul {
   list-style: none;
 }
 
+// Main Page
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url($bg-image-url);
+  background-size: cover;
+  background-position: center;
+  height: 500px;
+  margin: 70px 20px 0 20px;
+}
+
+.text-hero {
+  font-size: 52px;
+  font-weight: 400;
+}
+
 .container {
   width: 100%;
   max-width: 1440px;
@@ -48,5 +68,3 @@ ul {
     padding: 0 10px;
   }
 }
-
-@import "styles/header.scss";
