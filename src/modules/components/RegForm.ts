@@ -170,7 +170,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     ];
 
     this.countryInput = new Select(countryOptions, {
-      classes: ['inputs__box-selector'],
+      classes: ['inputs__box-select'],
       id: 'country',
     });
     countryDiv.append(countryLabel);
