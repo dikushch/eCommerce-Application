@@ -1,24 +1,4 @@
-
-
-.label {
-  font-family: Poppins;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  text-align: left;
-
-}
-.input{
-  border: 1px solid #FC7353;
-  height: 40px;
-  
-  margin-bottom: 20px;
-  margin-top: 5px;
-  padding: 0px 5px;
-  font-size: 16px;
-}
-
-.reg{
+.reg {
   display: flex;
   justify-content: center;
   margin: 15% auto;
@@ -26,91 +6,71 @@
   &__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;  
+    gap: 20px;
     padding: 20px;
-  
-    border: 1px solid #FC7353;
-  
+
+    border: 1px solid #fc7353;
+
     @media (max-width: 768px) {
       width: 95%;
     }
+
+    &-submit_btn {
+      height: 34px;
+      margin: 0px 0px;
+
+      background-color: $c-bg;
+      border: 1px solid #fc7353;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $c-accent;
+        color: #fff;
+      }
+    }
   }
 }
-.submit-btn{
 
-  background-color: $c-bg;
-  height: 34px;
-  // background-color: $c-bg;
-  
-  margin: 0px 0px;
-
-  border: 1px solid #FC7353;
-  cursor: pointer;
-
-  &:hover{
-    background-color: $c-accent;
-    color: #fff;
-  }
-}
-
-.inputs__container{
-  display: flex;  
+.inputs__container {
+  display: flex;
   flex-direction: column;
 }
-.inputs__box{
-  display: flex;  
+.inputs__box {
+  display: flex;
   flex-direction: column;
 
-  &-label{
+  &-label {
     font-family: Poppins;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
     text-align: left;
   }
-  &-input{
-    border: 1px solid #FC7353;
+  &-input {
+    border: 1px solid #fc7353;
     height: 40px;
-    
+
     margin-bottom: 20px;
     margin-top: 5px;
     padding: 0px 5px;
     font-size: 16px;
   }
+  &-selector {
+    height: 40px;
+
+    margin-bottom: 20px;
+    margin-top: 5px;
+
+    border: 1px solid #fc7353;
+    font-size: 16px;
+  }
 }
 
-
-
-.div-vert{
-  display: flex;  
-  flex-direction: column;
-}
-
-
-.form__container{
+.form__container {
   display: flex;
   flex-direction: row;
   gap: 20px;
   @media (max-width: 768px) {
     flex-direction: column;
   }
-
-}
-
-.div-hor{
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-
-}
-.country-selector{
-  height: 40px;
-  
-  margin-bottom: 20px;
-  margin-top: 5px;
-  border: 1px solid #FC7353;
-  font-size: 16px;
 }

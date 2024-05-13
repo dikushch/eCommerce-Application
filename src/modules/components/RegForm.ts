@@ -96,7 +96,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
     this.submitBtn = new Button({
       text: 'Register',
-      classes: ['submit-btn'],
+      classes: ['reg__form-submit_btn'],
     });
 
     // add container for reg data
@@ -175,7 +175,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
       classes: ['county-selrector'],
     }); */
     this.countryInput = new Select(countryOptions, {
-      classes: ['country-selector'],
+      classes: ['inputs__box-selector'],
       id: 'country',
     });
     countryDiv.append(countryLabel);
