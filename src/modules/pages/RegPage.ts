@@ -19,22 +19,16 @@ export default class RegistrationPage extends BaseComponent {
   constructor() {
     super({
       tag: 'section',
-      classes: ['container'],
-    });
-    const regSection = new BaseComponent({
-      tag: 'section',
-      classes: ['reg'],
+      classes: ['reg', 'container'],
     });
 
-    this.regForm = new RegForm({ classes: ['reg-form-style'] });
+    this.regForm = new RegForm({ classes: ['reg__form'] });
     this.firstNameInput = this.regForm.firstNameInput;
     this.lastNameInput = this.regForm.lastNameInput;
     this.emailInput = this.regForm.emailInput;
     this.passwordInput = this.regForm.passwordInput;
     this.submitBtn = this.regForm.submitBtn;
 
-    regSection.append(this.regForm);
-
-    this.append(regSection);
+    this.append(this.regForm);
   }
 }

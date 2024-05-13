@@ -31,64 +31,64 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     // Initialize form
 
     const firstNameDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const firstNameLabel = new Label({
       forStr: 'firstNameInput',
       text: 'First Name',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.firstNameInput = new Input({
       type: 'text',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'firstNameInput',
     });
     firstNameDiv.append(firstNameLabel);
     firstNameDiv.append(this.firstNameInput);
 
     const lastNameDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const lastNameLabel = new Label({
       forStr: 'lastNameInput',
       text: 'Last Name',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.lastNameInput = new Input({
       type: 'text',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'lastNameInput',
     });
     lastNameDiv.append(lastNameLabel);
     lastNameDiv.append(this.lastNameInput);
 
     const emailDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const emailLabel = new Label({
       forStr: 'emailInput',
       text: 'Email',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.emailInput = new Input({
       type: 'Email',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'emailInput',
     });
     emailDiv.append(emailLabel);
     emailDiv.append(this.emailInput);
 
     const passwordDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const passwordLabel = new Label({
       forStr: 'passwordInput',
       text: 'Password',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.passwordInput = new Input({
       type: 'password',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'passwordInput',
     });
     passwordDiv.append(passwordLabel);
@@ -101,68 +101,68 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
     // add container for reg data
     const divRegist = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__container'],
     });
     const divaddress = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__container'],
     });
 
     // create address elements
     const streetDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const streetLabel = new Label({
       forStr: 'streetInput',
       text: 'Street',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.streetInput = new Input({
       type: 'text',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'streetInput',
     });
     streetDiv.append(streetLabel);
     streetDiv.append(this.streetInput);
 
     const cityDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const cityLabel = new Label({
       forStr: 'cityInput',
       text: 'City',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.cityInput = new Input({
       type: 'text',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'cityInput',
     });
     cityDiv.append(cityLabel);
     cityDiv.append(this.cityInput);
 
     const postalCodeDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const postalCodeLabel = new Label({
       forStr: 'postalCodeInput',
       text: 'Postal Code',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
     this.postalCodeInput = new Input({
       type: 'text',
-      classes: ['input'],
+      classes: ['inputs__box-input'],
       id: 'postalCodeInput',
     });
     postalCodeDiv.append(postalCodeLabel);
     postalCodeDiv.append(this.postalCodeInput);
 
     const countryDiv = new BaseComponent({
-      classes: ['div-vert'],
+      classes: ['inputs__box'],
     });
     const countryLabel = new Label({
       forStr: 'country',
       text: 'Country',
-      classes: ['label'],
+      classes: ['inputs__box-label'],
     });
 
     const countryOptions = [
@@ -194,7 +194,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     divaddress.append(countryDiv);
 
     const divInputsContainer = new BaseComponent({
-      classes: ['div-hor'],
+      classes: ['form__container'],
     });
 
     divInputsContainer.append(divRegist);
