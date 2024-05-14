@@ -1,9 +1,13 @@
 $bg-image-url: 'https://s3-alpha-sig.figma.com/img/5e11/d35e/904cba106d3096beefd222c9d1b6c347?Expires=1716163200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=fvtxrD5q4p0G84AGyWhFNbqtzVA5oe1XPVVO18QolUuRiFOjA0LyBO~a6r9E7Jtbv3mFgKNsQQ4Xe~RWb5PtHro1eNXH-SrCqdWIlTIZs~gA1-gRPvSTCUFn3ieNGJJZtISd4nTR~TiiVGyEtRPb0~aWEiGjBXlBtcA-q-QtOnb7IW52SHOsBUEJWM1GyX-ecm6l3tRrhnpUXREyhGi07il5mT6SuvDcKo-CB9Sb8gKNHarv25VQPEb5RIUXq0N48ogREwNkdsHmNNaNa4EzxcL3k-9kQngY9w2nkX~XqixpsxR5V7S8rFdgrAM~zbTSpyUzRQOWXqdpcjmLF4J3zg__';
+$bg-shirt: 'https://s3-alpha-sig.figma.com/img/02f3/af56/730ece9156bff78531fed9aa38a78961?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qaOX-zOengIrKkTtD0njQrOdGdbNjuxGSCZ-l9wbS92bQ2IrUihPXl3XBMVTAkdj6Ic5gJKlVBvAq0Q7YOQuGJYodnDJXbyGzWmo3QAhF7DVlpCycGLZMRB-TY6NajpvERxx8N0nj7NpG-32Ncsch7Z6XqPGTYeraBOq8qQ1AGVI0v0KbLgrN-3u10exzRBYhDnTZARpS49RK3XtLJbdaaeOcpa5e5ZWY9L42qKzzd54nwyhL6HgVVyQ0Hls5eOZ-M0ib-oGglriCG6kx6FDy5I1akibGmkZtzP8AZ9KlXt1MLQ6LV0DpYrEitVS-RBQj3QANRUSWsgoerCWiUTcYg__';
+$bg-short: 'https://s3-alpha-sig.figma.com/img/8c60/00a8/2117e176f0b08303447ea0024f60bc1b?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RkPZ7C7m~X303mGk06XMiShIHEYGmtqXlgDWcKyfPwvG9RyLMOCqwdolCHyV~tL5DSan-sxphFeiBK-fzcuWd0JQXnScxh4Neq4mnLN8KDlDkBHj7PsI71y5AmuM6XDt1p5WVptUQe3RL1T1BtQvY19-ZuLyQZ959Nr8fJMiZ0b~MQqK9Wn86OltcgGCR4yZYEJiRDa2TvElN3qb4fWVcNNPg0rCCGxnMbeJn-n~f5LXMfFV5vBhEnu~Log9haTTS1RY6AbiMM3GTJksQlQmcHZaC0hPd1Bt08E5BXPwFEAJQxGQQrk3EdM2Zf20QLRiDMEWRdPvpQuCJ1eMBktL8A__';
+$bg-glasses: 'https://s3-alpha-sig.figma.com/img/d03f/1794/9f9d09590e39abfec0d7b5c300d938f3?Expires=1716768000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=WVe7uUQ3iFLU9uCuQ4kdIrEOB1LfoNNe19XNKNmmxDpoGwjJgIPaPLFEx471Wgqrha8HEvz2CQ6G~GCBTtLzXHLAIb3Z9d1GcuQV2puGfjC6GoMuZjTSNprUEtnhvWfBpHg381KaYIxbLvknzHOt3LhHXVQFthQCBC9Zg6C2YGKKGyGHr91-cDN2y11gqzAgPO9zyJuZ5bVuJmMVlw5BklmGVzzuaJtyk4WHPQA6mz0ST195M78c8Ybif~mLZn1O1-HL3ub9s-hWTFd1d1kpo63ngHdh-AqT~9FKHT2F~ofCg3w8XCej3tvdmbpbioaeFuwgqDzTVfLNVDr~ccSFgw__';
 
-.image-container {
+.main__hero {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   background-image: url($bg-image-url);
   background-size: cover;
   background-position: center;
@@ -11,18 +15,59 @@ $bg-image-url: 'https://s3-alpha-sig.figma.com/img/5e11/d35e/904cba106d3096beefd
   margin: 70px 20px 0 20px;
 }
 
-.text-hero {
+.hero-text {
   font-size: 52px;
   font-weight: 400;
 }
 
-.container {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 20px;
+.hero-sub {
+  font-size: 24px;
+}
 
-  @media (max-width: 768px) {
-    padding: 0 10px;
-  }
+.hero-sub2 {
+  font-size: 24px;
+  margin: 8px 0 0 0;
+}
+
+.product {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.product-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.product-items {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.product-item {
+  padding: 10px;
+  margin: 0 20px 0 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(25% - 20px);
+  text-align: center;
+  font-size: 16px;
+  max-width: calc(25% - 20px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 300px;
+}
+
+.shirt-item {
+  background-image: url($bg-shirt);
+}
+
+.shorts-item {
+  background-image: url($bg-short);
+}
+
+.accessories-item {
+  background-image: url($bg-glasses);
 }

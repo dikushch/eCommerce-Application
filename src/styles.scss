@@ -38,5 +38,16 @@ ul {
   list-style: none;
 }
 
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+}
+
 @import 'styles/header.scss';
 @import 'styles/mainPage.scss';
