@@ -1,11 +1,13 @@
+import { RouteItem } from '../types/Types';
+
 export default class Router {
-  routes: { path: string; component: HTMLElement }[];
+  routes: RouteItem[];
 
   currentRoute: null | HTMLElement = null;
 
   isLogin: boolean = false;
 
-  constructor(routes: { path: string; component: HTMLElement }[]) {
+  constructor(routes: RouteItem[]) {
     this.routes = routes;
     this.init();
   }
