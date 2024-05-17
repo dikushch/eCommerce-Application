@@ -33,3 +33,34 @@ export interface NewCustomerData {
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
 }
+
+export interface CustomerLoginResponse {
+  customer: Customer;
+}
+
+interface Customer {
+  id: string;
+  version: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  isEmailVerified: boolean;
+  createdAt: string;
+  lastModifiedAt: string;
+  addresses: Address[];
+  defaultShippingAddressId: string;
+  shippingAddressIds: string[];
+  defaultBillingAddressId: string;
+  billingAddressIds: string[];
+  authenticationMode: string;
+  stores: [];
+}
+
+interface Address {
+  id: string;
+  streetName: string;
+  postalCode: string;
+  city: string;
+  country: string;
+}
