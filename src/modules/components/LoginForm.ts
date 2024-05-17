@@ -40,7 +40,13 @@ export default class LoginForm extends BaseComponent {
     });
     const passwordCheckbox = new Input({
       type: 'checkbox',
+      id: 'login-pass-check',
       classes: ['login__checkbox'],
+    });
+    const passwordCheckboxLabel = new Label({
+      forStr: 'login-pass-check',
+      text: 'show',
+      classes: ['login__label-checkbox'],
     });
     const passwordLabel = new Label({
       forStr: 'login-pass',
@@ -54,6 +60,7 @@ export default class LoginForm extends BaseComponent {
     const passwordContainer = new BaseComponent(
       { classes: ['login__box'] },
       passwordCheckbox,
+      passwordCheckboxLabel,
       passwordLabel,
       this.password,
       passwordTip,
