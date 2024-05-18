@@ -21,12 +21,12 @@ export default class Select extends BaseComponent<HTMLSelectElement> {
   }
 
   // Method to get the selected value
-  getSelectedValue(): string {
+  getValue(): string {
     return this.node.value;
   }
 
   // Method to set the selected value
-  setSelectedValue(value: string): void {
+  setValue(value: string): void {
     this.node.value = value;
   }
 
@@ -45,5 +45,13 @@ export default class Select extends BaseComponent<HTMLSelectElement> {
         option.remove();
       }
     });
+  }
+
+  disable(): void {
+    this.node.disabled = true;
+  }
+
+  enable(): void {
+    this.node.disabled = false;
   }
 }
