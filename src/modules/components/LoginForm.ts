@@ -10,6 +10,10 @@ export default class LoginForm extends BaseComponent {
 
   submit: Button;
 
+  passwordCheckbox: Input;
+
+  regLink: BaseComponent;
+
   constructor() {
     super({ tag: 'form', classes: ['login__form'] });
     this.email = new Input({
@@ -38,7 +42,7 @@ export default class LoginForm extends BaseComponent {
       id: 'login-pass',
       classes: ['login__input'],
     });
-    const passwordCheckbox = new Input({
+    this.passwordCheckbox = new Input({
       type: 'checkbox',
       id: 'login-pass-check',
       classes: ['login__checkbox'],
@@ -59,7 +63,7 @@ export default class LoginForm extends BaseComponent {
     });
     const passwordContainer = new BaseComponent(
       { classes: ['login__box'] },
-      passwordCheckbox,
+      this.passwordCheckbox,
       passwordCheckboxLabel,
       passwordLabel,
       this.password,
@@ -68,7 +72,7 @@ export default class LoginForm extends BaseComponent {
 
     this.submit = new Button({ text: 'login', classes: ['login__btn'] });
 
-    const regLink = new BaseComponent({
+    this.regLink = new BaseComponent({
       tag: 'a',
       text: 'create one',
       classes: ['login__reg-link'],
@@ -81,7 +85,7 @@ export default class LoginForm extends BaseComponent {
     const regLinkContainer = new BaseComponent(
       { classes: ['login__reg-box'] },
       regLinkText,
-      regLink,
+      this.regLink,
     );
 
     this.appendChildren([
