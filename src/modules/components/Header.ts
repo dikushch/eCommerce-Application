@@ -42,7 +42,6 @@ export default class Header extends BaseComponent {
     this.addListener('click', (e) => {
       if (e.target instanceof HTMLElement) {
         if (this.links.includes(e.target)) {
-          console.log(e.target);
           this.setActiveLink(e.target);
           this.dispatchChangePageEvent(e.target);
         }
