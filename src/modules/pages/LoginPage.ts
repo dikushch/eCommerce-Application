@@ -12,6 +12,8 @@ export default class LoginPage extends BaseComponent {
 
   submit: Button;
 
+  passCheckbox: Input;
+
   isEmailValid: boolean = false;
 
   isPassValid: boolean = false;
@@ -22,6 +24,7 @@ export default class LoginPage extends BaseComponent {
     this.email = this.form.email;
     this.password = this.form.password;
     this.submit = this.form.submit;
+    this.passCheckbox = this.form.passwordCheckbox;
     this.submit.disable();
 
     this.append(this.form);
@@ -34,6 +37,10 @@ export default class LoginPage extends BaseComponent {
     this.password.addListener('input', () => {
       this.isPassValid = this.checkPass();
       this.checkValidForm();
+    });
+
+    this.passCheckbox.addListener('change', () => {
+      this.changePassVisibility();
     });
   }
 
@@ -67,5 +74,13 @@ export default class LoginPage extends BaseComponent {
 
     this.password.addClass('wrong');
     return false;
+  }
+
+  changePassVisibility(): void {
+    if ((this.passCheckbox.getNode() as HTMLInputElement).checked) {
+      this.password.setAttribute('type', 'text');
+    } else {
+      this.password.setAttribute('type', 'password');
+    }
   }
 }

@@ -10,6 +10,8 @@ export default class LoginForm extends BaseComponent {
 
   submit: Button;
 
+  passwordCheckbox: Input;
+
   constructor() {
     super({ tag: 'form', classes: ['login__form'] });
     this.email = new Input({
@@ -38,7 +40,7 @@ export default class LoginForm extends BaseComponent {
       id: 'login-pass',
       classes: ['login__input'],
     });
-    const passwordCheckbox = new Input({
+    this.passwordCheckbox = new Input({
       type: 'checkbox',
       id: 'login-pass-check',
       classes: ['login__checkbox'],
@@ -59,7 +61,7 @@ export default class LoginForm extends BaseComponent {
     });
     const passwordContainer = new BaseComponent(
       { classes: ['login__box'] },
-      passwordCheckbox,
+      this.passwordCheckbox,
       passwordCheckboxLabel,
       passwordLabel,
       this.password,
