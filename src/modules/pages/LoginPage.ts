@@ -42,6 +42,11 @@ export default class LoginPage extends BaseComponent {
     this.passCheckbox.addListener('change', () => {
       this.changePassVisibility();
     });
+
+    this.form.addListener('submit', (e) => {
+      e.preventDefault();
+      this.dispathLoginEvent();
+    });
   }
 
   checkValidForm(): void {
@@ -82,5 +87,20 @@ export default class LoginPage extends BaseComponent {
     } else {
       this.password.setAttribute('type', 'password');
     }
+  }
+
+  clearForm(): void {
+    this.email.clearValue();
+    this.password.clearValue();
+  }
+
+  dispathLoginEvent(): void {
+    const email = this.email.getValue();
+    const password = this.password.getValue();
+    const event = new CustomEvent('login', {
+      bubbles: true,
+      detail: { email, password },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
