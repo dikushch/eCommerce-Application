@@ -70,6 +70,12 @@ export default class HeaderUserMenu extends BaseComponent {
       regLinks,
     );
 
+    this.cart.setAttribute('data-href', '/cart');
+    this.user.setAttribute('data-href', '/user');
+    this.login.setAttribute('data-href', '/login');
+    this.register.setAttribute('data-href', '/register');
+    this.logout.setAttribute('data-href', '/logout');
+
     this.append(container);
   }
 }
