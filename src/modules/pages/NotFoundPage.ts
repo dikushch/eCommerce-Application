@@ -4,7 +4,7 @@ export default class NotFoundPage extends BaseComponent {
   goMain: BaseComponent;
 
   constructor() {
-    super({ tag: 'section', classes: ['nf'] });
+    super({ tag: 'section', classes: ['nf', 'container'] });
     const text = new BaseComponent({
       tag: 'p',
       text: 'PAGE NOT FOUND',
