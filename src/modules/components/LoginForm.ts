@@ -12,6 +12,8 @@ export default class LoginForm extends BaseComponent {
 
   passwordCheckbox: Input;
 
+  regLink: BaseComponent;
+
   constructor() {
     super({ tag: 'form', classes: ['login__form'] });
     this.email = new Input({
@@ -70,7 +72,7 @@ export default class LoginForm extends BaseComponent {
 
     this.submit = new Button({ text: 'login', classes: ['login__btn'] });
 
-    const regLink = new BaseComponent({
+    this.regLink = new BaseComponent({
       tag: 'a',
       text: 'create one',
       classes: ['login__reg-link'],
@@ -83,7 +85,7 @@ export default class LoginForm extends BaseComponent {
     const regLinkContainer = new BaseComponent(
       { classes: ['login__reg-box'] },
       regLinkText,
-      regLink,
+      this.regLink,
     );
 
     this.appendChildren([

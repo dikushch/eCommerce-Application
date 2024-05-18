@@ -14,6 +14,8 @@ export default class LoginPage extends BaseComponent {
 
   passCheckbox: Input;
 
+  regLink: BaseComponent;
+
   isEmailValid: boolean = false;
 
   isPassValid: boolean = false;
@@ -25,6 +27,7 @@ export default class LoginPage extends BaseComponent {
     this.password = this.form.password;
     this.submit = this.form.submit;
     this.passCheckbox = this.form.passwordCheckbox;
+    this.regLink = this.form.regLink;
     this.submit.disable();
 
     this.append(this.form);
@@ -46,6 +49,10 @@ export default class LoginPage extends BaseComponent {
     this.form.addListener('submit', (e) => {
       e.preventDefault();
       this.dispathLoginEvent();
+    });
+
+    this.regLink.addListener('click', () => {
+      this.dispatchGoToRegEvent();
     });
   }
 
@@ -100,6 +107,14 @@ export default class LoginPage extends BaseComponent {
     const event = new CustomEvent('login', {
       bubbles: true,
       detail: { email, password },
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  dispatchGoToRegEvent(): void {
+    const event = new CustomEvent('change-page', {
+      bubbles: true,
+      detail: '/register',
     });
     this.getNode().dispatchEvent(event);
   }
