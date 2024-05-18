@@ -1,3 +1,5 @@
+$c-err-bg: #ffdadc;
+
 .login {
   height: 100%;
   min-height: max-content;
@@ -36,6 +38,15 @@
     padding: 5px;
     border: 1px solid $c-accent;
     background-color: $c-white;
+
+    &.wrong {
+      border-color: $c-err;
+      background-color: $c-err-bg;
+      & + .login__tip {
+        display: block;
+      }
+    }
+
   }
 
   &__checkbox {
@@ -110,5 +121,14 @@
     &:hover {
       background-color: $c-accent;
     }
+  }
+
+  &__tip {
+    width: 100%;
+    white-space: pre-wrap;
+    font-size: 12px;
+    background-color: $c-err-bg;
+    padding: 10px;
+    display: none;
   }
 }
