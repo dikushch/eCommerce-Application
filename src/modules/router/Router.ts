@@ -42,6 +42,9 @@ export default class Router {
   redirectToNotFound(): void {
     const notFoundPage = this.routes.find((route) => route.path === '/404');
     if (notFoundPage) {
+      if (this.currentRoute) {
+        this.currentRoute.remove();
+      }
       this.currentRoute = notFoundPage.component;
       document.body.append(this.currentRoute);
     }
