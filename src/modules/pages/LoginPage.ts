@@ -18,6 +18,7 @@ export default class LoginPage extends BaseComponent {
     this.email = this.form.email;
     this.password = this.form.password;
     this.submit = this.form.submit;
+    this.submit.disable();
 
     this.append(this.form);
   }
