@@ -18,5 +18,17 @@ export default class NotFoundPage extends BaseComponent {
 
     this.append(text);
     this.append(this.goMain);
+
+    this.goMain.addListener('click', () => {
+      this.dispatchGoToMainEvent();
+    });
+  }
+
+  dispatchGoToMainEvent(): void {
+    const event = new CustomEvent('change-page', {
+      bubbles: true,
+      detail: '/',
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
