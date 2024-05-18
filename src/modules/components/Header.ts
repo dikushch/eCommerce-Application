@@ -83,4 +83,14 @@ export default class Header extends BaseComponent {
     });
     this.getNode().dispatchEvent(event);
   }
+
+  findLink(name: string): HTMLElement | null {
+    const link = this.links.find(
+      (l) => l.textContent?.toLowerCase() === name.toLowerCase(),
+    );
+    if (link) {
+      return link;
+    }
+    return null;
+  }
 }
