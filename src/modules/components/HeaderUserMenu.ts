@@ -11,7 +11,11 @@ export default class HeaderUserMenu extends BaseComponent {
 
   logout: BaseComponent;
 
-  constructor() {
+  regLinks: BaseComponent;
+
+  unregLinks: BaseComponent;
+
+  constructor(isLogin: boolean) {
     super({ tag: 'nav', classes: ['header__user-links', 'u-links'] });
     this.cart = new BaseComponent({
       tag: 'a',
@@ -35,7 +39,7 @@ export default class HeaderUserMenu extends BaseComponent {
       classes: ['u-links__item'],
     });
 
-    const unregLinks = new BaseComponent(
+    this.unregLinks = new BaseComponent(
       { classes: ['u-links__box'] },
       this.login,
       devider2,
@@ -55,8 +59,8 @@ export default class HeaderUserMenu extends BaseComponent {
       classes: ['u-links__item'],
     });
 
-    const regLinks = new BaseComponent(
-      { classes: ['u-links__box', 'hide'] },
+    this.regLinks = new BaseComponent(
+      { classes: ['u-links__box'] },
       this.user,
       devider3,
       this.logout,
@@ -66,10 +70,31 @@ export default class HeaderUserMenu extends BaseComponent {
       { classes: ['u-links__container'] },
       this.cart,
       devider1,
-      unregLinks,
-      regLinks,
+      this.unregLinks,
+      this.regLinks,
     );
 
+    if (isLogin) {
+      this.unregLinks.addClass('hide');
+    } else {
+      this.regLinks.addClass('hide');
+    }
+
+    this.cart.setAttribute('data-href', '/cart');
+    this.user.setAttribute('data-href', '/user');
+    this.login.setAttribute('data-href', '/login');
+    this.register.setAttribute('data-href', '/register');
+    this.logout.setAttribute('data-href', '/logout');
+
     this.append(container);
+  }
+
+  changeLinks(): void {
+    this.regLinks.toggleClass('hide');
+    this.unregLinks.toggleClass('hide');
+  }
+
+  setUserName(value: string): void {
+    this.user.setTextContent(value);
   }
 }

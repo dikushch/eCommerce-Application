@@ -46,6 +46,10 @@ export default class HeaderMainMenu extends BaseComponent {
       aboutLinkLi,
     );
 
+    this.mainLink.setAttribute('data-href', '/');
+    this.catalogLink.setAttribute('data-href', '/catalog');
+    this.aboutLink.setAttribute('data-href', '/about');
+
     this.append(list);
   }
 }
