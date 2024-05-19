@@ -204,6 +204,9 @@ export default class RegistrationPage extends BaseComponent {
         console.log('!!! Init registration APP  !!!');
       }
     });
+    this.loginShowDiv.addListener('click', () => {
+      console.log('!!!login click!!!');
+    });
   }
 
   static removeIncorrectStyle(node: Input) {
