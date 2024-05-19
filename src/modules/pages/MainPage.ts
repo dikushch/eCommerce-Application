@@ -96,5 +96,17 @@ export default class MainPage extends BaseComponent {
     productLineItems.append(accessoriesItem);
     productLineItems.append(somethingMoreItem);
     productLineDiv.append(catalogButton);
+
+    catalogButton.addListener('click', () => {
+      this.dispatchGoToCatalogEvent();
+    });
+  }
+
+  dispatchGoToCatalogEvent(): void {
+    const event = new CustomEvent('change-page', {
+      bubbles: true,
+      detail: '/catalog',
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
