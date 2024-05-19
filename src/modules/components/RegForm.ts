@@ -11,6 +11,8 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
   emailInput: Input;
 
+  birthDateInput: Input;
+
   passwordInput: Input;
 
   // add billing address
@@ -103,6 +105,24 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     lastNameDiv.append(lastNameLabel);
     lastNameDiv.append(this.lastNameInput);
     lastNameDiv.append(spanError('Martin'));
+
+    const birthDateDiv = new BaseComponent({
+      classes: ['inputs__box'],
+    });
+    const birthDateLabel = new Label({
+      forStr: 'birthDateInput',
+      text: 'Date of birth',
+      classes: ['inputs__box-label'],
+    });
+    this.birthDateInput = new Input({
+      type: 'date',
+      classes: ['inputs__box-input'],
+      id: 'lastNameInput',
+    });
+    this.birthDateInput.setAttribute('required', '');
+    birthDateDiv.append(birthDateLabel);
+    birthDateDiv.append(this.birthDateInput);
+    birthDateDiv.append(spanError('01.01.1990'));
 
     const emailDiv = new BaseComponent({
       classes: ['inputs__box'],
@@ -364,7 +384,6 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
       classes: ['inputs__box-checkbox'],
       id: 'checkIsSameAddressInput',
     });
-    // this.checkIsSameAddressInput.setAttribute('checked', '');
     checkIsSameAddressdDiv.append(checkIsSameAddressLabel);
     checkIsSameAddressdDiv.append(this.checkIsSameAddressInput);
 
@@ -378,6 +397,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     divRegist.append(h2PersonalDiv);
     divRegist.append(firstNameDiv);
     divRegist.append(lastNameDiv);
+    divRegist.append(birthDateDiv);
     divRegist.append(emailDiv);
     divRegist.append(passwordDiv);
     divRegist.append(checkIsSameAddressdDiv);
