@@ -11,6 +11,8 @@ export default class RegistrationPage extends BaseComponent {
 
   lastNameInput: Input;
 
+  birthDateInput: Input;
+
   emailInput: Input;
 
   passwordInput: Input;
@@ -59,6 +61,7 @@ export default class RegistrationPage extends BaseComponent {
     this.regForm = new RegForm({ classes: ['reg__form'] });
     this.firstNameInput = this.regForm.firstNameInput;
     this.lastNameInput = this.regForm.lastNameInput;
+    this.birthDateInput = this.regForm.birthDateInput;
     this.emailInput = this.regForm.emailInput;
     this.passwordInput = this.regForm.passwordInput;
 
@@ -216,6 +219,11 @@ export default class RegistrationPage extends BaseComponent {
       [this.postalShippingCodeInput, regPostalCodeExp],
     ];
     console.log(arrayValuesAndRegExp);
+
+    if (!RegistrationPage.validateInputDateValue(this.birthDateInput)) {
+      this.isValidInputs = false;
+    }
+
     arrayValuesAndRegExp.forEach((valueAndReg) => {
       if (
         !RegistrationPage.validateInputValue(valueAndReg[0], valueAndReg[1])
@@ -231,7 +239,46 @@ export default class RegistrationPage extends BaseComponent {
     if (regExp.test(inputValue.getValue())) {
       inputValue.removeClass('incorrect_input');
       inputValue.addClass('correct_input');
-      console.log();
+      if (spanError) {
+        spanError.classList.remove('reg_form_error-show');
+        spanError.classList.add('reg_form_error-hide');
+      }
+      return true;
+    }
+    inputValue.removeClass('correct_input');
+    inputValue.addClass('incorrect_input');
+
+    if (spanError) {
+      spanError.classList.remove('reg_form_error-hide');
+      spanError.classList.add('reg_form_error-show');
+    }
+    return false;
+  }
+
+  static validateInputDateValue(inputValue: Input) {
+    const spanError: Element | null = inputValue.getNode().nextElementSibling;
+
+    const minimumAge = 13;
+    const birthDate = new Date(inputValue.getValue());
+    console.log(inputValue.getValue());
+    const currentDate = new Date();
+
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds =
+      currentDate.getTime() - birthDate.getTime();
+
+    // Convert milliseconds to years
+    const ageInYears =
+      differenceInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+    // Check if age is at least the minimum required age
+    console.log(ageInYears >= minimumAge);
+    console.log(ageInYears);
+    console.log(minimumAge);
+
+    if (ageInYears >= minimumAge) {
+      inputValue.removeClass('incorrect_input');
+      inputValue.addClass('correct_input');
 
       if (spanError) {
         spanError.classList.remove('reg_form_error-show');
@@ -239,6 +286,7 @@ export default class RegistrationPage extends BaseComponent {
       }
       return true;
     }
+    // if false show error message
     inputValue.removeClass('correct_input');
     inputValue.addClass('incorrect_input');
 
