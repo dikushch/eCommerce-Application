@@ -51,6 +51,7 @@ export default class Router {
   }
 
   redirectToMain(): void {
+    window.history.replaceState({}, '', '/');
     const main = this.routes.find((route) => route.path === '/');
     if (main) {
       if (this.currentRoute) {
