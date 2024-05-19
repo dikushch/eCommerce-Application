@@ -1,6 +1,7 @@
 import { getAccessToken, loginCustomer } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
+import OkMsg from './modules/components/OkMsg';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
 import NotFoundPage from './modules/pages/NotFoundPage';
@@ -69,6 +70,7 @@ class App {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
+        this.element.append(new OkMsg('successful login').getNode());
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
