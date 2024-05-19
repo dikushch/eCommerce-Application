@@ -106,7 +106,6 @@ class App {
 
   changePageHandler(e: CustomEvent) {
     const path = (e as CustomEvent).detail;
-    console.log(path);
     this.setMenuItemActive(path);
     this.router.changeRoute(path);
   }
