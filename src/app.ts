@@ -1,3 +1,5 @@
+import { getAccessToken, loginCustomer } from './modules/api/Api';
+import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
@@ -54,9 +56,27 @@ class App {
     this.router.changeRoute(path);
   }
 
+  async loginHandler(e: CustomEvent) {
+    const token = await getAccessToken();
+    if (token) {
+      const res = await loginCustomer(token, (e as CustomEvent).detail);
+      if ('customer' in res) {
+        this.router.setLoginState(true);
+        this.header.userMenu.changeLinks();
+        this.header.userMenu.setUserName(res.customer.firstName);
+        this.router.changeRoute('/');
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('login', async (e) => {
+      this.loginHandler(e as CustomEvent);
     });
   }
 }
