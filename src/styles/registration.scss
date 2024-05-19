@@ -1,7 +1,10 @@
 .reg {
   display: flex;
+  width: fit-content;
+  margin: 10vh auto;
   justify-content: center;
-  margin: 15% auto;
+  flex-direction: column;
+  gap: 10px;
 
   &__form {
     display: flex;
@@ -9,23 +12,24 @@
     gap: 20px;
     padding: 20px;
 
-    border: 1px solid #fc7353;
+    border: 1px solid $c-accent;
 
     @media (max-width: 768px) {
       width: 95%;
     }
 
-    &-submit_btn {
+    &-btn {
       height: 34px;
       margin: 0px 0px;
+      padding: 0 5px;
 
       background-color: $c-bg;
-      border: 1px solid #fc7353;
+      border: 1px solid $c-accent;
       cursor: pointer;
 
       &:hover {
         background-color: $c-accent;
-        color: #fff;
+        color: $c-white;
       }
     }
   }
@@ -34,10 +38,19 @@
 .inputs__container {
   display: flex;
   flex-direction: column;
+
+  .checkbox_container {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
 }
 .inputs__box {
   display: flex;
   flex-direction: column;
+
+  margin-bottom: 20px;
+  margin-top: 5px;
 
   &-label {
     font-family: Poppins;
@@ -47,22 +60,44 @@
     text-align: left;
   }
   &-input {
-    border: 1px solid #fc7353;
+    border: 1px solid $c-accent;
     height: 40px;
 
-    margin-bottom: 20px;
-    margin-top: 5px;
     padding: 0px 5px;
     font-size: 16px;
   }
   &-select {
     height: 40px;
 
-    margin-bottom: 20px;
-    margin-top: 5px;
-
-    border: 1px solid #fc7353;
+    border: 1px solid $c-accent;
     font-size: 16px;
+    cursor: pointer;
+  }
+  &-checkbox {
+    appearance: none;
+    background-color: $c-white;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 25px;
+    height: 25px;
+
+    border: 1px solid $c-accent;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+  &-checkbox::before {
+    content: '';
+    width: 1em;
+    height: 1em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em $c-accent;
+    background-color: $c-white;
+  }
+  &-checkbox:checked::before {
+    transform: scale(1);
   }
 }
 
@@ -73,4 +108,31 @@
   @media (max-width: 768px) {
     flex-direction: column;
   }
+}
+
+.reg_form_error {
+  &-hide {
+    display: none;
+  }
+  &-show {
+    display: block;
+
+    color: $c-err;
+  }
+}
+.reg__form-login_container {
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.correct_input {
+  border: 1px solid $c-ok;
+}
+.incorrect_input {
+  border: 2px solid $c-err;
 }
