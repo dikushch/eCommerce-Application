@@ -4,6 +4,7 @@ import Header from './modules/components/Header';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
 import NotFoundPage from './modules/pages/NotFoundPage';
+import RegistrationPage from './modules/pages/RegPage';
 import Router from './modules/router/Router';
 import { RouteItem } from './modules/types/Types';
 import './styles.scss';
@@ -19,6 +20,8 @@ class App {
 
   login: LoginPage;
 
+  register: RegistrationPage;
+
   notFoundPage: NotFoundPage;
 
   constructor() {
@@ -27,9 +30,11 @@ class App {
     this.notFoundPage = new NotFoundPage();
     this.main = new MainPage();
     this.login = new LoginPage();
+    this.register = new RegistrationPage();
     const routes: RouteItem[] = [
       { path: '/', component: this.main.getNode() },
       { path: '/login', component: this.login.getNode() },
+      { path: '/register', component: this.register.getNode() },
       { path: '/404', component: this.notFoundPage.getNode() },
     ];
     this.router = new Router(routes);
