@@ -45,6 +45,10 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
   submitBtn: Button;
 
+  // add login button
+
+  regLoginBtn: Button;
+
   constructor(props: { classes?: string[] }) {
     super({ tag: 'form', classes: props.classes });
 
@@ -164,7 +168,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
     this.submitBtn = new Button({
       text: 'Register',
-      classes: ['reg__form-submit_btn'],
+      classes: ['reg__form-btn'],
     });
 
     // add container for reg data
@@ -390,6 +394,24 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
 
     checkShippingDiv.append(checkDefaultShippingLabel);
     checkShippingDiv.append(this.checkDefaultShippingInput);
+
+    // add login button
+    const regLoginLabel = new Label({
+      forStr: '',
+      text: 'Already have an account?',
+      classes: ['inputs__box-label'],
+    });
+    this.regLoginBtn = new Button({
+      text: 'Login',
+      classes: ['reg__form-btn'],
+    });
+    const loginShowDiv = new BaseComponent(
+      {
+        classes: ['reg__form-login_container'],
+      },
+      regLoginLabel,
+      this.regLoginBtn,
+    );
     // Append the form elements to the form
 
     divRegist.append(h2PersonalDiv);
@@ -425,5 +447,6 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     divInputsContainer.append(divShippingAddress);
     this.append(divInputsContainer);
     this.append(this.submitBtn);
+    this.append(loginShowDiv);
   }
 }
