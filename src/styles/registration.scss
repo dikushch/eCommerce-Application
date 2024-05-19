@@ -1,7 +1,10 @@
 .reg {
   display: flex;
-  justify-content: center;
+  width: fit-content;
   margin: 10vh auto;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 
   &__form {
     display: flex;
@@ -36,7 +39,7 @@
   display: flex;
   flex-direction: column;
 
-  .checkbox_container{
+  .checkbox_container {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -45,7 +48,7 @@
 .inputs__box {
   display: flex;
   flex-direction: column;
-  
+
   margin-bottom: 20px;
   margin-top: 5px;
 
@@ -70,8 +73,7 @@
     font-size: 16px;
     cursor: pointer;
   }
-  &-checkbox{
-
+  &-checkbox {
     appearance: none;
     background-color: $c-white;
     margin: 0;
@@ -85,7 +87,7 @@
     place-content: center;
     cursor: pointer;
   }
-  &-checkbox::before{
+  &-checkbox::before {
     content: '';
     width: 1em;
     height: 1em;
@@ -94,7 +96,7 @@
     box-shadow: inset 1em 1em $c-accent;
     background-color: $c-white;
   }
-  &-checkbox:checked::before{
+  &-checkbox:checked::before {
     transform: scale(1);
   }
 }
@@ -108,19 +110,19 @@
   }
 }
 
-.reg_form_error{
-  &-hide{
+.reg_form_error {
+  &-hide {
     display: none;
   }
-  &-show{
+  &-show {
     display: block;
 
     color: $c-err;
   }
 }
-.reg__form-login_container{
+.reg__form-login_container {
   display: flex;
-  
+
   flex-direction: row;
   align-items: center;
   justify-content: center;

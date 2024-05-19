@@ -1,6 +1,7 @@
 import BaseComponent from '../components/BaseComponent';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import Label from '../components/Label';
 import RegForm from '../components/RegForm';
 import Select from '../components/Select';
 
@@ -47,6 +48,11 @@ export default class RegistrationPage extends BaseComponent {
 
   submitBtn: Button;
 
+  // add login
+  loginShowDiv: BaseComponent;
+
+  regLoginBtn: Button;
+
   isValidInputs: boolean = true;
 
   isSameAddresses: boolean = false;
@@ -84,7 +90,28 @@ export default class RegistrationPage extends BaseComponent {
 
     this.submitBtn = this.regForm.submitBtn;
 
+    // add login button
+    const regLoginLabel = new Label({
+      forStr: '',
+      text: 'Already have an account?',
+      classes: ['inputs__box-label'],
+    });
+    this.regLoginBtn = new Button({
+      text: 'Login',
+      classes: ['reg__form-btn'],
+    });
+
+    this.loginShowDiv = new BaseComponent(
+      {
+        classes: ['reg__form-login_container'],
+      },
+      regLoginLabel,
+      this.regLoginBtn,
+    );
+
     this.append(this.regForm);
+    this.append(this.loginShowDiv);
+
     this.checkIsSameAddressInput.addListener('change', () => {
       const a = this.checkIsSameAddressInput.getNode() as HTMLInputElement;
 
