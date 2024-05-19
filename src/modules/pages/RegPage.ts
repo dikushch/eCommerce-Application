@@ -121,12 +121,10 @@ export default class RegistrationPage extends BaseComponent {
       const node = this.checkIsSameAddressInput.getNode() as HTMLInputElement;
 
       if (node.checked) {
-        console.log('checked');
         this.isSameAddresses = true;
         this.disableAllShippingInputs();
         this.copyAllFromBillToShipp();
       } else {
-        console.log('not checked');
         this.isSameAddresses = false;
         this.enableAllShippingInputs();
       }
@@ -135,10 +133,8 @@ export default class RegistrationPage extends BaseComponent {
       const node = this.checkDefaultBillingInput.getNode() as HTMLInputElement;
 
       if (node.checked) {
-        console.log('checked default billing');
         this.isDefaultBillingAddress = true;
       } else {
-        console.log('not checked default billing');
         this.isDefaultBillingAddress = false;
       }
     });
@@ -147,10 +143,8 @@ export default class RegistrationPage extends BaseComponent {
       const node = this.checkDefaultShippingInput.getNode() as HTMLInputElement;
 
       if (node.checked) {
-        console.log('checked default shipping');
         this.isDefaultShippingAddress = true;
       } else {
-        console.log('not checked default shipping');
         this.isDefaultShippingAddress = false;
       }
     });
@@ -171,8 +165,6 @@ export default class RegistrationPage extends BaseComponent {
 
     // billing address
     this.streetBillingInput.addListener('input', () => {
-      console.log('streetBillingInput input');
-
       RegistrationPage.removeIncorrectStyle(this.streetBillingInput);
       if (this.isSameAddresses) {
         RegistrationPage.removeIncorrectStyle(this.streetShippingInput);
@@ -225,12 +217,10 @@ export default class RegistrationPage extends BaseComponent {
     this.regForm.addListener('submit', (e) => {
       e.preventDefault();
       this.isValidInputs = true;
-      console.log('click submit');
+
       this.checkAllInputsValue();
 
       if (this.isValidInputs) {
-        console.log('!!! Init registration APP  !!!');
-
         const getCountry: { [key: string]: 'US' | 'AU' } = {
           US: 'US',
           AU: 'AU',
@@ -271,13 +261,10 @@ export default class RegistrationPage extends BaseComponent {
             newCustomerData.addresses.length - 1;
         } else delete newCustomerData.defaultShippingAddress;
 
-        console.log('newCustomerData', newCustomerData);
-
         this.dispatchRegCustomerEvent(newCustomerData);
       }
     });
     this.loginShowDiv.addListener('click', () => {
-      console.log('!!!login click!!!');
       this.dispatchGoToLoginEvent();
     });
   }
@@ -299,8 +286,6 @@ export default class RegistrationPage extends BaseComponent {
   }
 
   checkAllInputsValue() {
-    console.log(' checkAllInputsValue ');
-
     const regSingleWordExp = /^[A-Za-z]+$/;
     const postalCodeRegexps: { [key: string]: RegExp } = {
       US: /^\d{5}$/,
@@ -312,9 +297,6 @@ export default class RegistrationPage extends BaseComponent {
 
     const streetRegExp = /^.+$/;
     const cityRegExp = /^[A-Za-z\s]+$/;
-    console.log(postalCodeRegexps[this.countryBillingInput.getValue()]);
-
-    console.log(this.countryBillingInput.getValue());
 
     const arrayValuesAndRegExp: [Input, RegExp][] = [
       [this.firstNameInput, regSingleWordExp],
@@ -336,7 +318,6 @@ export default class RegistrationPage extends BaseComponent {
         postalCodeRegexps[this.countryShippingInput.getValue()],
       ],
     ];
-    console.log(arrayValuesAndRegExp);
 
     if (!RegistrationPage.validateInputDateValue(this.birthDateInput)) {
       this.isValidInputs = false;
@@ -352,7 +333,6 @@ export default class RegistrationPage extends BaseComponent {
   }
 
   static validateInputValue(inputValue: Input, regExp: RegExp) {
-    console.log('check input value', inputValue.getValue());
     const spanError: Element | null = inputValue.getNode().nextElementSibling;
     if (regExp.test(inputValue.getValue())) {
       inputValue.removeClass('incorrect_input');
@@ -378,7 +358,7 @@ export default class RegistrationPage extends BaseComponent {
 
     const minimumAge = 13;
     const birthDate = new Date(inputValue.getValue());
-    console.log(inputValue.getValue());
+
     const currentDate = new Date();
 
     // Calculate the difference in milliseconds
@@ -390,9 +370,6 @@ export default class RegistrationPage extends BaseComponent {
       differenceInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
 
     // Check if age is at least the minimum required age
-    console.log(ageInYears >= minimumAge);
-    console.log(ageInYears);
-    console.log(minimumAge);
 
     if (ageInYears >= minimumAge) {
       inputValue.removeClass('incorrect_input');
@@ -416,8 +393,6 @@ export default class RegistrationPage extends BaseComponent {
   }
 
   disableAllShippingInputs() {
-    console.log('disableAllShippingInputs');
-
     this.streetShippingInput.disable();
     this.cityShippingInput.disable();
     this.postalShippingCodeInput.disable();
@@ -425,8 +400,6 @@ export default class RegistrationPage extends BaseComponent {
   }
 
   enableAllShippingInputs() {
-    console.log('enableAllShippingInputs');
-
     this.streetShippingInput.enable();
     this.cityShippingInput.enable();
     this.postalShippingCodeInput.enable();
@@ -450,7 +423,6 @@ export default class RegistrationPage extends BaseComponent {
   ) {
     // copy one from billing to Shipping address
     toInput.setValue(fromInput.getValue());
-    console.log('get value from:', fromInput.getValue());
   }
 
   dispatchGoToLoginEvent(): void {
