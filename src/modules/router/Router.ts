@@ -7,8 +7,9 @@ export default class Router {
 
   isLogin: boolean = false;
 
-  constructor(routes: RouteItem[]) {
+  constructor(isLogin: boolean, routes: RouteItem[]) {
     this.routes = routes;
+    this.isLogin = isLogin;
     this.init();
   }
 

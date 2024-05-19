@@ -25,8 +25,15 @@ class App {
 
   notFoundPage: NotFoundPage;
 
+  isLogin: boolean = false;
+
+  authToken: string | null = null;
+
+  customerId: string | null = null;
+
   constructor() {
-    this.header = new Header(false);
+    this.isLogin = this.checkStorage();
+    this.header = new Header(this.isLogin);
     this.element.append(this.header.getNode());
     this.notFoundPage = new NotFoundPage();
     this.main = new MainPage();
@@ -38,8 +45,33 @@ class App {
       { path: '/register', component: this.register.getNode() },
       { path: '/404', component: this.notFoundPage.getNode() },
     ];
-    this.router = new Router(routes);
+    this.router = new Router(this.isLogin, routes);
     this.setMenuItemActive(window.location.pathname);
+  }
+
+  static saveToken(token: string): void {
+    localStorage.setItem('ct_token', token);
+  }
+
+  static saveCustomerId(id: string): void {
+    localStorage.setItem('ct_id', id);
+  }
+
+  static getToken(): string | null {
+    return localStorage.getItem('ct_token');
+  }
+
+  static getCustomerId(): string | null {
+    return localStorage.getItem('ct_id');
+  }
+
+  checkStorage(): boolean {
+    this.authToken = App.getToken();
+    this.customerId = App.getCustomerId();
+    if (this.authToken && this.customerId) {
+      return true;
+    }
+    return false;
   }
 
   setMenuItemActive(name: string): void {
@@ -65,8 +97,10 @@ class App {
   async loginHandler(e: CustomEvent) {
     const token = await getAccessToken();
     if (token) {
+      App.saveToken(token.access_token);
       const res = await loginCustomer(token, (e as CustomEvent).detail);
       if ('customer' in res) {
+        App.saveCustomerId(res.customer.id);
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
