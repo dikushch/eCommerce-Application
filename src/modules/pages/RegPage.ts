@@ -4,6 +4,7 @@ import Input from '../components/Input';
 import Label from '../components/Label';
 import RegForm from '../components/RegForm';
 import Select from '../components/Select';
+import { CustomerAddress, NewCustomerData } from '../types/Types';
 
 export default class RegistrationPage extends BaseComponent {
   regForm: RegForm;
@@ -56,6 +57,10 @@ export default class RegistrationPage extends BaseComponent {
   isValidInputs: boolean = true;
 
   isSameAddresses: boolean = false;
+
+  isDefaultBillingAddress: boolean = false;
+
+  isDefaultShippingAddress: boolean = false;
 
   constructor() {
     super({
@@ -113,9 +118,9 @@ export default class RegistrationPage extends BaseComponent {
     this.append(this.loginShowDiv);
 
     this.checkIsSameAddressInput.addListener('change', () => {
-      const a = this.checkIsSameAddressInput.getNode() as HTMLInputElement;
+      const node = this.checkIsSameAddressInput.getNode() as HTMLInputElement;
 
-      if (a.checked) {
+      if (node.checked) {
         console.log('checked');
         this.isSameAddresses = true;
         this.disableAllShippingInputs();
@@ -124,6 +129,29 @@ export default class RegistrationPage extends BaseComponent {
         console.log('not checked');
         this.isSameAddresses = false;
         this.enableAllShippingInputs();
+      }
+    });
+    this.checkDefaultBillingInput.addListener('change', () => {
+      const node = this.checkDefaultBillingInput.getNode() as HTMLInputElement;
+
+      if (node.checked) {
+        console.log('checked default billing');
+        this.isDefaultBillingAddress = true;
+      } else {
+        console.log('not checked default billing');
+        this.isDefaultBillingAddress = false;
+      }
+    });
+
+    this.checkDefaultShippingInput.addListener('change', () => {
+      const node = this.checkDefaultShippingInput.getNode() as HTMLInputElement;
+
+      if (node.checked) {
+        console.log('checked default shipping');
+        this.isDefaultShippingAddress = true;
+      } else {
+        console.log('not checked default shipping');
+        this.isDefaultShippingAddress = false;
       }
     });
 
@@ -202,10 +230,55 @@ export default class RegistrationPage extends BaseComponent {
 
       if (this.isValidInputs) {
         console.log('!!! Init registration APP  !!!');
+
+        const getCountry: { [key: string]: 'US' | 'AU' } = {
+          US: 'US',
+          AU: 'AU',
+        };
+
+        const newBillingAddress: CustomerAddress = {
+          country: getCountry[this.countryBillingInput.getValue()],
+          city: this.cityBillingInput.getValue(),
+          streetName: this.streetBillingInput.getValue(),
+          postalCode: this.postalBillingCodeInput.getValue(),
+        };
+
+        const newCustomerData: NewCustomerData = {
+          email: this.emailInput.getValue(),
+          firstName: this.firstNameInput.getValue(),
+          lastName: this.lastNameInput.getValue(),
+          password: this.passwordInput.getValue(),
+          dateOfBirth: this.birthDateInput.getValue(),
+          addresses: [newBillingAddress],
+        };
+
+        if (this.isDefaultBillingAddress) {
+          newCustomerData.defaultBillingAddress = 0;
+        } else delete newCustomerData.defaultBillingAddress;
+
+        if (!this.isSameAddresses) {
+          const newShippingAddress: CustomerAddress = {
+            country: getCountry[this.countryShippingInput.getValue()],
+            city: this.cityShippingInput.getValue(),
+            streetName: this.streetShippingInput.getValue(),
+            postalCode: this.postalShippingCodeInput.getValue(),
+          };
+          newCustomerData.addresses.push(newShippingAddress);
+        }
+
+        if (this.isDefaultShippingAddress) {
+          newCustomerData.defaultShippingAddress =
+            newCustomerData.addresses.length - 1;
+        } else delete newCustomerData.defaultShippingAddress;
+
+        console.log('newCustomerData', newCustomerData);
+
+        this.dispatchRegCustomerEvent(newCustomerData);
       }
     });
     this.loginShowDiv.addListener('click', () => {
       console.log('!!!login click!!!');
+      this.dispatchGoToLoginEvent();
     });
   }
 
@@ -378,5 +451,21 @@ export default class RegistrationPage extends BaseComponent {
     // copy one from billing to Shipping address
     toInput.setValue(fromInput.getValue());
     console.log('get value from:', fromInput.getValue());
+  }
+
+  dispatchGoToLoginEvent(): void {
+    const event = new CustomEvent('change-page', {
+      bubbles: true,
+      detail: '/login',
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  dispatchRegCustomerEvent(data: NewCustomerData): void {
+    const event = new CustomEvent('reg-customer', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
