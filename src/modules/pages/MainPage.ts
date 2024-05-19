@@ -4,69 +4,76 @@ export default class MainPage extends BaseComponent {
   constructor() {
     super({
       tag: 'section',
-      classes: ['main'],
+      classes: ['main', 'container'],
     });
 
-    const imageContainer = MainPage.createComponent('div', [
-      'main__hero',
-      'hero',
-    ]);
+    const imageContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['main__hero', 'hero'],
+    });
 
-    const subText = MainPage.createComponent('p', ['hero-sub'], 'it`s');
+    const subText = new BaseComponent({
+      tag: 'p',
+      classes: ['hero-sub'],
+      text: 'it`s',
+    });
 
-    const textHero = MainPage.createComponent(
-      'h2',
-      ['hero-text'],
-      'SUMMER SHOP',
-    );
+    const textHero = new BaseComponent({
+      tag: 'h2',
+      classes: ['hero-text'],
+      text: 'SUMMER SHOP',
+    });
 
-    const subText2 = MainPage.createComponent(
-      'p',
-      ['hero-sub2'],
-      'find your sunshine style',
-    );
+    const subText2 = new BaseComponent({
+      tag: 'p',
+      classes: ['hero-sub2'],
+      text: 'find your sunshine style',
+    });
 
     this.append(imageContainer);
     imageContainer.append(subText);
     imageContainer.append(textHero);
     imageContainer.append(subText2);
 
-    const productLineDiv = MainPage.createComponent('div', ['product']);
+    const productLineDiv = new BaseComponent({
+      tag: 'div',
+      classes: ['product'],
+    });
 
-    const productLineText = MainPage.createComponent(
-      'p',
-      ['product-text'],
-      'in our product line',
-    );
+    const productLineText = new BaseComponent({
+      tag: 'p',
+      classes: ['product-text'],
+      text: 'in our product line',
+    });
 
-    const productLineItems = MainPage.createComponent('div', [
-      'product-items',
-      'item',
-    ]);
+    const productLineItems = new BaseComponent({
+      tag: 'div',
+      classes: ['product-items', 'item'],
+    });
 
-    const shirtItem = MainPage.createComponent(
-      'div',
-      ['product-item', 'shirt-item'],
-      'shirts and T-shirts',
-    );
+    const shirtItem = new BaseComponent({
+      tag: 'div',
+      classes: ['product-item', 'shirt-item'],
+      text: 'shirts and T-shirts',
+    });
 
-    const shortsItem = MainPage.createComponent(
-      'div',
-      ['product-item', 'shorts-item'],
-      'shorts',
-    );
+    const shortsItem = new BaseComponent({
+      tag: 'div',
+      classes: ['product-item', 'shorts-item'],
+      text: 'shorts',
+    });
 
-    const accessoriesItem = MainPage.createComponent(
-      'div',
-      ['product-item', 'accessories-item'],
-      'accessories',
-    );
+    const accessoriesItem = new BaseComponent({
+      tag: 'div',
+      classes: ['product-item', 'accessories-item'],
+      text: 'accessories',
+    });
 
-    const somethingMoreItem = MainPage.createComponent(
-      'div',
-      ['product-item', 'something-more-item'],
-      'and something more',
-    );
+    const somethingMoreItem = new BaseComponent({
+      tag: 'div',
+      classes: ['product-item', 'something-more-item'],
+      text: 'and something more',
+    });
 
     this.append(productLineDiv);
     productLineDiv.append(productLineText);
@@ -75,17 +82,5 @@ export default class MainPage extends BaseComponent {
     productLineItems.append(shortsItem);
     productLineItems.append(accessoriesItem);
     productLineItems.append(somethingMoreItem);
-  }
-
-  static createComponent(
-    tag: string,
-    classes: string[] = [],
-    text: string = '',
-  ): BaseComponent {
-    return new BaseComponent({
-      tag,
-      classes,
-      text,
-    });
   }
 }
