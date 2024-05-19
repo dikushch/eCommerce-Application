@@ -240,7 +240,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     this.postalBillingCodeInput.setAttribute('required', '');
     postalBillingCodeDiv.append(postalBillingCodeLabel);
     postalBillingCodeDiv.append(this.postalBillingCodeInput);
-    postalBillingCodeDiv.append(spanError('1900014'));
+    postalBillingCodeDiv.append(spanError('12345 for US and 1234 for AU'));
 
     const countryBillingDiv = new BaseComponent({
       classes: ['inputs__box'],
@@ -252,8 +252,8 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     });
 
     const countryOptions = [
-      { value: 'us', text: 'United States' },
-      { value: 'au', text: 'Australia' },
+      { value: 'US', text: 'United States' },
+      { value: 'AU', text: 'Australia' },
     ];
 
     this.countryBillingInput = new Select(countryOptions, {
@@ -337,7 +337,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     this.postalShippingCodeInput.setAttribute('required', '');
     postalShippingCodeDiv.append(postalShippingCodeLabel);
     postalShippingCodeDiv.append(this.postalShippingCodeInput);
-    postalShippingCodeDiv.append(spanError('1900014'));
+    postalShippingCodeDiv.append(spanError('12345 for US and 1234 for AU'));
 
     const countryShippingDiv = new BaseComponent({
       classes: ['inputs__box'],
