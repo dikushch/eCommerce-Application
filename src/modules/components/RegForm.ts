@@ -117,12 +117,12 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     this.birthDateInput = new Input({
       type: 'date',
       classes: ['inputs__box-input'],
-      id: 'lastNameInput',
+      id: 'birthDateInput',
     });
     this.birthDateInput.setAttribute('required', '');
     birthDateDiv.append(birthDateLabel);
     birthDateDiv.append(this.birthDateInput);
-    birthDateDiv.append(spanError('01.01.1990'));
+    birthDateDiv.append(spanError('must be at least 13 years old'));
 
     const emailDiv = new BaseComponent({
       classes: ['inputs__box'],
