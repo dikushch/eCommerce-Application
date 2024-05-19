@@ -1,6 +1,7 @@
 import {
   createCustomer,
   getAccessToken,
+  getCustomerById,
   loginCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
@@ -37,6 +38,9 @@ class App {
 
   constructor() {
     this.isLogin = this.checkStorage();
+    if (this.isLogin) {
+      this.loginCustomer();
+    }
     this.header = new Header(this.isLogin);
     this.element.append(this.header.getNode());
     this.notFoundPage = new NotFoundPage();
@@ -51,6 +55,11 @@ class App {
     ];
     this.router = new Router(this.isLogin, routes);
     this.setMenuItemActive(window.location.pathname);
+  }
+
+  async loginCustomer() {
+    const token = JSON.parse(this.authToken as string);
+    getCustomerById(token, this.customerId as string);
   }
 
   static saveToken(token: string): void {
