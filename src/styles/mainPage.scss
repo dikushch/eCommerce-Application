@@ -29,7 +29,7 @@
 }
 
 .product-text {
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 20px;
 }
 
@@ -40,14 +40,16 @@
 }
 
 .product-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
-  // margin: 0 20px 0 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  flex: 1 1 calc(25% - 20px);
+  flex: 1;
   text-align: center;
-  font-size: 16px;
-  max-width: calc(25% - 20px);
+  font-size: 24px;
+  width: 23%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -64,4 +66,20 @@
 
 .accessories-item {
   background-image: url(/src/assets/glasses.png);
+}
+
+.something-more-item-span {
+  width: 87%;
+  font-size: 36px;
+}
+
+.catalog-button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  cursor: pointer;
+  width: 100%;
+  height: 88px;
+  margin: 20px 0 20px 0;
+  background: none;
+  border: 1px solid $c-accent;
 }

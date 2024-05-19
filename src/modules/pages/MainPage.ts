@@ -1,4 +1,5 @@
 import BaseComponent from '../components/BaseComponent';
+import Button from '../components/Button';
 
 export default class MainPage extends BaseComponent {
   constructor() {
@@ -72,7 +73,19 @@ export default class MainPage extends BaseComponent {
     const somethingMoreItem = new BaseComponent({
       tag: 'div',
       classes: ['product-item', 'something-more-item'],
+    });
+
+    const spanMore = new BaseComponent({
+      tag: 'span',
+      classes: ['something-more-item-span'],
       text: 'and something more',
+    });
+
+    somethingMoreItem.append(spanMore);
+
+    const catalogButton = new Button({
+      text: 'view CATALOG',
+      classes: ['catalog-button'],
     });
 
     this.append(productLineDiv);
@@ -82,5 +95,6 @@ export default class MainPage extends BaseComponent {
     productLineItems.append(shortsItem);
     productLineItems.append(accessoriesItem);
     productLineItems.append(somethingMoreItem);
+    productLineDiv.append(catalogButton);
   }
 }
