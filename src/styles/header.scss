@@ -13,13 +13,15 @@
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 100%;
     height: 1px;
     background-color: $c-accent;
     transform-origin: center;
-    transition: width 0.2s ease-out, transform 0.2s ease-out;
+    transition:
+      width 0.2s ease-out,
+      transform 0.2s ease-out;
   }
   &::before {
     align-self: flex-end;
@@ -51,11 +53,11 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   align-items: center;
-  grid-template-areas: "logo m-nav u-nav";
+  grid-template-areas: 'logo m-nav u-nav';
   @media (max-width: 768px) {
     gap: 0;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-areas: "logo brg" "m-nav m-nav" "u-nav u-nav";
+    grid-template-areas: 'logo brg' 'm-nav m-nav' 'u-nav u-nav';
   }
 
   &__logo {
@@ -130,7 +132,7 @@
 .u-links {
   grid-area: u-nav;
   justify-self: end;
-  
+
   @media (max-width: 768px) {
     justify-self: center;
     display: grid;
