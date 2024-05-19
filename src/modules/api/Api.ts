@@ -38,17 +38,27 @@ export async function getAccessToken(): Promise<TokenResponse | null> {
 export async function createCustomer(
   token: TokenResponse,
   data: NewCustomerData,
-): Promise<CustomerLoginResponse> {
-  const response = await fetch(`${host}/${projectKey}/customers`, {
-    method: 'POST',
-    headers: {
-      Authorization: `${token.token_type} ${token.access_token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  const result = await response.json();
-  return result;
+): Promise<CustomerLoginResponse | ErrResponse> {
+  try {
+    const response = await fetch(`${host}/${projectKey}/customers`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
 }
 
 export async function loginCustomer(
@@ -80,13 +90,23 @@ export async function loginCustomer(
 export async function getCustomerById(
   token: TokenResponse,
   id: string,
-): Promise<CustomerLoginResponse> {
-  const response = await fetch(`${host}/${projectKey}/customers/${id}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `${token.token_type} ${token.access_token}`,
-    },
-  });
-  const result = await response.json();
-  return result;
+): Promise<CustomerLoginResponse | ErrResponse> {
+  try {
+    const response = await fetch(`${host}/${projectKey}/customers/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
 }

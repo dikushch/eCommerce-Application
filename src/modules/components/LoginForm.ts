@@ -58,7 +58,7 @@ export default class LoginForm extends BaseComponent {
       classes: ['login__label'],
     });
     const passwordTip = new BaseComponent({
-      text: '- minimum length 8 characters\n- one uppercase letter (A-Z)\n- one lowercase letter (a-z)\n- contain at least one digit (0-9)\n-  contain at least one special character (e.g., !@#$%^&*)\n- must not contain leading or trailing whitespace',
+      text: '- minimum length 8 characters\n- one uppercase letter (A-Z)\n- one lowercase letter (a-z)\n- contain at least one digit (0-9)\n- must not contain leading or trailing whitespace',
       classes: ['login__tip'],
     });
     const passwordContainer = new BaseComponent(

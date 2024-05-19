@@ -77,7 +77,7 @@ export default class LoginPage extends BaseComponent {
   }
 
   checkPass(): boolean {
-    const regExp = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\s])[^\s]{8,}$/;
+    const regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     const value = this.password.getValue();
     if (regExp.test(value)) {
       this.password.removeClass('wrong');

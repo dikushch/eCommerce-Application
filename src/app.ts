@@ -1,4 +1,8 @@
-import { getAccessToken, loginCustomer } from './modules/api/Api';
+import {
+  createCustomer,
+  getAccessToken,
+  loginCustomer,
+} from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
 import OkMsg from './modules/components/OkMsg';
@@ -99,9 +103,16 @@ class App {
   }
 
   async loginHandler(e: CustomEvent) {
-    const token = await getAccessToken();
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
     if (token) {
-      App.saveToken(token.access_token);
+      App.saveToken(JSON.stringify(token));
       const res = await loginCustomer(token, (e as CustomEvent).detail);
       if ('customer' in res) {
         App.saveCustomerId(res.customer.id);
@@ -109,6 +120,29 @@ class App {
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
         this.element.append(new OkMsg('successful login').getNode());
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async regCustomerHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const res = await createCustomer(token, e.detail);
+      if ('customer' in res) {
+        App.saveCustomerId(res.customer.id);
+        this.router.setLoginState(true);
+        this.header.userMenu.changeLinks();
+        this.router.changeRoute('/');
+        this.element.append(new OkMsg('successful registration').getNode());
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -134,6 +168,9 @@ class App {
     });
     this.element.addEventListener('logout', () => {
       this.logoutHandler();
+    });
+    this.element.addEventListener('reg-customer', async (e) => {
+      this.regCustomerHandler(e as CustomEvent);
     });
   }
 }
