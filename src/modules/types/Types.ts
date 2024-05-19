@@ -64,3 +64,15 @@ interface Address {
   city: string;
   country: string;
 }
+
+export interface ErrResponse {
+  statusCode: number;
+  message: string;
+  errors: Error[];
+}
+
+interface Error {
+  code: string;
+  message: string;
+  detailedErrorMessage: string;
+}
