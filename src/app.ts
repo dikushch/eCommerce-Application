@@ -65,6 +65,10 @@ class App {
     return localStorage.getItem('ct_id');
   }
 
+  static clearStorage(): void {
+    localStorage.clear();
+  }
+
   checkStorage(): boolean {
     this.authToken = App.getToken();
     this.customerId = App.getCustomerId();
@@ -111,12 +115,25 @@ class App {
     }
   }
 
+  logoutHandler() {
+    App.clearStorage();
+    this.authToken = null;
+    this.customerId = null;
+    this.isLogin = false;
+    this.header.userMenu.changeLinks();
+    this.router.setLoginState(this.isLogin);
+    this.router.changeRoute('/');
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
     });
     this.element.addEventListener('login', async (e) => {
       this.loginHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('logout', () => {
+      this.logoutHandler();
     });
   }
 }

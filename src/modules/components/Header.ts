@@ -12,11 +12,14 @@ export default class Header extends BaseComponent {
 
   links: HTMLElement[];
 
+  logout: BaseComponent;
+
   constructor(isLogin: boolean) {
     super({ tag: 'heeader', classes: ['header', 'container'] });
     const logo = new HeaderLogo();
     this.mainMenu = new HeaderMainMenu();
     this.userMenu = new HeaderUserMenu(isLogin);
+    this.logout = this.userMenu.logout;
     this.brg = new BaseComponent({ classes: ['brg'] });
 
     this.append(logo);
@@ -32,11 +35,14 @@ export default class Header extends BaseComponent {
       this.userMenu.login.getNode(),
       this.userMenu.register.getNode(),
       this.userMenu.profile.getNode(),
-      this.userMenu.logout.getNode(),
     ];
 
     this.brg.addListener('click', () => {
       this.openMenu();
+    });
+
+    this.logout.addListener('click', () => {
+      this.dispatchLogoutEvent();
     });
 
     this.addListener('click', (e) => {
@@ -92,5 +98,12 @@ export default class Header extends BaseComponent {
       return link;
     }
     return null;
+  }
+
+  dispatchLogoutEvent(): void {
+    const event = new CustomEvent('logout', {
+      bubbles: true,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
