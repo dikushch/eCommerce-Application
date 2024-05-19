@@ -199,24 +199,39 @@ export default class RegistrationPage extends BaseComponent {
     console.log(' checkAllInputsValue ');
 
     const regSingleWordExp = /^[A-Za-z]+$/;
-    const regMultiWordExp = /^[A-Za-z ]+$/;
-    const regPostalCodeExp = /^[A-Za-z0-9 ]+$/;
+    const postalCodeRegexps: { [key: string]: RegExp } = {
+      US: /^\d{5}$/,
+      AU: /^\d{4}$/,
+    };
+
     const regMailExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const regPasswExp =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[`~!@#$%^&*()_+=[{\]}\\|:;"'<>,.?/-])[A-Za-z\d~!@#$%^&*()_+=[{\]}\\|:;"'<>,.?/-]{8,}$/;
+    const regPasswExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+    const streetRegExp = /^.+$/;
+    const cityRegExp = /^[A-Za-z\s]+$/;
+    console.log(postalCodeRegexps[this.countryBillingInput.getValue()]);
+
+    console.log(this.countryBillingInput.getValue());
+
     const arrayValuesAndRegExp: [Input, RegExp][] = [
       [this.firstNameInput, regSingleWordExp],
       [this.lastNameInput, regSingleWordExp],
       [this.emailInput, regMailExp],
       [this.passwordInput, regPasswExp],
       // billing address
-      [this.streetBillingInput, regMultiWordExp],
-      [this.cityBillingInput, regMultiWordExp],
-      [this.postalBillingCodeInput, regPostalCodeExp],
+      [this.streetBillingInput, streetRegExp],
+      [this.cityBillingInput, cityRegExp],
+      [
+        this.postalBillingCodeInput,
+        postalCodeRegexps[this.countryBillingInput.getValue()],
+      ],
       // shipping address
-      [this.streetShippingInput, regMultiWordExp],
-      [this.cityShippingInput, regMultiWordExp],
-      [this.postalShippingCodeInput, regPostalCodeExp],
+      [this.streetShippingInput, streetRegExp],
+      [this.cityShippingInput, cityRegExp],
+      [
+        this.postalShippingCodeInput,
+        postalCodeRegexps[this.countryShippingInput.getValue()],
+      ],
     ];
     console.log(arrayValuesAndRegExp);
 
