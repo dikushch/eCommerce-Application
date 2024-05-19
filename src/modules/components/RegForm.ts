@@ -159,9 +159,7 @@ export default class RegForm extends BaseComponent<HTMLFormElement> {
     passwordDiv.append(passwordLabel);
     passwordDiv.append(this.passwordInput);
     passwordDiv.append(
-      spanError(
-        'need 8 symbols and at least one symbol, digit, upper and lower letter',
-      ),
+      spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
     );
 
     this.submitBtn = new Button({
