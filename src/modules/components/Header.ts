@@ -31,7 +31,7 @@ export default class Header extends BaseComponent {
       this.userMenu.cart.getNode(),
       this.userMenu.login.getNode(),
       this.userMenu.register.getNode(),
-      this.userMenu.user.getNode(),
+      this.userMenu.profile.getNode(),
       this.userMenu.logout.getNode(),
     ];
 

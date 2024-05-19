@@ -68,7 +68,6 @@ class App {
       if ('customer' in res) {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
-        this.header.userMenu.setUserName(res.customer.firstName);
         this.router.changeRoute('/');
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
