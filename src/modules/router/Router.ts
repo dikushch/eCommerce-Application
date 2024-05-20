@@ -7,8 +7,9 @@ export default class Router {
 
   isLogin: boolean = false;
 
-  constructor(routes: RouteItem[]) {
+  constructor(isLogin: boolean, routes: RouteItem[]) {
     this.routes = routes;
+    this.isLogin = isLogin;
     this.init();
   }
 
@@ -42,12 +43,16 @@ export default class Router {
   redirectToNotFound(): void {
     const notFoundPage = this.routes.find((route) => route.path === '/404');
     if (notFoundPage) {
+      if (this.currentRoute) {
+        this.currentRoute.remove();
+      }
       this.currentRoute = notFoundPage.component;
       document.body.append(this.currentRoute);
     }
   }
 
   redirectToMain(): void {
+    window.history.replaceState({}, '', '/');
     const main = this.routes.find((route) => route.path === '/');
     if (main) {
       if (this.currentRoute) {

@@ -7,7 +7,7 @@ export default class HeaderUserMenu extends BaseComponent {
 
   register: BaseComponent;
 
-  user: BaseComponent;
+  profile: BaseComponent;
 
   logout: BaseComponent;
 
@@ -46,8 +46,9 @@ export default class HeaderUserMenu extends BaseComponent {
       this.register,
     );
 
-    this.user = new BaseComponent({
+    this.profile = new BaseComponent({
       tag: 'a',
+      text: 'profile',
       classes: ['u-links__item'],
     });
 
@@ -61,7 +62,7 @@ export default class HeaderUserMenu extends BaseComponent {
 
     this.regLinks = new BaseComponent(
       { classes: ['u-links__box'] },
-      this.user,
+      this.profile,
       devider3,
       this.logout,
     );
@@ -81,7 +82,7 @@ export default class HeaderUserMenu extends BaseComponent {
     }
 
     this.cart.setAttribute('data-href', '/cart');
-    this.user.setAttribute('data-href', '/user');
+    this.profile.setAttribute('data-href', '/profile');
     this.login.setAttribute('data-href', '/login');
     this.register.setAttribute('data-href', '/register');
     this.logout.setAttribute('data-href', '/logout');
@@ -92,9 +93,5 @@ export default class HeaderUserMenu extends BaseComponent {
   changeLinks(): void {
     this.regLinks.toggleClass('hide');
     this.unregLinks.toggleClass('hide');
-  }
-
-  setUserName(value: string): void {
-    this.user.setTextContent(value);
   }
 }

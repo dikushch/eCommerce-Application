@@ -12,11 +12,14 @@ export default class Header extends BaseComponent {
 
   links: HTMLElement[];
 
+  logout: BaseComponent;
+
   constructor(isLogin: boolean) {
     super({ tag: 'heeader', classes: ['header', 'container'] });
     const logo = new HeaderLogo();
     this.mainMenu = new HeaderMainMenu();
     this.userMenu = new HeaderUserMenu(isLogin);
+    this.logout = this.userMenu.logout;
     this.brg = new BaseComponent({ classes: ['brg'] });
 
     this.append(logo);
@@ -31,12 +34,15 @@ export default class Header extends BaseComponent {
       this.userMenu.cart.getNode(),
       this.userMenu.login.getNode(),
       this.userMenu.register.getNode(),
-      this.userMenu.user.getNode(),
-      this.userMenu.logout.getNode(),
+      this.userMenu.profile.getNode(),
     ];
 
     this.brg.addListener('click', () => {
       this.openMenu();
+    });
+
+    this.logout.addListener('click', () => {
+      this.dispatchLogoutEvent();
     });
 
     this.addListener('click', (e) => {
@@ -80,6 +86,23 @@ export default class Header extends BaseComponent {
     const event = new CustomEvent('change-page', {
       bubbles: true,
       detail: link.dataset.href,
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  findLink(name: string): HTMLElement | null {
+    const link = this.links.find(
+      (l) => l.textContent?.toLowerCase() === name.toLowerCase(),
+    );
+    if (link) {
+      return link;
+    }
+    return null;
+  }
+
+  dispatchLogoutEvent(): void {
+    const event = new CustomEvent('logout', {
+      bubbles: true,
     });
     this.getNode().dispatchEvent(event);
   }
