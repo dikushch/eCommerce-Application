@@ -1,0 +1,33 @@
+.preload {
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  background-color: rgba($color: $c-bg, $alpha: 0.5);
+
+  &__text {
+    text-align: center;
+    font-weight: 500;
+    font-size: 26px;
+  }
+
+  &__icon {
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    width: 109px;
+    height: 100px;
+    background-image: url(/src/assets/preload.png);
+    transform-origin: 50px 50px;
+    animation: 2s ease-out 1s infinite spin;
+  }
+}

@@ -7,6 +7,7 @@ import {
 import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
 import OkMsg from './modules/components/OkMsg';
+import Preloader from './modules/components/Preloader';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
 import NotFoundPage from './modules/pages/NotFoundPage';
@@ -121,7 +122,10 @@ class App {
     }
     if (token) {
       App.saveToken(JSON.stringify(token));
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
       const res = await loginCustomer(token, (e as CustomEvent).detail);
+      preload.destroy();
       if ('customer' in res) {
         App.saveCustomerId(res.customer.id);
         this.router.setLoginState(true);
@@ -144,7 +148,10 @@ class App {
       App.saveToken(JSON.stringify(token));
     }
     if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
       const res = await createCustomer(token, e.detail);
+      preload.destroy();
       if ('customer' in res) {
         App.saveCustomerId(res.customer.id);
         this.router.setLoginState(true);
