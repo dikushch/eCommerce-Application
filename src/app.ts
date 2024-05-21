@@ -1,0 +1,194 @@
+import {
+  createCustomer,
+  getAccessToken,
+  getCustomerById,
+  loginCustomer,
+} from './modules/api/Api';
+import ErrMsg from './modules/components/ErrMsg';
+import Header from './modules/components/Header';
+import OkMsg from './modules/components/OkMsg';
+import Preloader from './modules/components/Preloader';
+import LoginPage from './modules/pages/LoginPage';
+import MainPage from './modules/pages/MainPage';
+import NotFoundPage from './modules/pages/NotFoundPage';
+import RegistrationPage from './modules/pages/RegPage';
+import Router from './modules/router/Router';
+import { RouteItem } from './modules/types/Types';
+import './styles.scss';
+
+class App {
+  element: HTMLElement = document.body;
+
+  router: Router;
+
+  header: Header;
+
+  main: MainPage;
+
+  login: LoginPage;
+
+  register: RegistrationPage;
+
+  notFoundPage: NotFoundPage;
+
+  isLogin: boolean = false;
+
+  authToken: string | null = null;
+
+  customerId: string | null = null;
+
+  constructor() {
+    this.isLogin = this.checkStorage();
+    if (this.isLogin) {
+      this.loginCustomer();
+    }
+    this.header = new Header(this.isLogin);
+    this.element.append(this.header.getNode());
+    this.notFoundPage = new NotFoundPage();
+    this.main = new MainPage();
+    this.login = new LoginPage();
+    this.register = new RegistrationPage();
+    const routes: RouteItem[] = [
+      { path: '/', component: this.main.getNode() },
+      { path: '/login', component: this.login.getNode() },
+      { path: '/register', component: this.register.getNode() },
+      { path: '/404', component: this.notFoundPage.getNode() },
+    ];
+    this.router = new Router(this.isLogin, routes);
+    this.setMenuItemActive(window.location.pathname);
+  }
+
+  async loginCustomer() {
+    const token = JSON.parse(this.authToken as string);
+    getCustomerById(token, this.customerId as string);
+  }
+
+  static saveToken(token: string): void {
+    localStorage.setItem('ct_token', token);
+  }
+
+  static saveCustomerId(id: string): void {
+    localStorage.setItem('ct_id', id);
+  }
+
+  static getToken(): string | null {
+    return localStorage.getItem('ct_token');
+  }
+
+  static getCustomerId(): string | null {
+    return localStorage.getItem('ct_id');
+  }
+
+  static clearStorage(): void {
+    localStorage.clear();
+  }
+
+  checkStorage(): boolean {
+    this.authToken = App.getToken();
+    this.customerId = App.getCustomerId();
+    if (this.authToken && this.customerId) {
+      return true;
+    }
+    return false;
+  }
+
+  setMenuItemActive(name: string): void {
+    let linkName;
+    if (name === '/') {
+      linkName = 'main';
+    } else {
+      linkName = name.slice(1);
+    }
+    const link = this.header.findLink(linkName);
+    if (link) {
+      this.header.setActiveLink(link);
+    }
+  }
+
+  changePageHandler(e: CustomEvent) {
+    const path = (e as CustomEvent).detail;
+    this.setMenuItemActive(path);
+    this.router.changeRoute(path);
+  }
+
+  async loginHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      App.saveToken(JSON.stringify(token));
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await loginCustomer(token, (e as CustomEvent).detail);
+      preload.destroy();
+      if ('customer' in res) {
+        App.saveCustomerId(res.customer.id);
+        this.router.setLoginState(true);
+        this.header.userMenu.changeLinks();
+        this.router.changeRoute('/');
+        this.element.append(new OkMsg('successful login').getNode());
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async regCustomerHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await createCustomer(token, e.detail);
+      preload.destroy();
+      if ('customer' in res) {
+        App.saveCustomerId(res.customer.id);
+        this.router.setLoginState(true);
+        this.header.userMenu.changeLinks();
+        this.router.changeRoute('/');
+        this.element.append(new OkMsg('successful registration').getNode());
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  logoutHandler() {
+    App.clearStorage();
+    this.authToken = null;
+    this.customerId = null;
+    this.isLogin = false;
+    this.header.userMenu.changeLinks();
+    this.router.setLoginState(this.isLogin);
+    this.router.changeRoute('/');
+  }
+
+  addListeners() {
+    this.element.addEventListener('change-page', (e) => {
+      this.changePageHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('login', async (e) => {
+      this.loginHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('logout', () => {
+      this.logoutHandler();
+    });
+    this.element.addEventListener('reg-customer', async (e) => {
+      this.regCustomerHandler(e as CustomEvent);
+    });
+  }
+}
+
+const app = new App();
+app.addListeners();
