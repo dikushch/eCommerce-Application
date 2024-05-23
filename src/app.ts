@@ -8,9 +8,12 @@ import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
 import OkMsg from './modules/components/OkMsg';
 import Preloader from './modules/components/Preloader';
+import CatalogPage from './modules/pages/CatalogPage';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
 import NotFoundPage from './modules/pages/NotFoundPage';
+import ProductPage from './modules/pages/ProductPage';
+import ProfilePage from './modules/pages/ProfilePage';
 import RegistrationPage from './modules/pages/RegPage';
 import Router from './modules/router/Router';
 import { RouteItem } from './modules/types/Types';
@@ -37,30 +40,52 @@ class App {
 
   customerId: string | null = null;
 
+  catalog: CatalogPage;
+
+  profile: ProfilePage | null = null;
+
+  product: ProductPage;
+
   constructor() {
     this.isLogin = this.checkStorage();
-    if (this.isLogin) {
-      this.loginCustomer();
-    }
     this.header = new Header(this.isLogin);
     this.element.append(this.header.getNode());
     this.notFoundPage = new NotFoundPage();
     this.main = new MainPage();
     this.login = new LoginPage();
     this.register = new RegistrationPage();
+    this.catalog = new CatalogPage();
+    this.product = new ProductPage(
+      'Red shirt with print',
+      'Great shirt made of premium materials with a juicy print',
+      3000,
+      2000,
+    );
     const routes: RouteItem[] = [
       { path: '/', component: this.main.getNode() },
       { path: '/login', component: this.login.getNode() },
       { path: '/register', component: this.register.getNode() },
+      { path: '/catalog', component: this.catalog.getNode() },
+      { path: '/product', component: this.product.getNode() },
       { path: '/404', component: this.notFoundPage.getNode() },
     ];
     this.router = new Router(this.isLogin, routes);
     this.setMenuItemActive(window.location.pathname);
+    if (this.isLogin) {
+      this.loginCustomer();
+    }
   }
 
   async loginCustomer() {
     const token = JSON.parse(this.authToken as string);
-    getCustomerById(token, this.customerId as string);
+    const userInfo = await getCustomerById(token, this.customerId as string);
+    if ('id' in userInfo) {
+      this.profile = new ProfilePage(userInfo);
+      this.router.routes.push({
+        path: '/profile',
+        component: this.profile.getNode(),
+      });
+    }
   }
 
   static saveToken(token: string): void {
@@ -132,6 +157,11 @@ class App {
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
         this.element.append(new OkMsg('successful login').getNode());
+        this.profile = new ProfilePage(res.customer);
+        this.router.routes.push({
+          path: '/profile',
+          component: this.profile.getNode(),
+        });
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
