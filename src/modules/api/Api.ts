@@ -111,3 +111,31 @@ export async function getCustomerById(
     return (e as Error).cause as ErrResponse;
   }
 }
+
+export async function getAccessTokenPassFlow(
+  email: string,
+  pass: string,
+): Promise<TokenResponse | null> {
+  try {
+    const response = await fetch(
+      `${authUrl}/oauth/${projectKey}/customers/token?grant_type=password&username=${email}&password=${pass}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization:
+            'Basic a294UzBEb29GbEtrWmVBSGhVUDZQOW5UOjRXZkkyNF9ram1Lcm1qNDRweGxNd2pZN1F6YURCamtw',
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Error');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return null;
+  }
+}
