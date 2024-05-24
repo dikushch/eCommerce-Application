@@ -4,6 +4,7 @@ import {
   LoginData,
   CustomerLoginResponse,
   ErrResponse,
+  Customer,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -90,7 +91,7 @@ export async function loginCustomer(
 export async function getCustomerById(
   token: TokenResponse,
   id: string,
-): Promise<CustomerLoginResponse | ErrResponse> {
+): Promise<Customer | ErrResponse> {
   try {
     const response = await fetch(`${host}/${projectKey}/customers/${id}`, {
       method: 'GET',

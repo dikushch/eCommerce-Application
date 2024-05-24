@@ -38,7 +38,7 @@ export interface CustomerLoginResponse {
   customer: Customer;
 }
 
-interface Customer {
+export interface Customer {
   id: string;
   version: number;
   email: string;
