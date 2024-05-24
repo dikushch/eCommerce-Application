@@ -77,3 +77,65 @@ interface Error {
   message: string;
   detailedErrorMessage: string;
 }
+
+export interface ChangeCustomerRequest {
+  version: number;
+  actions: Actions[];
+}
+
+type Actions =
+  | SetEmailAction
+  | SetFirstNameAction
+  | SetLastNameAction
+  | SetDateOfBirthAction
+  | AddNewAddressAction
+  | RemoveAddressAction
+  | ChangeAddressAction
+  | SetDefaultBillingAction
+  | SetDefaultShippingAction;
+
+export interface SetEmailAction {
+  action: 'changeEmail';
+  email: string;
+}
+
+export interface SetFirstNameAction {
+  action: 'setFirstName';
+  firstName: string;
+}
+
+export interface SetLastNameAction {
+  action: 'setLastName';
+  lastName: string;
+}
+
+export interface SetDateOfBirthAction {
+  action: 'setDateOfBirth';
+  dateOfBirth: string;
+}
+
+export interface AddNewAddressAction {
+  action: 'addAddress';
+  address: CustomerAddress;
+}
+
+export interface RemoveAddressAction {
+  action: 'removeAddress';
+  addressId: string;
+}
+
+export interface ChangeAddressAction {
+  action: 'changeAddress';
+  addressId: string;
+  address: CustomerAddress;
+}
+
+export interface SetDefaultShippingAction {
+  action: 'setDefaultShippingAddress';
+  addressId: string;
+}
+
+export interface SetDefaultBillingAction {
+  action: 'setDefaultBillingAddress';
+  addressId: string;
+}

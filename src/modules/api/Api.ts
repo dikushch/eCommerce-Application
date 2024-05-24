@@ -5,6 +5,7 @@ import {
   CustomerLoginResponse,
   ErrResponse,
   Customer,
+  ChangeCustomerRequest,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -137,5 +138,32 @@ export async function getAccessTokenPassFlow(
     return result;
   } catch (e) {
     return null;
+  }
+}
+
+export async function updateCustomer(
+  token: TokenResponse,
+  id: string,
+  dataToChange: ChangeCustomerRequest,
+): Promise<Customer | ErrResponse> {
+  try {
+    const response = await fetch(`${host}/${projectKey}/customers/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToChange),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
   }
 }

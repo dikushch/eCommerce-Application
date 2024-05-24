@@ -3,6 +3,7 @@ import {
   getAccessToken,
   getCustomerById,
   loginCustomer,
+  updateCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
@@ -85,6 +86,9 @@ class App {
         path: '/profile',
         component: this.profile.getNode(),
       });
+      if (window.location.pathname === '/profile') {
+        this.router.changeRoute('/profile');
+      }
     }
   }
 
@@ -156,6 +160,7 @@ class App {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
+        this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful login').getNode());
         this.profile = new ProfilePage(res.customer);
         this.router.routes.push({
@@ -187,6 +192,7 @@ class App {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
+        this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful registration').getNode());
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
@@ -202,6 +208,42 @@ class App {
     this.header.userMenu.changeLinks();
     this.router.setLoginState(this.isLogin);
     this.router.changeRoute('/');
+    this.setMenuItemActive('/');
+  }
+
+  updateProfileRout() {
+    const profileRoute = this.router.routes.find((r) => r.path === '/profile');
+    if (profileRoute) {
+      profileRoute.component = (this.profile as ProfilePage).getNode();
+    }
+    this.router.changeRoute('/profile');
+  }
+
+  async updateCustomerHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const { id, data } = e.detail;
+      const res = await updateCustomer(token, id, data);
+      preload.destroy();
+      if ('id' in res) {
+        this.profile = new ProfilePage(res);
+        this.updateProfileRout();
+        this.element.append(
+          new OkMsg('user data has been successfully updated').getNode(),
+        );
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
   }
 
   addListeners() {
@@ -216,6 +258,9 @@ class App {
     });
     this.element.addEventListener('reg-customer', async (e) => {
       this.regCustomerHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('update-customer', async (e) => {
+      this.updateCustomerHandler(e as CustomEvent);
     });
   }
 }
