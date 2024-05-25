@@ -9,6 +9,7 @@ import {
   ChangePassData,
   ProductsResponse,
   OneProduct,
+  SearchProductsData,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -227,6 +228,48 @@ export async function getProductById(
   try {
     const response = await fetch(
       `${host}/${projectKey}/product-projections/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function searchProducts(
+  token: TokenResponse,
+  searchData: SearchProductsData,
+): Promise<ProductsResponse | ErrResponse> {
+  const filters = [];
+  if (searchData.color !== null) {
+    filters.push(`filter=variants.attributes.color:"${searchData.color}"`);
+  }
+  if (searchData.size !== null) {
+    filters.push(`filter=variants.attributes.size:"${searchData.size}"`);
+  }
+  if (searchData.price !== null) {
+    filters.push(
+      `filter=variants.prices.value.centAmount:range (${searchData.price.from} to ${searchData.price.to})`,
+    );
+  }
+  if (searchData.type !== null) {
+    filters.push(`filter=productType.id:"${searchData.type}"`);
+  }
+  try {
+    const response = await fetch(
+      `${host}/${projectKey}/product-projections/search?${filters.join('&')}`,
       {
         method: 'GET',
         headers: {

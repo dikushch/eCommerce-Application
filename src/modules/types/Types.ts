@@ -206,3 +206,13 @@ export interface ProductAttr {
   name: string;
   value: string;
 }
+
+export interface SearchProductsData {
+  color: string | null;
+  size: string | null;
+  price: {
+    from: number;
+    to: number;
+  } | null;
+  type: string | null;
+}
