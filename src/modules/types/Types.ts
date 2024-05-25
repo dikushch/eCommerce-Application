@@ -216,4 +216,10 @@ export interface SearchProductsData {
   } | null;
   type: string | null;
   name: string | null;
+  sort:
+    | 'name.en-US desc'
+    | 'name.en-US asc'
+    | 'price asc'
+    | 'price desc'
+    | null;
 }

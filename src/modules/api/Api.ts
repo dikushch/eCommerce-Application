@@ -198,29 +198,6 @@ export async function changeCustomerPass(
   }
 }
 
-export async function getAllProducts(
-  token: TokenResponse,
-): Promise<ProductsResponse | ErrResponse> {
-  try {
-    const response = await fetch(`${host}/${projectKey}/product-projections`, {
-      method: 'GET',
-      headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const res = await response.json();
-      throw new Error(res.message, { cause: res });
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (e) {
-    return (e as Error).cause as ErrResponse;
-  }
-}
-
 export async function getProductById(
   token: TokenResponse,
   id: string,
@@ -269,6 +246,9 @@ export async function searchProducts(
   }
   if (searchData.name !== null) {
     filters.push(`text.en-US="${searchData.name}"`);
+  }
+  if (searchData.sort !== null) {
+    filters.push(`sort=${searchData.sort}`);
   }
   try {
     const response = await fetch(
