@@ -215,4 +215,5 @@ export interface SearchProductsData {
     to: number;
   } | null;
   type: string | null;
+  name: string | null;
 }

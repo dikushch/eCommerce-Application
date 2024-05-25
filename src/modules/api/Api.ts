@@ -267,6 +267,9 @@ export async function searchProducts(
   if (searchData.type !== null) {
     filters.push(`filter=productType.id:"${searchData.type}"`);
   }
+  if (searchData.name !== null) {
+    filters.push(`text.en-US="${searchData.name}"`);
+  }
   try {
     const response = await fetch(
       `${host}/${projectKey}/product-projections/search?${filters.join('&')}`,
