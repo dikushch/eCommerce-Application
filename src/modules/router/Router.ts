@@ -31,6 +31,8 @@ export default class Router {
         (matchedRoute.path === '/login' || matchedRoute.path === '/register')
       ) {
         this.redirectToMain();
+      } else if (!this.isLogin && matchedRoute.path === '/profile') {
+        this.redirectToMain();
       } else {
         this.currentRoute = matchedRoute.component;
         document.body.append(this.currentRoute);

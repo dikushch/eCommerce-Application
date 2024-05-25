@@ -164,10 +164,7 @@ class App {
         this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful login').getNode());
         this.profile = new ProfilePage(res.customer);
-        this.router.routes.push({
-          path: '/profile',
-          component: this.profile.getNode(),
-        });
+        this.updateProfileRout();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -195,6 +192,8 @@ class App {
         this.router.changeRoute('/');
         this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful registration').getNode());
+        this.profile = new ProfilePage(res.customer);
+        this.updateProfileRout();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -216,8 +215,12 @@ class App {
     const profileRoute = this.router.routes.find((r) => r.path === '/profile');
     if (profileRoute) {
       profileRoute.component = (this.profile as ProfilePage).getNode();
+    } else {
+      this.router.routes.push({
+        path: '/profile',
+        component: (this.profile as ProfilePage).getNode(),
+      });
     }
-    this.router.changeRoute('/profile');
   }
 
   async updateCustomerHandler(e: CustomEvent) {
@@ -238,6 +241,7 @@ class App {
       if ('id' in res) {
         this.profile = new ProfilePage(res);
         this.updateProfileRout();
+        this.router.changeRoute('/profile');
         this.element.append(
           new OkMsg('user data has been successfully updated').getNode(),
         );
@@ -264,6 +268,7 @@ class App {
       if ('id' in res) {
         this.profile = new ProfilePage(res);
         this.updateProfileRout();
+        this.router.changeRoute('/profile');
         this.element.append(
           new OkMsg('user password successfully changed').getNode(),
         );
