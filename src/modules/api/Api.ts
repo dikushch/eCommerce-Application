@@ -7,6 +7,8 @@ import {
   Customer,
   ChangeCustomerRequest,
   ChangePassData,
+  ProductsResponse,
+  OneProduct,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -182,6 +184,56 @@ export async function changeCustomerPass(
       },
       body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function getAllProducts(
+  token: TokenResponse,
+): Promise<ProductsResponse | ErrResponse> {
+  try {
+    const response = await fetch(`${host}/${projectKey}/product-projections`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function getProductById(
+  token: TokenResponse,
+  id: string,
+): Promise<OneProduct | ErrResponse> {
+  try {
+    const response = await fetch(
+      `${host}/${projectKey}/product-projections/${id}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      },
+    );
 
     if (!response.ok) {
       const res = await response.json();

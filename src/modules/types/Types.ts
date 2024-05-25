@@ -146,3 +146,63 @@ export interface ChangePassData {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface ProductsResponse {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: OneProduct[];
+}
+
+export interface OneProduct {
+  id: string;
+  version: number;
+  productType: {
+    typeId: 'product-type';
+    id: string;
+  };
+  name: {
+    'en-US': string;
+  };
+  description: {
+    'en-US': string;
+  };
+  masterVariant: {
+    id: number;
+    sku: string;
+    key: string;
+    prices: {
+      id: string;
+      value: {
+        type: 'centPrecision';
+        currencyCode: 'USD';
+        centAmount: number;
+        fractionDigits: number;
+      };
+      discounted?: {
+        value: {
+          type: 'centPrecision';
+          currencyCode: 'USD';
+          centAmount: number;
+          fractionDigits: number;
+        };
+      };
+    };
+    images: ProductImg[];
+    attributes: ProductAttr[];
+  };
+}
+
+export interface ProductImg {
+  url: string;
+  dimensions: {
+    w: number;
+    h: number;
+  };
+}
+
+export interface ProductAttr {
+  name: string;
+  value: string;
+}
