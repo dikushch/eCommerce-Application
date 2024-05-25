@@ -139,3 +139,10 @@ export interface SetDefaultBillingAction {
   action: 'setDefaultBillingAddress';
   addressId: string;
 }
+
+export interface ChangePassData {
+  id: string;
+  version: number;
+  currentPassword: string;
+  newPassword: string;
+}

@@ -1,4 +1,5 @@
 import {
+  changeCustomerPass,
   createCustomer,
   getAccessToken,
   getCustomerById,
@@ -246,6 +247,32 @@ class App {
     }
   }
 
+  async changePassHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await changeCustomerPass(token, e.detail);
+      preload.destroy();
+      if ('id' in res) {
+        this.profile = new ProfilePage(res);
+        this.updateProfileRout();
+        this.element.append(
+          new OkMsg('user password successfully changed').getNode(),
+        );
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
@@ -261,6 +288,9 @@ class App {
     });
     this.element.addEventListener('update-customer', async (e) => {
       this.updateCustomerHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('change-pass', async (e) => {
+      this.changePassHandler(e as CustomEvent);
     });
   }
 }
