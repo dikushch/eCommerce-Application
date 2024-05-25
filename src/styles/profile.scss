@@ -42,6 +42,11 @@
     margin-bottom: 20px;
     margin-top: 5px;
 
+    &-address {
+      display: flex;
+      flex-direction: row;
+    }
+
     &-label {
       font-family: Poppins;
       font-size: 16px;
@@ -84,6 +89,60 @@
         &:hover {
           background-color: rgba($color: $c-err, $alpha: 0.6);
         }
+      }
+    }
+  }
+
+  &__address {
+    gap: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid $c-accent;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
+
+.address__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &-div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  &-btn {
+    padding: 8px 10px 8px 10px;
+
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    height: 40px;
+
+    color: black;
+    border: 1px solid #fc7353;
+    cursor: pointer;
+
+    &.green {
+      background-color: rgba($color: $c-ok, $alpha: 0.3);
+      &:hover {
+        background-color: rgba($color: $c-ok, $alpha: 0.6);
+      }
+    }
+    &.red {
+      background-color: rgba($color: $c-err, $alpha: 0.3);
+      &:hover {
+        background-color: rgba($color: $c-err, $alpha: 0.6);
       }
     }
   }
