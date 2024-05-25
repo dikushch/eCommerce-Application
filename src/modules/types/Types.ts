@@ -58,7 +58,7 @@ export interface Customer {
   dateOfBirth: string;
 }
 
-interface Address {
+export interface Address {
   id: string;
   streetName: string;
   postalCode: string;
