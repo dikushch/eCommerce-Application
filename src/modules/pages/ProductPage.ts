@@ -53,10 +53,9 @@ export default class ProductPage extends BaseComponent {
     let saleLabel: BaseComponent<HTMLElement> | null = null;
 
     if (this.discount) {
-      salePrice = new BaseComponent({
-        tag: 'span',
-        text: `${this.discount}$`,
-        classes: ['sale-price'],
+      const saleWrapper = new BaseComponent({
+        tag: 'div',
+        classes: ['sale-wrapper'],
       });
 
       saleLabel = new BaseComponent({
@@ -64,7 +63,22 @@ export default class ProductPage extends BaseComponent {
         text: 'sale',
         classes: ['sale-label'],
       });
+
+      salePrice = new BaseComponent({
+        tag: 'span',
+        text: `${this.discount}$`,
+        classes: ['sale-price'],
+      });
+
+      saleWrapper.append(saleLabel);
+      saleWrapper.append(salePrice);
+      priceContainer.append(saleWrapper);
     }
+
+    priceContainer.append(originalPrice);
+    productContainer.append(productName);
+    productContainer.append(productDescription);
+    productContainer.append(priceContainer);
 
     const addToCartButton = new BaseComponent({
       tag: 'button',
@@ -72,17 +86,7 @@ export default class ProductPage extends BaseComponent {
       classes: ['add-to-cart'],
     });
 
-    productContainer.append(productName);
-    productContainer.append(productDescription);
-
-    if (saleLabel && salePrice) {
-      priceContainer.append(saleLabel);
-      priceContainer.append(salePrice);
-    }
-    priceContainer.append(originalPrice);
-    productContainer.append(priceContainer);
     productContainer.append(addToCartButton);
-
     this.append(productContainer);
   }
 }
