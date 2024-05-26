@@ -1,8 +1,10 @@
 import {
+  changeCustomerPass,
   createCustomer,
   getAccessToken,
   getCustomerById,
   loginCustomer,
+  updateCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
@@ -60,6 +62,11 @@ class App {
       'Great shirt made of premium materials with a juicy print',
       3000,
       2000,
+      [
+        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/2%20%281%29-vKzesj9M.jpg',
+        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/1-k-mMeUwr.jpg',
+        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/3-nhIai5J1.jpg',
+      ],
     );
     const routes: RouteItem[] = [
       { path: '/', component: this.main.getNode() },
@@ -85,6 +92,9 @@ class App {
         path: '/profile',
         component: this.profile.getNode(),
       });
+      if (window.location.pathname === '/profile') {
+        this.router.changeRoute('/profile');
+      }
     }
   }
 
@@ -156,12 +166,10 @@ class App {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
+        this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful login').getNode());
         this.profile = new ProfilePage(res.customer);
-        this.router.routes.push({
-          path: '/profile',
-          component: this.profile.getNode(),
-        });
+        this.updateProfileRout();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -187,7 +195,10 @@ class App {
         this.router.setLoginState(true);
         this.header.userMenu.changeLinks();
         this.router.changeRoute('/');
+        this.setMenuItemActive('/');
         this.element.append(new OkMsg('successful registration').getNode());
+        this.profile = new ProfilePage(res.customer);
+        this.updateProfileRout();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -202,6 +213,74 @@ class App {
     this.header.userMenu.changeLinks();
     this.router.setLoginState(this.isLogin);
     this.router.changeRoute('/');
+    this.setMenuItemActive('/');
+  }
+
+  updateProfileRout() {
+    const profileRoute = this.router.routes.find((r) => r.path === '/profile');
+    if (profileRoute) {
+      profileRoute.component = (this.profile as ProfilePage).getNode();
+    } else {
+      this.router.routes.push({
+        path: '/profile',
+        component: (this.profile as ProfilePage).getNode(),
+      });
+    }
+  }
+
+  async updateCustomerHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const { id, data } = e.detail;
+      const res = await updateCustomer(token, id, data);
+      preload.destroy();
+      if ('id' in res) {
+        this.profile = new ProfilePage(res);
+        this.updateProfileRout();
+        this.router.changeRoute('/profile');
+        this.element.append(
+          new OkMsg('user data has been successfully updated').getNode(),
+        );
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async changePassHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await changeCustomerPass(token, e.detail);
+      preload.destroy();
+      if ('id' in res) {
+        this.profile = new ProfilePage(res);
+        this.updateProfileRout();
+        this.router.changeRoute('/profile');
+        this.element.append(
+          new OkMsg('user password successfully changed').getNode(),
+        );
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
   }
 
   addListeners() {
@@ -216,6 +295,12 @@ class App {
     });
     this.element.addEventListener('reg-customer', async (e) => {
       this.regCustomerHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('update-customer', async (e) => {
+      this.updateCustomerHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('change-pass', async (e) => {
+      this.changePassHandler(e as CustomEvent);
     });
   }
 }

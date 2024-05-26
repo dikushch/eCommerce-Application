@@ -9,7 +9,15 @@ export default class ProductPage extends BaseComponent {
 
   discount?: number;
 
-  constructor(name: string, descr: string, price: number, discount?: number) {
+  imgs?: string[];
+
+  constructor(
+    name: string,
+    descr: string,
+    price: number,
+    discount?: number,
+    imgs?: string[],
+  ) {
     super({
       tag: 'section',
       classes: ['product-page', 'container'],
@@ -19,6 +27,9 @@ export default class ProductPage extends BaseComponent {
     this.price = price;
     if (discount) {
       this.discount = discount;
+    }
+    if (imgs) {
+      this.imgs = imgs;
     }
 
     const productContainer = new BaseComponent({
