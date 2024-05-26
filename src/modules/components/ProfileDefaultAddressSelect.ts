@@ -1,80 +1,67 @@
 import BaseComponent from './BaseComponent';
 import { Customer, Address } from '../types/Types';
-import Button from './Button';
+import Select from './Select';
 
 export default class ProfileDefaultAddressSelect extends BaseComponent {
-  profileAddNewAddress: Button;
+  addressDefaultBillingSelect: Select;
+
+  addressDefaultShippingSelect: Select;
 
   constructor(userInfo: Customer) {
-    super({ classes: ['profile__default_address'] });
-    const h2Element = (textHead: string) =>
+    super({ classes: ['profile__default_address', 'profile__info-container'] });
+    const spanElement = (textHead: string) =>
       new BaseComponent({
-        tag: 'h2',
-        classes: ['h2'],
+        tag: 'span',
+        classes: ['h3'],
         text: textHead,
       });
-    // add in colums
+
+    const addressesOptions: { value: string; text: string }[] = [];
+
+    userInfo.addresses.forEach((element) => {
+      addressesOptions.push(
+        ProfileDefaultAddressSelect.addAddressOption(element),
+      );
+    });
+
+    this.addressDefaultShippingSelect = new Select(addressesOptions, {
+      classes: ['inputs__box-select'],
+      id: 'shippingAddresses',
+    });
+
+    this.addressDefaultBillingSelect = new Select(addressesOptions, {
+      classes: ['inputs__box-select'],
+      id: 'billingAddresses',
+    });
+
     const profileDefAddressDiv1 = new BaseComponent(
       {
         classes: ['profile__box'],
       },
-      h2Element('Default shipping address:'),
-      (this.profileAddNewAddress = new Button({
-        text: 'delete1',
-        classes: ['profile__box-btn', 'green'],
-      })),
+      spanElement('Default shipping address:'),
+      this.addressDefaultShippingSelect,
     );
 
     const profileDefAddressDiv2 = new BaseComponent(
       {
         classes: ['profile__box'],
       },
-      h2Element('Default billing address:'),
-      (this.profileAddNewAddress = new Button({
-        text: 'delete2 ',
-        classes: ['profile__box-btn', 'green'],
-      })),
+      spanElement('Default billing address:'),
+      this.addressDefaultBillingSelect,
     );
 
-    console.log(userInfo.addresses);
+    console.log('userInfo', userInfo);
 
     this.append(profileDefAddressDiv1);
     this.append(profileDefAddressDiv2);
   }
 
-  static addAddressDiv(address: Address): BaseComponent[] {
-    const divElement = new BaseComponent({
-      classes: ['address__list-div'],
-    });
-
-    const spanElement = new BaseComponent({
-      tag: 'span',
+  static addAddressOption(address: Address): { value: string; text: string } {
+    const optionElement = {
       text: `${address.country}, ${address.city}, ${address.streetName}, ${address.postalCode}`,
-      classes: ['address__list-span'],
-    });
-    const editBtn = new Button({
-      text: 'edit',
-      classes: ['address__list-btn', 'green'],
-    });
-    editBtn.setAttribute('data-addressId', address.id);
+      value: `${address.id}`,
+    };
 
-    const removeBtn = new Button({
-      text: 'remove',
-      classes: ['address__list-btn', 'red'],
-    });
-    removeBtn.setAttribute('data-addressId', address.id);
-
-    const btnsDivElement = new BaseComponent(
-      {
-        classes: ['address__list-div'],
-      },
-      editBtn,
-      removeBtn,
-    );
-
-    divElement.append(spanElement);
-    divElement.append(btnsDivElement);
-
-    return [divElement];
+    return optionElement;
   }
 }
