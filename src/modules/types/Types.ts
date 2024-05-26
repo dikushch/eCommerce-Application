@@ -55,9 +55,10 @@ export interface Customer {
   billingAddressIds: string[];
   authenticationMode: string;
   stores: [];
+  dateOfBirth: string;
 }
 
-interface Address {
+export interface Address {
   id: string;
   streetName: string;
   postalCode: string;
