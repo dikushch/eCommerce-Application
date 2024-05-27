@@ -4,6 +4,7 @@ import {
   getAccessToken,
   getCustomerById,
   loginCustomer,
+  searchProducts,
   updateCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
@@ -283,6 +284,28 @@ class App {
     }
   }
 
+  async updateCatalogHandler(e: CustomEvent) {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await searchProducts(token, e.detail);
+      preload.destroy();
+      if ('limit' in res) {
+        this.catalog.createProductsList(res);
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
@@ -301,6 +324,9 @@ class App {
     });
     this.element.addEventListener('change-pass', async (e) => {
       this.changePassHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('update-catalog', async (e) => {
+      this.updateCatalogHandler(e as CustomEvent);
     });
   }
 }
