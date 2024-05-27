@@ -31,7 +31,7 @@ export default class CatalogProductTypes extends BaseComponent {
       text: 't-shirts',
       classes: ['c-types__link'],
     });
-    this.tshirts.setAttribute('data-type', '');
+    this.tshirts.setAttribute('data-type', 't-shirt');
     const tshirtsLi = new BaseComponent(
       { tag: 'li', classes: ['c-types__item'] },
       this.tshirts,
@@ -42,7 +42,7 @@ export default class CatalogProductTypes extends BaseComponent {
       text: 'shirts',
       classes: ['c-types__link'],
     });
-    this.shirts.setAttribute('data-type', '');
+    this.shirts.setAttribute('data-type', 'shirt');
     const shirtsLi = new BaseComponent(
       { tag: 'li', classes: ['c-types__item'] },
       this.shirts,
@@ -53,7 +53,7 @@ export default class CatalogProductTypes extends BaseComponent {
       text: 'shorts',
       classes: ['c-types__link'],
     });
-    this.shorts.setAttribute('data-type', '');
+    this.shorts.setAttribute('data-type', 'short');
     const shortsLi = new BaseComponent(
       { tag: 'li', classes: ['c-types__item'] },
       this.shorts,
@@ -64,7 +64,7 @@ export default class CatalogProductTypes extends BaseComponent {
       text: 'glasses',
       classes: ['c-types__link'],
     });
-    this.glasses.setAttribute('data-type', '');
+    this.glasses.setAttribute('data-type', 'glasses');
     const glassesLi = new BaseComponent(
       { tag: 'li', classes: ['c-types__item'] },
       this.glasses,
@@ -75,7 +75,7 @@ export default class CatalogProductTypes extends BaseComponent {
       text: 'hats',
       classes: ['c-types__link'],
     });
-    this.hats.setAttribute('data-type', '');
+    this.hats.setAttribute('data-type', 'hat');
     const hatsLi = new BaseComponent(
       { tag: 'li', classes: ['c-types__item'] },
       this.hats,
