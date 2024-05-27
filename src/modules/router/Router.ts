@@ -32,7 +32,7 @@ export default class Router {
       ) {
         this.redirectToMain();
       } else if (!this.isLogin && matchedRoute.path === '/profile') {
-        this.redirectToMain();
+        this.redirectToLogin();
       } else {
         this.currentRoute = matchedRoute.component;
         document.body.append(this.currentRoute);
@@ -61,6 +61,18 @@ export default class Router {
         this.currentRoute.remove();
       }
       this.currentRoute = main.component;
+      document.body.append(this.currentRoute);
+    }
+  }
+
+  redirectToLogin(): void {
+    window.history.replaceState({}, '', '/login');
+    const login = this.routes.find((route) => route.path === '/login');
+    if (login) {
+      if (this.currentRoute) {
+        this.currentRoute.remove();
+      }
+      this.currentRoute = login.component;
       document.body.append(this.currentRoute);
     }
   }
