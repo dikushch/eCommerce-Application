@@ -172,25 +172,27 @@ export interface OneProduct {
     id: number;
     sku: string;
     key: string;
-    prices: {
-      id: string;
-      value: {
-        type: 'centPrecision';
-        currencyCode: 'USD';
-        centAmount: number;
-        fractionDigits: number;
-      };
-      discounted?: {
-        value: {
-          type: 'centPrecision';
-          currencyCode: 'USD';
-          centAmount: number;
-          fractionDigits: number;
-        };
-      };
-    };
+    prices: Price[];
     images: ProductImg[];
     attributes: ProductAttr[];
+  };
+}
+
+interface Price {
+  id: string;
+  value: {
+    type: 'centPrecision';
+    currencyCode: 'USD';
+    centAmount: number;
+    fractionDigits: number;
+  };
+  discounted?: {
+    value: {
+      type: 'centPrecision';
+      currencyCode: 'USD';
+      centAmount: number;
+      fractionDigits: number;
+    };
   };
 }
 
