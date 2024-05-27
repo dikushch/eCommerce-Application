@@ -25,12 +25,8 @@ export default class ProductPage extends BaseComponent {
     this.name = name;
     this.descr = descr;
     this.price = price;
-    if (discount) {
-      this.discount = discount;
-    }
-    if (imgs) {
-      this.imgs = imgs;
-    }
+    this.discount = discount;
+    this.imgs = imgs;
 
     const productContainer = new BaseComponent({
       tag: 'div',
@@ -98,6 +94,51 @@ export default class ProductPage extends BaseComponent {
     });
 
     productContainer.append(addToCartButton);
+
     this.append(productContainer);
+
+    if (this.imgs && this.imgs.length > 0) {
+      const slider = this.createSlider(this.imgs);
+      this.append(slider);
+    }
+  }
+
+  createSlider(imgs: string[]): BaseComponent {
+    const sliderContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['slider-container'],
+    });
+
+    const mainImage = new BaseComponent({
+      tag: 'img',
+      classes: ['main-image'],
+    });
+    mainImage.setAttribute('src', imgs[0]);
+    mainImage.setAttribute('alt', this.name);
+
+    const previewsContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['previews-container'],
+    });
+
+    imgs.forEach((img, index) => {
+      const preview = new BaseComponent({
+        tag: 'img',
+        classes: ['preview'],
+      });
+      preview.setAttribute('src', img);
+      preview.setAttribute('alt', `${this.name} preview ${index + 1}`);
+
+      preview.addListener('click', () => {
+        mainImage.setAttribute('src', img);
+      });
+
+      previewsContainer.append(preview);
+    });
+
+    sliderContainer.append(mainImage);
+    sliderContainer.append(previewsContainer);
+
+    return sliderContainer;
   }
 }
