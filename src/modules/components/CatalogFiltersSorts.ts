@@ -106,4 +106,11 @@ export default class CatalogFiltersSorts extends BaseComponent {
       this.reset,
     ]);
   }
+
+  resetState(): void {
+    this.colorFilter.setValue('');
+    this.sizeFilter.setValue('');
+    this.sort.setValue('');
+    this.search.clearValue();
+  }
 }

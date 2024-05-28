@@ -40,6 +40,11 @@ export default class CatalogPage extends BaseComponent {
     this.types.addListener('click', (e) => {
       this.typesHandler(e);
     });
+
+    this.query.reset.addListener('click', () => {
+      this.resetFilters();
+      this.dispatchUpdateCatalogEvent(this.queryData);
+    });
   }
 
   createProductsList(data: ProductsResponse): void {
@@ -64,6 +69,16 @@ export default class CatalogPage extends BaseComponent {
         this.dispatchUpdateCatalogEvent(this.queryData);
       }
     }
+  }
+
+  resetFilters(): void {
+    this.queryData.color = null;
+    this.queryData.size = null;
+    this.queryData.name = null;
+    this.queryData.sort = null;
+    this.queryData.price = null;
+
+    this.query.resetState();
   }
 
   dispatchUpdateCatalogEvent(searchParams: SearchProductsData): void {
