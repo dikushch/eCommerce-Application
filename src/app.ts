@@ -3,6 +3,7 @@ import {
   createCustomer,
   getAccessToken,
   getCustomerById,
+  getProductById,
   loginCustomer,
   searchProducts,
   updateCustomer,
@@ -224,7 +225,7 @@ class App {
     this.setMenuItemActive('/');
   }
 
-  updateProfileRout() {
+  updateProfileRout(): void {
     const profileRoute = this.router.routes.find((r) => r.path === '/profile');
     if (profileRoute) {
       profileRoute.component = (this.profile as ProfilePage).getNode();
@@ -232,6 +233,18 @@ class App {
       this.router.routes.push({
         path: '/profile',
         component: (this.profile as ProfilePage).getNode(),
+      });
+    }
+  }
+
+  checkRoute(path: string, node: HTMLElement): void {
+    const route = this.router.routes.find((r) => r.path === path);
+    if (route) {
+      route.component = node;
+    } else {
+      this.router.routes.push({
+        path,
+        component: node,
       });
     }
   }
@@ -292,6 +305,32 @@ class App {
     }
   }
 
+  async openProductHandler(e: CustomEvent) {
+    const token = await App.checkToken();
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await getProductById(token, e.detail);
+      preload.destroy();
+      if ('id' in res) {
+        const imgs = res.masterVariant.images.map((img) => img.url);
+        this.product = new ProductPage(
+          res.name['en-US'],
+          res.description['en-US'],
+          res.masterVariant.prices[0].value.centAmount,
+          res.masterVariant.prices[0].discounted?.value.centAmount,
+          imgs,
+        );
+        const type = this.catalog.idsTypes.get(res.productType.id);
+        const id = res.masterVariant.sku;
+        this.checkRoute(`/catalog/${type}/${id}`, this.product.getNode());
+        this.router.changeRoute(`/catalog/${type}/${id}`);
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
@@ -313,6 +352,10 @@ class App {
     });
     this.element.addEventListener('update-catalog', async (e) => {
       this.updateCatalogHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('open-product', async (e) => {
+      console.log((e as CustomEvent).detail);
+      this.openProductHandler(e as CustomEvent);
     });
   }
 }

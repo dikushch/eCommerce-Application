@@ -50,5 +50,30 @@ export default class CatalogCard extends BaseComponent {
     this.addBtn = new Button({ text: 'add to cart', classes: ['c-item__btn'] });
 
     this.appendChildren([name, img, descr, priceCaontainer, this.addBtn]);
+
+    this.addListener('click', (e) => {
+      this.cardHandler(e);
+    });
+
+    this.addBtn.addListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  cardHandler(e: Event): void {
+    if (e.target instanceof HTMLElement) {
+      const card = e.target.closest('.c-item');
+      if (card instanceof HTMLElement) {
+        this.dispatchOpenProductEvent();
+      }
+    }
+  }
+
+  dispatchOpenProductEvent(): void {
+    const event = new CustomEvent('open-product', {
+      bubbles: true,
+      detail: this.id,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }

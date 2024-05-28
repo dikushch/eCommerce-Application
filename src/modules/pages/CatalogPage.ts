@@ -17,6 +17,8 @@ export default class CatalogPage extends BaseComponent {
 
   typesIds: Map<string, string> = new Map();
 
+  idsTypes: Map<string, string> = new Map();
+
   queryData: SearchProductsData = {
     color: null,
     size: null,
@@ -34,6 +36,10 @@ export default class CatalogPage extends BaseComponent {
     this.typesIds.set('short', '79154a83-d7b5-4b3f-b294-2c9b45042368');
     this.typesIds.set('hat', '973f3761-e366-4791-bd63-23478d9426c0');
     this.typesIds.set('glasses', '4b9618e7-4f98-4ec3-9dda-8657a7371224');
+
+    this.typesIds.forEach((v, k) => {
+      this.idsTypes.set(v, k);
+    });
 
     this.types = new CatalogProductTypes();
     this.types.all.addClass('active');
