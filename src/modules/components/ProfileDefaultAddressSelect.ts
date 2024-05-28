@@ -64,7 +64,6 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
     // add listeners
 
     this.addressDefaultShippingSelect.addListener('change', () => {
-      console.log('change shipping address');
       const dataAddressDefaultShipping: ChangeCustomerRequest = {
         version: userInfo.version,
         actions: [
@@ -74,12 +73,11 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
           },
         ],
       };
-      console.log(dataAddressDefaultShipping);
+
       this.dispathUpdateEvent(userInfo.id, dataAddressDefaultShipping);
     });
 
     this.addressDefaultBillingSelect.addListener('change', () => {
-      console.log('change billing address');
       const dataAddressDefaultBilling: ChangeCustomerRequest = {
         version: userInfo.version,
         actions: [
@@ -89,7 +87,7 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
           },
         ],
       };
-      console.log(dataAddressDefaultBilling);
+
       this.dispathUpdateEvent(userInfo.id, dataAddressDefaultBilling);
     });
 
@@ -109,7 +107,7 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
       this.addressDefaultBillingSelect,
     );
 
-    console.log('userInfo', userInfo);
+    // console.log('userInfo', userInfo);
 
     this.append(profileDefAddressDiv1);
     this.append(profileDefAddressDiv2);
