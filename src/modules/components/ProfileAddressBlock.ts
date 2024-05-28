@@ -1,5 +1,5 @@
 import BaseComponent from './BaseComponent';
-import { Customer, Address } from '../types/Types';
+import { Customer, Address, ChangeCustomerRequest } from '../types/Types';
 import Button from './Button';
 
 export default class ProfileAddressBlock extends BaseComponent {
@@ -54,11 +54,27 @@ export default class ProfileAddressBlock extends BaseComponent {
       }
       if (
         ev != null &&
+        ev.getAttribute('data-addressid') !== null &&
         ev.tagName === 'BUTTON' &&
         ev.classList.contains('red')
       ) {
         console.log('!!! Red button clicked:');
         console.log('addressid', ev.getAttribute('data-addressid'));
+
+        const addressValue = ev.getAttribute('data-addressid');
+
+        if (addressValue !== null) {
+          const dataAddressDefaultBilling: ChangeCustomerRequest = {
+            version: userInfo.version,
+            actions: [
+              {
+                action: 'removeAddress',
+                addressId: addressValue,
+              },
+            ],
+          };
+          this.dispathUpdateEvent(userInfo.id, dataAddressDefaultBilling);
+        }
       }
     });
     console.log(userInfo.addresses);
@@ -101,5 +117,13 @@ export default class ProfileAddressBlock extends BaseComponent {
     divElement.append(btnsDivElement);
 
     return [divElement];
+  }
+
+  dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
+    const event = new CustomEvent('update-customer', {
+      bubbles: true,
+      detail: { id, data },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
