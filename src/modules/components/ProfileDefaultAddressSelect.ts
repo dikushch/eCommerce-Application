@@ -1,5 +1,5 @@
 import BaseComponent from './BaseComponent';
-import { Customer, Address } from '../types/Types';
+import { Customer, Address, ChangeCustomerRequest } from '../types/Types';
 import Select from './Select';
 
 export default class ProfileDefaultAddressSelect extends BaseComponent {
@@ -16,22 +16,81 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
         text: textHead,
       });
 
-    const addressesOptions: { value: string; text: string }[] = [];
+    const addressesShippingOptions: { value: string; text: string }[] = [];
 
+    const addressesBillingOptions: { value: string; text: string }[] = [];
+
+    if (!userInfo.defaultShippingAddressId) {
+      addressesShippingOptions.push({
+        text: `No default address`,
+        value: ``,
+      });
+    }
+    if (!userInfo.defaultBillingAddressId) {
+      addressesBillingOptions.push({
+        text: `No default address`,
+        value: ``,
+      });
+    }
     userInfo.addresses.forEach((element) => {
-      addressesOptions.push(
+      addressesShippingOptions.push(
+        ProfileDefaultAddressSelect.addAddressOption(element),
+      );
+      addressesBillingOptions.push(
         ProfileDefaultAddressSelect.addAddressOption(element),
       );
     });
 
-    this.addressDefaultShippingSelect = new Select(addressesOptions, {
+    this.addressDefaultShippingSelect = new Select(addressesShippingOptions, {
       classes: ['inputs__box-select'],
       id: 'shippingAddresses',
     });
+    if (userInfo.defaultShippingAddressId) {
+      const selectSh =
+        this.addressDefaultShippingSelect.getNode() as HTMLSelectElement;
+      selectSh.value = userInfo.defaultShippingAddressId;
+    }
 
-    this.addressDefaultBillingSelect = new Select(addressesOptions, {
+    this.addressDefaultBillingSelect = new Select(addressesBillingOptions, {
       classes: ['inputs__box-select'],
       id: 'billingAddresses',
+    });
+    if (userInfo.defaultBillingAddressId) {
+      const selectB =
+        this.addressDefaultBillingSelect.getNode() as HTMLSelectElement;
+      selectB.value = userInfo.defaultBillingAddressId;
+    }
+
+    // add listeners
+
+    this.addressDefaultShippingSelect.addListener('change', () => {
+      console.log('change shipping address');
+      const dataAddressDefaultShipping: ChangeCustomerRequest = {
+        version: userInfo.version,
+        actions: [
+          {
+            action: 'setDefaultShippingAddress',
+            addressId: this.addressDefaultShippingSelect.getValue(),
+          },
+        ],
+      };
+      console.log(dataAddressDefaultShipping);
+      this.dispathUpdateEvent(userInfo.id, dataAddressDefaultShipping);
+    });
+
+    this.addressDefaultBillingSelect.addListener('change', () => {
+      console.log('change billing address');
+      const dataAddressDefaultBilling: ChangeCustomerRequest = {
+        version: userInfo.version,
+        actions: [
+          {
+            action: 'setDefaultBillingAddress',
+            addressId: this.addressDefaultBillingSelect.getValue(),
+          },
+        ],
+      };
+      console.log(dataAddressDefaultBilling);
+      this.dispathUpdateEvent(userInfo.id, dataAddressDefaultBilling);
     });
 
     const profileDefAddressDiv1 = new BaseComponent(
@@ -63,5 +122,13 @@ export default class ProfileDefaultAddressSelect extends BaseComponent {
     };
 
     return optionElement;
+  }
+
+  dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
+    const event = new CustomEvent('update-customer', {
+      bubbles: true,
+      detail: { id, data },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
