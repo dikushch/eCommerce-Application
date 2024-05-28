@@ -13,6 +13,8 @@ export default class CatalogProductTypes extends BaseComponent {
 
   hats: BaseComponent;
 
+  links: HTMLElement[];
+
   constructor() {
     super({ tag: 'ul', classes: ['c-types__list'] });
     this.all = new BaseComponent({
@@ -81,6 +83,15 @@ export default class CatalogProductTypes extends BaseComponent {
       this.hats,
     );
 
+    this.links = [
+      this.all.getNode(),
+      this.tshirts.getNode(),
+      this.shirts.getNode(),
+      this.shorts.getNode(),
+      this.glasses.getNode(),
+      this.hats.getNode(),
+    ];
+
     this.appendChildren([
       allLi,
       tshirtsLi,
@@ -89,5 +100,19 @@ export default class CatalogProductTypes extends BaseComponent {
       glassesLi,
       hatsLi,
     ]);
+  }
+
+  setActiveLink(link: HTMLElement): void {
+    const clickedLink = this.links.find((l) => l === link);
+    if (!clickedLink?.classList.contains('active')) {
+      this.clearActiveClass();
+      clickedLink?.classList.add('active');
+    }
+  }
+
+  clearActiveClass(): void {
+    this.links.forEach((l) => {
+      l.classList.remove('active');
+    });
   }
 }

@@ -19,7 +19,7 @@ import ProductPage from './modules/pages/ProductPage';
 import ProfilePage from './modules/pages/ProfilePage';
 import RegistrationPage from './modules/pages/RegPage';
 import Router from './modules/router/Router';
-import { RouteItem } from './modules/types/Types';
+import { RouteItem, TokenResponse } from './modules/types/Types';
 import './styles.scss';
 
 class App {
@@ -50,6 +50,7 @@ class App {
   product: ProductPage;
 
   constructor() {
+    App.checkToken();
     this.isLogin = this.checkStorage();
     this.header = new Header(this.isLogin);
     this.element.append(this.header.getNode());
@@ -81,6 +82,14 @@ class App {
     this.setMenuItemActive(window.location.pathname);
     if (this.isLogin) {
       this.loginCustomer();
+    }
+  }
+
+  async getProducts(): Promise<void> {
+    const token = await App.checkToken();
+    const data = await searchProducts(token, this.catalog.queryData);
+    if ('limit' in data) {
+      this.catalog.createProductsList(data);
     }
   }
 
@@ -119,12 +128,25 @@ class App {
     localStorage.clear();
   }
 
+  static async checkToken(): Promise<TokenResponse> {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    return token;
+  }
+
   checkStorage(): boolean {
     this.authToken = App.getToken();
     this.customerId = App.getCustomerId();
     if (this.authToken && this.customerId) {
       return true;
     }
+
     return false;
   }
 
@@ -148,16 +170,8 @@ class App {
   }
 
   async loginHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
-      App.saveToken(JSON.stringify(token));
       const preload = new Preloader();
       this.element.append(preload.getNode());
       const res = await loginCustomer(token, (e as CustomEvent).detail);
@@ -178,14 +192,7 @@ class App {
   }
 
   async regCustomerHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -230,14 +237,7 @@ class App {
   }
 
   async updateCustomerHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -258,14 +258,7 @@ class App {
   }
 
   async changePassHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -285,14 +278,7 @@ class App {
   }
 
   async updateCatalogHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -333,3 +319,4 @@ class App {
 
 const app = new App();
 app.addListeners();
+app.getProducts();
