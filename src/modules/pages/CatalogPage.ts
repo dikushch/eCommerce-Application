@@ -2,7 +2,11 @@ import BaseComponent from '../components/BaseComponent';
 import CatalogFiltersSorts from '../components/CatalogFiltersSorts';
 import CatalogList from '../components/CatalogList';
 import CatalogProductTypes from '../components/CatalogProductsTypes';
-import { ProductsResponse, SearchProductsData } from '../types/Types';
+import {
+  ProductsResponse,
+  SearchProductsData,
+  SearchSort,
+} from '../types/Types';
 
 export default class CatalogPage extends BaseComponent {
   catalogList: CatalogList | null = null;
@@ -44,6 +48,47 @@ export default class CatalogPage extends BaseComponent {
     this.query.reset.addListener('click', () => {
       this.resetFilters();
       this.dispatchUpdateCatalogEvent(this.queryData);
+    });
+
+    this.query.colorFilter.addListener('change', () => {
+      const value = this.query.colorFilter.getValue();
+      if (value === '') {
+        this.queryData.color = null;
+      } else {
+        this.queryData.color = value;
+      }
+      this.dispatchUpdateCatalogEvent(this.queryData);
+    });
+
+    this.query.sizeFilter.addListener('change', () => {
+      const value = this.query.sizeFilter.getValue();
+      if (value === '') {
+        this.queryData.size = null;
+      } else {
+        this.queryData.size = value;
+      }
+      this.dispatchUpdateCatalogEvent(this.queryData);
+    });
+
+    this.query.sort.addListener('change', () => {
+      const value = this.query.sort.getValue();
+      if (value === '') {
+        this.queryData.sort = null;
+      } else {
+        this.queryData.sort = value as SearchSort;
+      }
+      this.dispatchUpdateCatalogEvent(this.queryData);
+    });
+
+    this.query.search.addListener('input', () => {
+      const value = this.query.search.getValue();
+      if (value === '') {
+        this.queryData.name = null;
+        this.dispatchUpdateCatalogEvent(this.queryData);
+      } else if (value.trim()) {
+        this.queryData.name = value;
+        this.dispatchUpdateCatalogEvent(this.queryData);
+      }
     });
   }
 
