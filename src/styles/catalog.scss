@@ -12,6 +12,23 @@
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
     gap: 20px;
+    position: relative;
+    &::before {
+      content: "Products not found!";
+      width: 100%;
+      text-align: center;
+      font: inherit;
+      font-size: 28px;
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &:has(>li) {
+      &::before {
+        display: none;
+      }
+    }
     @media (max-width: 1024px) {
       grid-template-columns: repeat(3, 1fr);
     }
