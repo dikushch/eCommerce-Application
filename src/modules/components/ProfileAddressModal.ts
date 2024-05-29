@@ -1,3 +1,4 @@
+import { Customer } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 import Input from './Input';
@@ -19,15 +20,29 @@ export default class ModalAddress extends BaseComponent {
 
   isValidInputs: boolean = true;
 
-  constructor() {
+  constructor(
+    isEditMode: boolean,
+    userInfo?: Customer,
+    editAddressId?: string | null,
+  ) {
     super({ classes: ['modal'] });
     console.log('ModalAddress class');
+
     const spanError = (textExample: string) =>
       new BaseComponent({
         tag: 'span',
         classes: ['reg_form_error-hide'],
         text: `Incorrect input, example: ${textExample}`,
       });
+
+    const textInModal = {
+      head: 'Add address',
+      submitBtn: 'add',
+    };
+    if (isEditMode) {
+      textInModal.head = 'Edit address';
+      textInModal.submitBtn = 'save';
+    }
 
     const profileModalDivHead = new BaseComponent(
       {
@@ -40,7 +55,7 @@ export default class ModalAddress extends BaseComponent {
         },
         new BaseComponent({
           tag: 'h2',
-          text: 'Address',
+          text: textInModal.head,
           classes: ['profile__box-h2'],
         }),
       ),
@@ -138,7 +153,7 @@ export default class ModalAddress extends BaseComponent {
           classes: ['profile__box'],
         },
         (this.saveBtn = new Button({
-          text: 'save',
+          text: textInModal.submitBtn,
           classes: ['profile__box-btn', 'green'],
         })),
       ),
@@ -193,6 +208,12 @@ export default class ModalAddress extends BaseComponent {
       this.handleWindowClick(event);
     };
 
+    if (isEditMode) {
+      if (userInfo && editAddressId) {
+        this.fillInputs(userInfo, editAddressId);
+      }
+    }
+
     this.append(profileModalContent);
   }
 
@@ -204,6 +225,20 @@ export default class ModalAddress extends BaseComponent {
 
   destroyModal(): void {
     this.destroy();
+  }
+
+  fillInputs(userInfo: Customer, editAddressId: string): void {
+    const editAddress = userInfo.addresses.find(
+      (address) => address.id === editAddressId,
+    );
+    if (editAddress) {
+      console.log(editAddress.city);
+
+      this.profileAddressCity.setValue(editAddress.city);
+      this.profileAddressPostal.setValue(editAddress.postalCode);
+      this.profileAddressStreet.setValue(editAddress.streetName);
+      this.profileAddressCountry.setValue(editAddress.country);
+    }
   }
 
   checkAllInputsValue() {
