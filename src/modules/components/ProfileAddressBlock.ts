@@ -1,6 +1,7 @@
 import BaseComponent from './BaseComponent';
 import { Customer, Address, ChangeCustomerRequest } from '../types/Types';
 import Button from './Button';
+import ProfileAddressModal from './ProfileAddressModal';
 
 export default class ProfileAddressBlock extends BaseComponent {
   profileAddNewAddress: Button;
@@ -40,7 +41,8 @@ export default class ProfileAddressBlock extends BaseComponent {
 
     // add listeners
     this.profileAddNewAddress.addListener('click', () => {
-      console.log('click add new address btn');
+      const modalAddress = new ProfileAddressModal();
+      this.append(modalAddress);
     });
     profileAddressesListDiv.addListener('click', (e) => {
       const ev = e.target as HTMLElement;
@@ -51,6 +53,8 @@ export default class ProfileAddressBlock extends BaseComponent {
       ) {
         console.log('!!! Green button clicked:');
         console.log('addressid', ev.getAttribute('data-addressid'));
+        const modalAddress = new ProfileAddressModal();
+        this.append(modalAddress);
       }
       if (
         ev != null &&
