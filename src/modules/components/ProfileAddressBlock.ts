@@ -6,10 +6,6 @@ import ProfileAddressModal from './ProfileAddressModal';
 export default class ProfileAddressBlock extends BaseComponent {
   profileAddNewAddress: Button;
 
-  // profileEditAddress: Button;
-
-  // profileRemoveAddress: Button;
-
   constructor(userInfo: Customer) {
     super({ classes: ['profile__address'] });
     const h2Element = (textHead: string) =>
@@ -18,7 +14,6 @@ export default class ProfileAddressBlock extends BaseComponent {
         classes: ['h2'],
         text: textHead,
       });
-    // add in colums
     const profileAddressDiv1 = new BaseComponent(
       {
         classes: ['profile__info-container'],
@@ -51,8 +46,6 @@ export default class ProfileAddressBlock extends BaseComponent {
         ev.tagName === 'BUTTON' &&
         ev.classList.contains('green')
       ) {
-        console.log('!!! Green button clicked:');
-        console.log('addressid', ev.getAttribute('data-addressid'));
         const modalAddress = new ProfileAddressModal(
           true,
           userInfo,
@@ -66,9 +59,6 @@ export default class ProfileAddressBlock extends BaseComponent {
         ev.tagName === 'BUTTON' &&
         ev.classList.contains('red')
       ) {
-        console.log('!!! Red button clicked:');
-        console.log('addressid', ev.getAttribute('data-addressid'));
-
         const addressValue = ev.getAttribute('data-addressid');
 
         if (addressValue !== null) {
@@ -85,7 +75,6 @@ export default class ProfileAddressBlock extends BaseComponent {
         }
       }
     });
-    console.log(userInfo.addresses);
 
     this.append(profileAddressDiv1);
     this.append(profileAddressesListDiv);
