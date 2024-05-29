@@ -272,3 +272,30 @@ export async function searchProducts(
     return (e as Error).cause as ErrResponse;
   }
 }
+
+export async function getProductByKey(
+  token: TokenResponse,
+  key: string,
+): Promise<OneProduct | ErrResponse> {
+  try {
+    const response = await fetch(
+      `${host}/${projectKey}/product-projections/key=${key}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}

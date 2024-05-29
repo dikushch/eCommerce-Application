@@ -3,7 +3,9 @@ import {
   createCustomer,
   getAccessToken,
   getCustomerById,
+  getProductById,
   loginCustomer,
+  searchProducts,
   updateCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
@@ -18,7 +20,7 @@ import ProductPage from './modules/pages/ProductPage';
 import ProfilePage from './modules/pages/ProfilePage';
 import RegistrationPage from './modules/pages/RegPage';
 import Router from './modules/router/Router';
-import { RouteItem } from './modules/types/Types';
+import { RouteItem, TokenResponse } from './modules/types/Types';
 import './styles.scss';
 
 class App {
@@ -49,6 +51,7 @@ class App {
   product: ProductPage;
 
   constructor() {
+    App.checkToken();
     this.isLogin = this.checkStorage();
     this.header = new Header(this.isLogin);
     this.element.append(this.header.getNode());
@@ -80,6 +83,14 @@ class App {
     this.setMenuItemActive(window.location.pathname);
     if (this.isLogin) {
       this.loginCustomer();
+    }
+  }
+
+  async getProducts(): Promise<void> {
+    const token = await App.checkToken();
+    const data = await searchProducts(token, this.catalog.queryData);
+    if ('limit' in data) {
+      this.catalog.createProductsList(data);
     }
   }
 
@@ -118,12 +129,25 @@ class App {
     localStorage.clear();
   }
 
+  static async checkToken(): Promise<TokenResponse> {
+    const storageToken = App.getToken();
+    let token;
+    if (storageToken) {
+      token = JSON.parse(storageToken);
+    } else {
+      token = await getAccessToken();
+      App.saveToken(JSON.stringify(token));
+    }
+    return token;
+  }
+
   checkStorage(): boolean {
     this.authToken = App.getToken();
     this.customerId = App.getCustomerId();
     if (this.authToken && this.customerId) {
       return true;
     }
+
     return false;
   }
 
@@ -147,16 +171,8 @@ class App {
   }
 
   async loginHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
-      App.saveToken(JSON.stringify(token));
       const preload = new Preloader();
       this.element.append(preload.getNode());
       const res = await loginCustomer(token, (e as CustomEvent).detail);
@@ -177,14 +193,7 @@ class App {
   }
 
   async regCustomerHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -216,7 +225,7 @@ class App {
     this.setMenuItemActive('/');
   }
 
-  updateProfileRout() {
+  updateProfileRout(): void {
     const profileRoute = this.router.routes.find((r) => r.path === '/profile');
     if (profileRoute) {
       profileRoute.component = (this.profile as ProfilePage).getNode();
@@ -228,15 +237,20 @@ class App {
     }
   }
 
-  async updateCustomerHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
+  checkRoute(path: string, node: HTMLElement): void {
+    const route = this.router.routes.find((r) => r.path === path);
+    if (route) {
+      route.component = node;
     } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
+      this.router.routes.push({
+        path,
+        component: node,
+      });
     }
+  }
+
+  async updateCustomerHandler(e: CustomEvent) {
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -257,14 +271,7 @@ class App {
   }
 
   async changePassHandler(e: CustomEvent) {
-    const storageToken = App.getToken();
-    let token;
-    if (storageToken) {
-      token = JSON.parse(storageToken);
-    } else {
-      token = await getAccessToken();
-      App.saveToken(JSON.stringify(token));
-    }
+    const token = await App.checkToken();
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
@@ -277,6 +284,48 @@ class App {
         this.element.append(
           new OkMsg('user password successfully changed').getNode(),
         );
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async updateCatalogHandler(e: CustomEvent) {
+    const token = await App.checkToken();
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await searchProducts(token, e.detail);
+      preload.destroy();
+      if ('limit' in res) {
+        this.catalog.createProductsList(res);
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async openProductHandler(e: CustomEvent) {
+    const token = await App.checkToken();
+    if (token) {
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
+      const res = await getProductById(token, e.detail);
+      preload.destroy();
+      if ('id' in res) {
+        const imgs = res.masterVariant.images.map((img) => img.url);
+        this.product = new ProductPage(
+          res.name['en-US'],
+          res.description['en-US'],
+          res.masterVariant.prices[0].value.centAmount,
+          res.masterVariant.prices[0].discounted?.value.centAmount,
+          imgs,
+        );
+        const type = this.catalog.idsTypes.get(res.productType.id);
+        const id = res.masterVariant.sku;
+        this.checkRoute(`/catalog/${type}/${id}`, this.product.getNode());
+        this.router.changeRoute(`/catalog/${type}/${id}`);
+        this.header.clearActiveClass();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -302,8 +351,15 @@ class App {
     this.element.addEventListener('change-pass', async (e) => {
       this.changePassHandler(e as CustomEvent);
     });
+    this.element.addEventListener('update-catalog', async (e) => {
+      this.updateCatalogHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('open-product', async (e) => {
+      this.openProductHandler(e as CustomEvent);
+    });
   }
 }
 
 const app = new App();
 app.addListeners();
+app.getProducts();
