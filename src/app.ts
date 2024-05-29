@@ -354,7 +354,6 @@ class App {
       this.updateCatalogHandler(e as CustomEvent);
     });
     this.element.addEventListener('open-product', async (e) => {
-      console.log((e as CustomEvent).detail);
       this.openProductHandler(e as CustomEvent);
     });
   }
