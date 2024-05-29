@@ -26,7 +26,6 @@ export default class ModalAddress extends BaseComponent {
     editAddressId?: string | null,
   ) {
     super({ classes: ['modal'] });
-    console.log('ModalAddress class');
 
     const spanError = (textExample: string) =>
       new BaseComponent({
@@ -194,13 +193,10 @@ export default class ModalAddress extends BaseComponent {
       this.destroyModal();
     });
     this.saveBtn.addListener('click', () => {
-      console.log('click save');
-
       this.isValidInputs = true;
       this.checkAllInputsValue();
 
       if (this.isValidInputs) {
-        console.log('!!! send data to server');
         if (isEditMode && editAddressId) {
           this.createAndSendRequstForEditAddress(userInfo, editAddressId);
         } else {
@@ -237,8 +233,6 @@ export default class ModalAddress extends BaseComponent {
       (address) => address.id === editAddressId,
     );
     if (editAddress) {
-      console.log(editAddress.city);
-
       this.profileAddressCity.setValue(editAddress.city);
       this.profileAddressPostal.setValue(editAddress.postalCode);
       this.profileAddressStreet.setValue(editAddress.streetName);
