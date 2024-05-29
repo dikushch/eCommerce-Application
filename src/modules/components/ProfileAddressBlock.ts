@@ -41,7 +41,7 @@ export default class ProfileAddressBlock extends BaseComponent {
 
     // add listeners
     this.profileAddNewAddress.addListener('click', () => {
-      const modalAddress = new ProfileAddressModal(false);
+      const modalAddress = new ProfileAddressModal(false, userInfo);
       this.append(modalAddress);
     });
     profileAddressesListDiv.addListener('click', (e) => {

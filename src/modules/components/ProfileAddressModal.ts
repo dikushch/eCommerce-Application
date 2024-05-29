@@ -1,4 +1,4 @@
-import { Customer } from '../types/Types';
+import { ChangeCustomerRequest, Customer } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 import Input from './Input';
@@ -22,7 +22,7 @@ export default class ModalAddress extends BaseComponent {
 
   constructor(
     isEditMode: boolean,
-    userInfo?: Customer,
+    userInfo: Customer,
     editAddressId?: string | null,
   ) {
     super({ classes: ['modal'] });
@@ -201,6 +201,11 @@ export default class ModalAddress extends BaseComponent {
 
       if (this.isValidInputs) {
         console.log('!!! send data to server');
+        if (isEditMode && editAddressId) {
+          this.createAndSendRequstForEditAddress(userInfo, editAddressId);
+        } else {
+          this.createAndSendRequstForAddAddress(userInfo);
+        }
       }
     });
 
@@ -301,5 +306,60 @@ export default class ModalAddress extends BaseComponent {
         .getNode()
         .nextElementSibling?.classList.remove('reg_form_error-show');
     }
+  }
+
+  createAndSendRequstForAddAddress(userInfo: Customer) {
+    const getCountry: { [key: string]: 'US' | 'AU' } = {
+      US: 'US',
+      AU: 'AU',
+    };
+
+    const dataAddAddress: ChangeCustomerRequest = {
+      version: userInfo.version,
+      actions: [
+        {
+          action: 'addAddress',
+          address: {
+            country: getCountry[this.profileAddressCountry.getValue()],
+            city: this.profileAddressCity.getValue(),
+            streetName: this.profileAddressStreet.getValue(),
+            postalCode: this.profileAddressPostal.getValue(),
+          },
+        },
+      ],
+    };
+    this.dispathUpdateEvent(userInfo.id, dataAddAddress);
+  }
+
+  createAndSendRequstForEditAddress(userInfo: Customer, editAddressId: string) {
+    const getCountry: { [key: string]: 'US' | 'AU' } = {
+      US: 'US',
+      AU: 'AU',
+    };
+
+    const dataEditAddress: ChangeCustomerRequest = {
+      version: userInfo.version,
+      actions: [
+        {
+          action: 'changeAddress',
+          addressId: editAddressId,
+          address: {
+            country: getCountry[this.profileAddressCountry.getValue()],
+            city: this.profileAddressCity.getValue(),
+            streetName: this.profileAddressStreet.getValue(),
+            postalCode: this.profileAddressPostal.getValue(),
+          },
+        },
+      ],
+    };
+    this.dispathUpdateEvent(userInfo.id, dataEditAddress);
+  }
+
+  dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
+    const event = new CustomEvent('update-customer', {
+      bubbles: true,
+      detail: { id, data },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
