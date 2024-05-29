@@ -325,6 +325,7 @@ class App {
         const id = res.masterVariant.sku;
         this.checkRoute(`/catalog/${type}/${id}`, this.product.getNode());
         this.router.changeRoute(`/catalog/${type}/${id}`);
+        this.header.clearActiveClass();
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }

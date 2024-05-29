@@ -37,6 +37,8 @@ export default class Router {
         this.currentRoute = matchedRoute.component;
         document.body.append(this.currentRoute);
       }
+    } else if (!this.isLogin && routePath === '/profile') {
+      this.redirectToLogin();
     } else {
       this.redirectToNotFound();
     }
