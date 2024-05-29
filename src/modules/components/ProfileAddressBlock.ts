@@ -41,7 +41,7 @@ export default class ProfileAddressBlock extends BaseComponent {
 
     // add listeners
     this.profileAddNewAddress.addListener('click', () => {
-      const modalAddress = new ProfileAddressModal();
+      const modalAddress = new ProfileAddressModal(false);
       this.append(modalAddress);
     });
     profileAddressesListDiv.addListener('click', (e) => {
@@ -53,7 +53,11 @@ export default class ProfileAddressBlock extends BaseComponent {
       ) {
         console.log('!!! Green button clicked:');
         console.log('addressid', ev.getAttribute('data-addressid'));
-        const modalAddress = new ProfileAddressModal();
+        const modalAddress = new ProfileAddressModal(
+          true,
+          userInfo,
+          ev.getAttribute('data-addressid'),
+        );
         this.append(modalAddress);
       }
       if (
