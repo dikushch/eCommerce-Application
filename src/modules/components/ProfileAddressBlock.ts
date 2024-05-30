@@ -1,13 +1,10 @@
 import BaseComponent from './BaseComponent';
-import { Customer, Address } from '../types/Types';
+import { Customer, Address, ChangeCustomerRequest } from '../types/Types';
 import Button from './Button';
+import ProfileAddressModal from './ProfileAddressModal';
 
 export default class ProfileAddressBlock extends BaseComponent {
   profileAddNewAddress: Button;
-
-  // profileEditAddress: Button;
-
-  // profileRemoveAddress: Button;
 
   constructor(userInfo: Customer) {
     super({ classes: ['profile__address'] });
@@ -17,7 +14,6 @@ export default class ProfileAddressBlock extends BaseComponent {
         classes: ['h2'],
         text: textHead,
       });
-    // add in colums
     const profileAddressDiv1 = new BaseComponent(
       {
         classes: ['profile__info-container'],
@@ -40,7 +36,8 @@ export default class ProfileAddressBlock extends BaseComponent {
 
     // add listeners
     this.profileAddNewAddress.addListener('click', () => {
-      console.log('click add new address btn');
+      const modalAddress = new ProfileAddressModal(false, userInfo);
+      this.append(modalAddress);
     });
     profileAddressesListDiv.addListener('click', (e) => {
       const ev = e.target as HTMLElement;
@@ -49,19 +46,35 @@ export default class ProfileAddressBlock extends BaseComponent {
         ev.tagName === 'BUTTON' &&
         ev.classList.contains('green')
       ) {
-        console.log('!!! Green button clicked:');
-        console.log('addressid', ev.getAttribute('data-addressid'));
+        const modalAddress = new ProfileAddressModal(
+          true,
+          userInfo,
+          ev.getAttribute('data-addressid'),
+        );
+        this.append(modalAddress);
       }
       if (
         ev != null &&
+        ev.getAttribute('data-addressid') !== null &&
         ev.tagName === 'BUTTON' &&
         ev.classList.contains('red')
       ) {
-        console.log('!!! Red button clicked:');
-        console.log('addressid', ev.getAttribute('data-addressid'));
+        const addressValue = ev.getAttribute('data-addressid');
+
+        if (addressValue !== null) {
+          const dataAddressDefaultBilling: ChangeCustomerRequest = {
+            version: userInfo.version,
+            actions: [
+              {
+                action: 'removeAddress',
+                addressId: addressValue,
+              },
+            ],
+          };
+          this.dispathUpdateEvent(userInfo.id, dataAddressDefaultBilling);
+        }
       }
     });
-    console.log(userInfo.addresses);
 
     this.append(profileAddressDiv1);
     this.append(profileAddressesListDiv);
@@ -101,5 +114,13 @@ export default class ProfileAddressBlock extends BaseComponent {
     divElement.append(btnsDivElement);
 
     return [divElement];
+  }
+
+  dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
+    const event = new CustomEvent('update-customer', {
+      bubbles: true,
+      detail: { id, data },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
