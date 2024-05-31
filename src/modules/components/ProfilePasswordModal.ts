@@ -176,7 +176,7 @@ export default class PaswordModal extends BaseComponent {
         if (!this.isNewAndConfurmPasswordNotTheSame()) {
           PaswordModal.addCustomErrorText(
             this.profileConfurmNewPassword,
-            'Passwords are not the same',
+            'Password mismatch',
           );
           return;
         }
