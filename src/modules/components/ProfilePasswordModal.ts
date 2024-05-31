@@ -24,7 +24,7 @@ export default class PaswordModal extends BaseComponent {
       new BaseComponent({
         tag: 'span',
         classes: ['reg_form_error-hide'],
-        text: `Incorrect input, example: ${textExample}`,
+        text: textExample,
       });
 
     const profileModalDivHead = new BaseComponent(
@@ -63,7 +63,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileCurrentPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
     const profileModalDiv2 = new BaseComponent(
@@ -85,7 +87,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileNewPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
 
@@ -131,7 +135,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileConfurmNewPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
 
@@ -167,6 +173,14 @@ export default class PaswordModal extends BaseComponent {
       this.checkAllInputsValue();
 
       if (this.isValidInputs) {
+        if (!this.isNewAndConfurmPasswordNotTheSame()) {
+          PaswordModal.addCustomErrorText(
+            this.profileConfurmNewPassword,
+            'Passwords are not the same',
+          );
+          return;
+        }
+
         console.log(userInfo);
 
         console.log('!!! send request to server');
@@ -240,6 +254,21 @@ export default class PaswordModal extends BaseComponent {
       node
         .getNode()
         .nextElementSibling?.classList.remove('reg_form_error-show');
+    }
+  }
+
+  isNewAndConfurmPasswordNotTheSame() {
+    return (
+      this.profileNewPassword.getValue() ===
+      this.profileConfurmNewPassword.getValue()
+    );
+  }
+
+  static addCustomErrorText(inputValue: Input, errorText: string) {
+    const spanError: Element | null = inputValue.getNode().nextElementSibling;
+    if (spanError) {
+      spanError.classList.add('reg_form_error-show');
+      spanError.textContent = errorText;
     }
   }
 }
