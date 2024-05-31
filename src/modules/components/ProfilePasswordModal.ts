@@ -1,4 +1,4 @@
-import { Customer } from '../types/Types';
+import { ChangePassData, Customer } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 import Input from './Input';
@@ -24,7 +24,7 @@ export default class PaswordModal extends BaseComponent {
       new BaseComponent({
         tag: 'span',
         classes: ['reg_form_error-hide'],
-        text: `Incorrect input, example: ${textExample}`,
+        text: textExample,
       });
 
     const profileModalDivHead = new BaseComponent(
@@ -63,7 +63,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileCurrentPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
     const profileModalDiv2 = new BaseComponent(
@@ -85,7 +87,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileNewPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
 
@@ -131,7 +135,9 @@ export default class PaswordModal extends BaseComponent {
           classes: ['profile__box-input'],
           id: 'profileConfurmNewPassword',
         })),
-        spanError('need 8 characters and 1 digit, 1 upper and lower letter'),
+        spanError(
+          'Incorrect input, example: need 8 characters and 1 digit, 1 upper and lower letter',
+        ),
       ),
     );
 
@@ -167,9 +173,15 @@ export default class PaswordModal extends BaseComponent {
       this.checkAllInputsValue();
 
       if (this.isValidInputs) {
-        console.log(userInfo);
+        if (!this.isNewAndConfurmPasswordNotTheSame()) {
+          PaswordModal.addCustomErrorText(
+            this.profileConfurmNewPassword,
+            'Password mismatch',
+          );
+          return;
+        }
 
-        console.log('!!! send request to server');
+        this.preparePusswordDataForRequest(userInfo);
       }
     });
 
@@ -241,5 +253,38 @@ export default class PaswordModal extends BaseComponent {
         .getNode()
         .nextElementSibling?.classList.remove('reg_form_error-show');
     }
+  }
+
+  isNewAndConfurmPasswordNotTheSame() {
+    return (
+      this.profileNewPassword.getValue() ===
+      this.profileConfurmNewPassword.getValue()
+    );
+  }
+
+  static addCustomErrorText(inputValue: Input, errorText: string) {
+    const spanError: Element | null = inputValue.getNode().nextElementSibling;
+    if (spanError) {
+      spanError.classList.add('reg_form_error-show');
+      spanError.textContent = errorText;
+    }
+  }
+
+  preparePusswordDataForRequest(userInfo: Customer) {
+    const updateUserPassword: ChangePassData = {
+      version: userInfo.version,
+      id: userInfo.id,
+      currentPassword: this.profileCurrentPassword.getValue(),
+      newPassword: this.profileConfurmNewPassword.getValue(),
+    };
+    this.dispatchChangePassEvent(updateUserPassword);
+  }
+
+  dispatchChangePassEvent(data: ChangePassData): void {
+    const event = new CustomEvent('change-pass', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
