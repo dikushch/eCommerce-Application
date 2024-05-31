@@ -1,7 +1,7 @@
 import BaseComponent from './BaseComponent';
 import Label from './Label';
 import Input from './Input';
-import { Customer } from '../types/Types';
+import { ChangeCustomerRequest, Customer } from '../types/Types';
 import Button from './Button';
 
 export default class ProfileInfo extends BaseComponent {
@@ -18,6 +18,8 @@ export default class ProfileInfo extends BaseComponent {
   profileChangePasswordBtn: Button;
 
   // passwordInput: Input;
+
+  isEditMode: boolean = false;
 
   constructor(userInfo: Customer) {
     super({ classes: ['profile__info'] });
@@ -92,6 +94,11 @@ export default class ProfileInfo extends BaseComponent {
     // add listeners
     this.profileEditBtn.addListener('click', () => {
       console.log('click edit btn');
+      if (!this.isEditMode) {
+        this.initEditMode();
+      } else {
+        this.prepareDataToRequest(userInfo);
+      }
     });
 
     const profileChangePasswordBtnDiv = new BaseComponent(
@@ -104,6 +111,9 @@ export default class ProfileInfo extends BaseComponent {
     // add listeners
     this.profileChangePasswordBtn.addListener('click', () => {
       console.log('click change password btn');
+      if (this.isEditMode) {
+        this.cancelEditMode(userInfo);
+      }
     });
 
     // disable all inputs
@@ -145,5 +155,72 @@ export default class ProfileInfo extends BaseComponent {
     this.append(profileDiv1);
     this.append(profileDiv2);
     this.append(profileDiv3);
+  }
+
+  initEditMode() {
+    this.isEditMode = true;
+
+    this.profileFirstNameInput.enable();
+    this.profileLastNameInput.enable();
+    this.profileEmailInput.enable();
+    this.profileBirthDateInput.enable();
+
+    this.profileEditBtn.setTextContent('save');
+    this.profileChangePasswordBtn.setTextContent('cancel');
+  }
+
+  cancelEditMode(userInfo: Customer) {
+    this.isEditMode = false;
+
+    this.cancelInputChanges(userInfo);
+
+    this.profileFirstNameInput.disable();
+    this.profileLastNameInput.disable();
+    this.profileEmailInput.disable();
+    this.profileBirthDateInput.disable();
+
+    this.profileEditBtn.setTextContent('edit profile');
+    this.profileChangePasswordBtn.setTextContent('change password');
+  }
+
+  cancelInputChanges(userInfo: Customer) {
+    this.profileFirstNameInput.setValue(userInfo.firstName);
+    this.profileLastNameInput.setValue(userInfo.lastName);
+    this.profileEmailInput.setValue(userInfo.email);
+    this.profileBirthDateInput.setValue(userInfo.dateOfBirth);
+  }
+
+  prepareDataToRequest(userInfo: Customer) {
+    const updateUserInfo: ChangeCustomerRequest = {
+      version: userInfo.version,
+      actions: [
+        {
+          action: 'setFirstName',
+          firstName: this.profileFirstNameInput.getValue(),
+        },
+        {
+          action: 'setLastName',
+          lastName: this.profileLastNameInput.getValue(),
+        },
+        {
+          action: 'setDateOfBirth',
+          dateOfBirth: this.profileBirthDateInput.getValue(),
+        },
+        {
+          action: 'changeEmail',
+          email: this.profileEmailInput.getValue(),
+        },
+      ],
+    };
+
+    this.dispathUpdateEvent(userInfo.id, updateUserInfo);
+  }
+
+  dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
+    const event = new CustomEvent('update-customer', {
+      bubbles: true,
+      detail: { id, data },
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
