@@ -17,8 +17,6 @@ export default class ProfileInfo extends BaseComponent {
 
   profileChangePasswordBtn: Button;
 
-  // passwordInput: Input;
-
   isEditMode: boolean = false;
 
   isValidInputs: boolean = true;
@@ -106,7 +104,6 @@ export default class ProfileInfo extends BaseComponent {
     );
     // add listeners
     this.profileEditBtn.addListener('click', () => {
-      console.log('click edit btn');
       if (!this.isEditMode) {
         this.initEditMode();
       } else {
@@ -129,7 +126,6 @@ export default class ProfileInfo extends BaseComponent {
 
     // add listeners
     this.profileChangePasswordBtn.addListener('click', () => {
-      console.log('click change password btn');
       if (this.isEditMode) {
         this.cancelEditMode(userInfo);
       }
@@ -351,8 +347,6 @@ export default class ProfileInfo extends BaseComponent {
         },
       ],
     };
-
-    console.log(updateUserInfo);
 
     this.dispathUpdateEvent(userInfo.id, updateUserInfo);
   }
