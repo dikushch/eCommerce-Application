@@ -350,7 +350,7 @@ export default class ProfileInfo extends BaseComponent {
 
     console.log(updateUserInfo);
 
-    // this.dispathUpdateEvent(userInfo.id, updateUserInfo);
+    this.dispathUpdateEvent(userInfo.id, updateUserInfo);
   }
 
   dispathUpdateEvent(id: string, data: ChangeCustomerRequest): void {
