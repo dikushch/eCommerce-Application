@@ -1,4 +1,4 @@
-import { Customer } from '../types/Types';
+import { ChangePassData, Customer } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 import Input from './Input';
@@ -181,9 +181,7 @@ export default class PaswordModal extends BaseComponent {
           return;
         }
 
-        console.log(userInfo);
-
-        console.log('!!! send request to server');
+        this.preparePusswordDataForRequest(userInfo);
       }
     });
 
@@ -270,5 +268,23 @@ export default class PaswordModal extends BaseComponent {
       spanError.classList.add('reg_form_error-show');
       spanError.textContent = errorText;
     }
+  }
+
+  preparePusswordDataForRequest(userInfo: Customer) {
+    const updateUserPassword: ChangePassData = {
+      version: userInfo.version,
+      id: userInfo.id,
+      currentPassword: this.profileCurrentPassword.getValue(),
+      newPassword: this.profileConfurmNewPassword.getValue(),
+    };
+    this.dispatchChangePassEvent(updateUserPassword);
+  }
+
+  dispatchChangePassEvent(data: ChangePassData): void {
+    const event = new CustomEvent('change-pass', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
