@@ -171,6 +171,7 @@
 
   &-content {
     max-width: 880px;
+    width: min-content;
     background-color: $c-bg;
     margin: 0 50px;
     padding: 20px;
