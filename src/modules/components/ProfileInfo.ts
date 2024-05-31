@@ -3,6 +3,7 @@ import Label from './Label';
 import Input from './Input';
 import { ChangeCustomerRequest, Customer } from '../types/Types';
 import Button from './Button';
+import ProfilePasswordModal from './ProfilePasswordModal';
 
 export default class ProfileInfo extends BaseComponent {
   profileFirstNameInput: Input;
@@ -128,6 +129,9 @@ export default class ProfileInfo extends BaseComponent {
     this.profileChangePasswordBtn.addListener('click', () => {
       if (this.isEditMode) {
         this.cancelEditMode(userInfo);
+      } else {
+        const modalPasword = new ProfilePasswordModal(userInfo);
+        this.append(modalPasword);
       }
     });
 
