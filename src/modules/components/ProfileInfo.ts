@@ -348,8 +348,6 @@ export default class ProfileInfo extends BaseComponent {
       ],
     };
 
-    console.log(updateUserInfo);
-
     this.dispathUpdateEvent(userInfo.id, updateUserInfo);
   }
 
