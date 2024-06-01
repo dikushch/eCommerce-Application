@@ -1,4 +1,5 @@
 import BaseComponent from '../components/BaseComponent';
+import Button from '../components/Button';
 
 export default class ProductPage extends BaseComponent {
   name: string;
@@ -87,8 +88,7 @@ export default class ProductPage extends BaseComponent {
     productContainer.append(productDescription);
     productContainer.append(priceContainer);
 
-    const addToCartButton = new BaseComponent({
-      tag: 'button',
+    const addToCartButton = new Button({
       text: 'add to cart',
       classes: ['add-to-cart'],
     });
@@ -104,6 +104,8 @@ export default class ProductPage extends BaseComponent {
   }
 
   createSlider(imgs: string[]): BaseComponent {
+    let currentIndex = 0;
+
     const sliderContainer = new BaseComponent({
       tag: 'div',
       classes: ['slider-container'],
@@ -131,12 +133,35 @@ export default class ProductPage extends BaseComponent {
 
       preview.addListener('click', () => {
         mainImage.setAttribute('src', img);
+        currentIndex = index;
       });
 
       previewsContainer.append(preview);
     });
 
+    const prevButton = new Button({
+      text: '',
+      classes: ['slider-button', 'prev-button'],
+    });
+
+    const nextButton = new Button({
+      text: '',
+      classes: ['slider-button', 'next-button'],
+    });
+
+    prevButton.addListener('click', () => {
+      currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+      mainImage.setAttribute('src', imgs[currentIndex]);
+    });
+
+    nextButton.addListener('click', () => {
+      currentIndex = (currentIndex + 1) % imgs.length;
+      mainImage.setAttribute('src', imgs[currentIndex]);
+    });
+
+    sliderContainer.append(prevButton);
     sliderContainer.append(mainImage);
+    sliderContainer.append(nextButton);
     sliderContainer.append(previewsContainer);
 
     return sliderContainer;
