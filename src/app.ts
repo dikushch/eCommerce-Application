@@ -4,6 +4,7 @@ import {
   getAccessToken,
   getCustomerById,
   getProductById,
+  getProductByKey,
   loginCustomer,
   searchProducts,
   updateCustomer,
@@ -83,6 +84,32 @@ class App {
     this.setMenuItemActive(window.location.pathname);
     if (this.isLogin) {
       this.loginCustomer();
+    }
+    this.checkProductPath();
+  }
+
+  async checkProductPath() {
+    const pathArr = window.location.pathname.split('/');
+    if (pathArr[1] === 'catalog' && pathArr.length === 4) {
+      console.log(pathArr);
+      const type = pathArr[2];
+      if (this.catalog.typesIds.has(type)) {
+        const key = pathArr[3];
+        const token = await App.checkToken();
+        const res = await getProductByKey(token, key);
+        if ('id' in res) {
+          const imgs = res.masterVariant.images.map((img) => img.url);
+          this.product = new ProductPage(
+            res.name['en-US'],
+            res.description['en-US'],
+            res.masterVariant.prices[0].value.centAmount,
+            res.masterVariant.prices[0].discounted?.value.centAmount,
+            imgs,
+          );
+          this.checkRoute(`/catalog/${type}/${key}`, this.product.getNode());
+          this.router.changeRoute(`/catalog/${type}/${key}`);
+        }
+      }
     }
   }
 
