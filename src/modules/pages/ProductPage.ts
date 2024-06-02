@@ -111,6 +111,11 @@ export default class ProductPage extends BaseComponent {
       classes: ['slider-container'],
     });
 
+    const imagesContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['images-container'],
+    });
+
     const mainImage = new BaseComponent({
       tag: 'img',
       classes: ['main-image'],
@@ -159,9 +164,10 @@ export default class ProductPage extends BaseComponent {
       mainImage.setAttribute('src', imgs[currentIndex]);
     });
 
-    sliderContainer.append(prevButton);
-    sliderContainer.append(mainImage);
-    sliderContainer.append(nextButton);
+    imagesContainer.append(prevButton);
+    imagesContainer.append(mainImage);
+    sliderContainer.append(imagesContainer);
+    imagesContainer.append(nextButton);
     sliderContainer.append(previewsContainer);
 
     return sliderContainer;
