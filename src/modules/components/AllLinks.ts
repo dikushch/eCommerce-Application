@@ -15,8 +15,6 @@ export default class AllLinks extends BaseComponent {
 
   profile: BaseComponent;
 
-  product: BaseComponent;
-
   constructor() {
     super({ classes: ['all-links'] });
     const title = new BaseComponent({
@@ -59,11 +57,6 @@ export default class AllLinks extends BaseComponent {
       text: 'profile',
       classes: ['all-links__item'],
     });
-    this.product = new BaseComponent({
-      tag: 'a',
-      text: 'product',
-      classes: ['all-links__item'],
-    });
 
     this.main.setAttribute('data-href', '/');
     this.catalog.setAttribute('data-href', '/catalog');
@@ -72,7 +65,6 @@ export default class AllLinks extends BaseComponent {
     this.login.setAttribute('data-href', '/login');
     this.register.setAttribute('data-href', '/register');
     this.profile.setAttribute('data-href', '/profile');
-    this.product.setAttribute('data-href', '/product');
 
     this.appendChildren([
       title,
@@ -83,7 +75,6 @@ export default class AllLinks extends BaseComponent {
       this.login,
       this.register,
       this.profile,
-      this.product,
     ]);
 
     this.addListener('click', (e) => {

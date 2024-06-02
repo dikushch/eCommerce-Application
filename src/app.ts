@@ -49,7 +49,7 @@ class App {
 
   profile: ProfilePage | null = null;
 
-  product: ProductPage;
+  product: ProductPage | null = null;
 
   constructor() {
     App.checkToken();
@@ -61,23 +61,11 @@ class App {
     this.login = new LoginPage();
     this.register = new RegistrationPage();
     this.catalog = new CatalogPage();
-    this.product = new ProductPage(
-      'Red shirt with print',
-      'Great shirt made of premium materials with a juicy print',
-      3000,
-      2000,
-      [
-        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/2%20%281%29-vKzesj9M.jpg',
-        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/1-k-mMeUwr.jpg',
-        'https://images.cdn.australia-southeast1.gcp.commercetools.com/667a149d-1134-4297-9d6c-699187c4205e/3-nhIai5J1.jpg',
-      ],
-    );
     const routes: RouteItem[] = [
       { path: '/', component: this.main.getNode() },
       { path: '/login', component: this.login.getNode() },
       { path: '/register', component: this.register.getNode() },
       { path: '/catalog', component: this.catalog.getNode() },
-      { path: '/product', component: this.product.getNode() },
       { path: '/404', component: this.notFoundPage.getNode() },
     ];
     this.router = new Router(this.isLogin, routes);
