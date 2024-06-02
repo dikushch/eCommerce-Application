@@ -1,5 +1,6 @@
 import BaseComponent from '../components/BaseComponent';
 import Button from '../components/Button';
+import ImgModal from '../components/ImgModal';
 
 export default class ProductPage extends BaseComponent {
   name: string;
@@ -131,6 +132,10 @@ export default class ProductPage extends BaseComponent {
     mainImage.setAttribute('src', imgs[0]);
     mainImage.setAttribute('alt', this.name);
 
+    mainImage.addListener('click', () => {
+      this.openModal();
+    });
+
     const previewsContainer = new BaseComponent({
       tag: 'div',
       classes: ['previews-container'],
@@ -195,5 +200,10 @@ export default class ProductPage extends BaseComponent {
     sliderContainer.append(previewsContainer);
 
     return sliderContainer;
+  }
+
+  openModal(): void {
+    const modal = new ImgModal(this.imgs as string[]);
+    document.body.append(modal.getNode());
   }
 }
