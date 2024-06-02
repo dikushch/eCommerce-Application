@@ -51,9 +51,14 @@ export default class ProductPage extends BaseComponent {
       classes: ['price-container'],
     });
 
+    const formattedPrice = (price / 100).toFixed(2);
+    const formattedDiscount = this.discount
+      ? (this.discount / 100).toFixed(2)
+      : undefined;
+
     const originalPrice = new BaseComponent({
       tag: 'span',
-      text: `${this.price}$`,
+      text: `${formattedPrice}$`,
       classes: [
         'original-price',
         this.discount ? 'has-discount' : 'no-discount',
@@ -77,7 +82,7 @@ export default class ProductPage extends BaseComponent {
 
       salePrice = new BaseComponent({
         tag: 'span',
-        text: `${this.discount}$`,
+        text: `${formattedDiscount}$`,
         classes: ['sale-price'],
       });
 
