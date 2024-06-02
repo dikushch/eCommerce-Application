@@ -1,4 +1,5 @@
 import BaseComponent from '../components/BaseComponent';
+import Button from '../components/Button';
 
 export default class ProductPage extends BaseComponent {
   name: string;
@@ -25,12 +26,8 @@ export default class ProductPage extends BaseComponent {
     this.name = name;
     this.descr = descr;
     this.price = price;
-    if (discount) {
-      this.discount = discount;
-    }
-    if (imgs) {
-      this.imgs = imgs;
-    }
+    this.discount = discount;
+    this.imgs = imgs;
 
     const productContainer = new BaseComponent({
       tag: 'div',
@@ -54,10 +51,18 @@ export default class ProductPage extends BaseComponent {
       classes: ['price-container'],
     });
 
+    const formattedPrice = (price / 100).toFixed(2);
+    const formattedDiscount = this.discount
+      ? (this.discount / 100).toFixed(2)
+      : undefined;
+
     const originalPrice = new BaseComponent({
       tag: 'span',
-      text: `${this.price}$`,
-      classes: ['original-price'],
+      text: `${formattedPrice}$`,
+      classes: [
+        'original-price',
+        this.discount ? 'has-discount' : 'no-discount',
+      ],
     });
 
     let salePrice: BaseComponent<HTMLElement> | null = null;
@@ -77,7 +82,7 @@ export default class ProductPage extends BaseComponent {
 
       salePrice = new BaseComponent({
         tag: 'span',
-        text: `${this.discount}$`,
+        text: `${formattedDiscount}$`,
         classes: ['sale-price'],
       });
 
@@ -91,13 +96,104 @@ export default class ProductPage extends BaseComponent {
     productContainer.append(productDescription);
     productContainer.append(priceContainer);
 
-    const addToCartButton = new BaseComponent({
-      tag: 'button',
+    const addToCartButton = new Button({
       text: 'add to cart',
       classes: ['add-to-cart'],
     });
 
     productContainer.append(addToCartButton);
+
     this.append(productContainer);
+
+    if (this.imgs && this.imgs.length > 0) {
+      const slider = this.createSlider(this.imgs);
+      this.append(slider);
+    }
+  }
+
+  createSlider(imgs: string[]): BaseComponent {
+    let currentIndex = 0;
+
+    const sliderContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['slider-container'],
+    });
+
+    const imagesContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['images-container'],
+    });
+
+    const mainImage = new BaseComponent({
+      tag: 'img',
+      classes: ['main-image'],
+    });
+    mainImage.setAttribute('src', imgs[0]);
+    mainImage.setAttribute('alt', this.name);
+
+    const previewsContainer = new BaseComponent({
+      tag: 'div',
+      classes: ['previews-container'],
+    });
+
+    imgs.forEach((img, index) => {
+      const preview = new BaseComponent({
+        tag: 'img',
+        classes: ['preview'],
+      });
+      preview.setAttribute('src', img);
+      preview.setAttribute('alt', `${this.name} preview ${index + 1}`);
+
+      preview.addListener('click', () => {
+        mainImage.setAttribute('src', img);
+        currentIndex = index;
+      });
+
+      previewsContainer.append(preview);
+    });
+
+    const prevButton = new Button({
+      text: '',
+      classes: ['slider-button', 'prev-button'],
+    });
+
+    const nextButton = new Button({
+      text: '',
+      classes: ['slider-button', 'next-button'],
+    });
+
+    prevButton.addListener('click', () => {
+      currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+      mainImage.addClass('fade-out');
+      setTimeout(() => {
+        mainImage.setAttribute('src', imgs[currentIndex]);
+        mainImage.removeClass('fade-out');
+        mainImage.addClass('fade-in');
+        setTimeout(() => {
+          mainImage.removeClass('fade-in');
+        }, 50);
+      }, 400);
+    });
+
+    nextButton.addListener('click', () => {
+      currentIndex = (currentIndex + 1) % imgs.length;
+      mainImage.addClass('fade-out');
+      setTimeout(() => {
+        mainImage.setAttribute('src', imgs[currentIndex]);
+        mainImage.removeClass('fade-out');
+        mainImage.addClass('fade-in');
+        setTimeout(() => {
+          mainImage.removeClass('fade-in');
+        }, 50);
+      }, 400);
+    });
+
+    imagesContainer.append(prevButton);
+    imagesContainer.append(mainImage);
+    sliderContainer.append(imagesContainer);
+    imagesContainer.append(nextButton);
+    sliderContainer.append(previewsContainer);
+
+    return sliderContainer;
   }
 }
