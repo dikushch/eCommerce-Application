@@ -54,7 +54,10 @@ export default class ProductPage extends BaseComponent {
     const originalPrice = new BaseComponent({
       tag: 'span',
       text: `${this.price}$`,
-      classes: ['original-price'],
+      classes: [
+        'original-price',
+        this.discount ? 'has-discount' : 'no-discount',
+      ],
     });
 
     let salePrice: BaseComponent<HTMLElement> | null = null;
@@ -156,12 +159,28 @@ export default class ProductPage extends BaseComponent {
 
     prevButton.addListener('click', () => {
       currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
-      mainImage.setAttribute('src', imgs[currentIndex]);
+      mainImage.addClass('fade-out');
+      setTimeout(() => {
+        mainImage.setAttribute('src', imgs[currentIndex]);
+        mainImage.removeClass('fade-out');
+        mainImage.addClass('fade-in');
+        setTimeout(() => {
+          mainImage.removeClass('fade-in');
+        }, 50);
+      }, 400);
     });
 
     nextButton.addListener('click', () => {
       currentIndex = (currentIndex + 1) % imgs.length;
-      mainImage.setAttribute('src', imgs[currentIndex]);
+      mainImage.addClass('fade-out');
+      setTimeout(() => {
+        mainImage.setAttribute('src', imgs[currentIndex]);
+        mainImage.removeClass('fade-out');
+        mainImage.addClass('fade-in');
+        setTimeout(() => {
+          mainImage.removeClass('fade-in');
+        }, 50);
+      }, 400);
     });
 
     imagesContainer.append(prevButton);
