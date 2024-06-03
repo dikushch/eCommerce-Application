@@ -1,16 +1,21 @@
 .product-page {
-  display: flex;
-  flex-direction: row-reverse;
-  padding: 20px;
+  display: grid;
+  padding-bottom: 20px;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  background-color: $c-bg;
+  grid-template-areas: "slider info";
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "slider" "info";
+    justify-items: center;
+  }
 }
 
 .product-container {
+  grid-area: info;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
+  align-items: flex-start;  
 }
 
 .product-name {
@@ -29,6 +34,8 @@
   flex-direction: column-reverse;
   align-items: center;
   margin-bottom: 40px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .original-price {
@@ -48,7 +55,7 @@
   align-items: center;
   background-color: $c-accent;
   padding: 0 5px;
-  width: 45.5vw;
+  width: 100%;
 }
 
 .sale-price {
@@ -61,7 +68,7 @@
   color: $c-black;
   background-color: $c-accent;
   padding: 0px 5px 0px 5px;
-  width: 45.5vw;
+  width: 100%;
 }
 
 .add-to-cart {
@@ -71,7 +78,8 @@
   background-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 45.5vw;
+  width: 100%;
+  max-width: 500px;
   height: 34px;
 
   &:hover {
@@ -81,10 +89,12 @@
 }
 
 .main-image {
+  object-fit: cover;
   width: 100%;
   height: 500px;
   margin-bottom: 20px;
   transition: opacity 0.5s ease-in-out;
+  cursor: pointer;
 }
 
 .previews-container {
@@ -106,6 +116,7 @@
 }
 
 .slider-container {
+  grid-area: slider;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -162,7 +173,7 @@
 }
 
 .prev-button {
-  left: -25px;
+  left: -15px;
 
   &::before {
     transform: rotate(-45deg);
@@ -171,7 +182,7 @@
 }
 
 .next-button {
-  right: 0px;
+  right: 10px;
 
   &::after {
     transform: rotate(45deg);
@@ -200,11 +211,5 @@
 @media (max-width: 380px) {
   .product-page {
     flex-direction: column-reverse;
-  }
-
-  .sale-wrapper,
-  .sale-label,
-  .add-to-cart {
-    width: 88.5vw;
   }
 }
