@@ -21,6 +21,10 @@ export interface CustomerAddress {
 export interface LoginData {
   email: string;
   password: string;
+  anonymousCart?: {
+    id: string;
+    typeId: 'cart';
+  };
 }
 
 export interface NewCustomerData {
@@ -32,10 +36,12 @@ export interface NewCustomerData {
   addresses: CustomerAddress[];
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
+  anonymousCartId?: string;
 }
 
 export interface CustomerLoginResponse {
   customer: Customer;
+  cart?: Cart;
 }
 
 export interface Customer {
@@ -227,3 +233,40 @@ export type SearchSort =
   | 'price asc'
   | 'price desc'
   | null;
+
+export interface Cart {
+  id: string;
+  version: number;
+  lineItems: LineItem[];
+  totalPrice: {
+    type: 'centPrecision';
+    currencyCode: 'USD';
+    centAmount: number;
+    fractionDigits: number;
+  };
+  totalLineItemQuantity?: number;
+}
+
+export interface LineItem {
+  id: string;
+  productId: string;
+  name: {
+    'en-US': string;
+  };
+  variant: {
+    id: number;
+    sku: string;
+    key: string;
+    prices: Price[];
+    images: ProductImg[];
+    attributes: ProductAttr[];
+  };
+  price: Price;
+  quantity: number;
+  totalPrice: {
+    type: 'centPrecision';
+    currencyCode: 'USD';
+    centAmount: number;
+    fractionDigits: number;
+  };
+}
