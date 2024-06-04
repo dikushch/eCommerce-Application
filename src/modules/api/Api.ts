@@ -357,6 +357,33 @@ export async function getCartById(
   }
 }
 
+export async function getCartByCustomerId(
+  token: TokenResponse,
+  id: string,
+): Promise<Cart | ErrResponse> {
+  try {
+    const response = await fetch(
+      `${host}/${projectKey}/carts/customer-id=${id}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
 export async function addToCart(
   token: TokenResponse,
   cartId: string,
