@@ -11,6 +11,7 @@ import {
   OneProduct,
   SearchProductsData,
   Cart,
+  CartActions,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -400,6 +401,38 @@ export async function addToCart(
         quantity: 1,
       },
     ],
+  };
+  try {
+    const response = await fetch(`${host}/${projectKey}/carts/${cartId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function updateCart(
+  token: TokenResponse,
+  cartId: string,
+  cartVersion: number,
+  actions: CartActions[],
+): Promise<Cart | ErrResponse> {
+  const data = {
+    version: cartVersion,
+    actions,
   };
   try {
     const response = await fetch(`${host}/${projectKey}/carts/${cartId}`, {

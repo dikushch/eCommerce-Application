@@ -270,3 +270,26 @@ export interface LineItem {
     fractionDigits: number;
   };
 }
+
+export interface CartUpdate {
+  version: number;
+  actions: CartActions[];
+}
+
+export type CartActions = ChangeQuantity | RemoveLineItem | SetDiscount;
+
+export interface ChangeQuantity {
+  action: 'changeLineItemQuantity';
+  lineItemId: string;
+  quantity: number;
+}
+
+export interface RemoveLineItem {
+  action: 'removeLineItem';
+  lineItemId: string;
+}
+
+export interface SetDiscount {
+  action: 'addDiscountCode';
+  code: string;
+}
