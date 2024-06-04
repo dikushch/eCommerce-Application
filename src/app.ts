@@ -1,7 +1,11 @@
 import {
+  addToCart,
   changeCustomerPass,
+  createCart,
   createCustomer,
   getAccessToken,
+  getCartByCustomerId,
+  getCartById,
   getCustomerById,
   getProductById,
   getProductByKey,
@@ -13,6 +17,8 @@ import ErrMsg from './modules/components/ErrMsg';
 import Header from './modules/components/Header';
 import OkMsg from './modules/components/OkMsg';
 import Preloader from './modules/components/Preloader';
+import AboutPage from './modules/pages/AboutPage';
+import CartPage from './modules/pages/CartPage';
 import CatalogPage from './modules/pages/CatalogPage';
 import LoginPage from './modules/pages/LoginPage';
 import MainPage from './modules/pages/MainPage';
@@ -51,6 +57,12 @@ class App {
 
   product: ProductPage | null = null;
 
+  cartId: string | null = null;
+
+  cart: CartPage;
+
+  about: AboutPage;
+
   constructor() {
     App.checkToken();
     this.isLogin = this.checkStorage();
@@ -61,11 +73,15 @@ class App {
     this.login = new LoginPage();
     this.register = new RegistrationPage();
     this.catalog = new CatalogPage();
+    this.about = new AboutPage();
+    this.cart = new CartPage();
     const routes: RouteItem[] = [
       { path: '/', component: this.main.getNode() },
       { path: '/login', component: this.login.getNode() },
       { path: '/register', component: this.register.getNode() },
       { path: '/catalog', component: this.catalog.getNode() },
+      { path: '/about', component: this.about.getNode() },
+      { path: '/cart', component: this.cart.getNode() },
       { path: '/404', component: this.notFoundPage.getNode() },
     ];
     this.router = new Router(this.isLogin, routes);
@@ -120,6 +136,25 @@ class App {
       });
       if (window.location.pathname === '/profile') {
         this.router.changeRoute('/profile');
+      }
+
+      this.checkCart(token, userInfo.id);
+    }
+  }
+
+  async checkCart(token: TokenResponse, id: string) {
+    const res = await getCartByCustomerId(token, id);
+    if ('id' in res) {
+      this.cartId = res.id;
+      if (res.totalLineItemQuantity) {
+        this.header.userMenu.cart.setTextContent(
+          `cart(${res.totalLineItemQuantity})`,
+        );
+      }
+      this.cart = new CartPage(res);
+      this.checkRoute('/cart', this.cart.getNode());
+      if (window.location.pathname === '/cart') {
+        this.router.changeRoute('/cart');
       }
     }
   }
@@ -190,7 +225,14 @@ class App {
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
-      const res = await loginCustomer(token, (e as CustomEvent).detail);
+      const data = (e as CustomEvent).detail;
+      if (this.cartId) {
+        data.anonymousCart = {
+          id: this.cartId,
+          typeId: 'cart',
+        };
+      }
+      const res = await loginCustomer(token, data);
       preload.destroy();
       if ('customer' in res) {
         App.saveCustomerId(res.customer.id);
@@ -212,7 +254,11 @@ class App {
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
-      const res = await createCustomer(token, e.detail);
+      const data = (e as CustomEvent).detail;
+      if (this.cartId) {
+        data.anonymousCartId = this.cartId;
+      }
+      const res = await createCustomer(token, data);
       preload.destroy();
       if ('customer' in res) {
         App.saveCustomerId(res.customer.id);
@@ -347,6 +393,46 @@ class App {
     }
   }
 
+  async addToCartHandler(e: CustomEvent) {
+    const token = await App.checkToken();
+    if (token) {
+      let cartVersion: number | null = null;
+      if (!this.cartId) {
+        let cart;
+        if (this.customerId) {
+          cart = await createCart(token, this.customerId);
+        } else {
+          cart = await createCart(token);
+        }
+        if ('id' in cart) {
+          this.cartId = cart.id;
+          cartVersion = cart.version;
+        }
+      }
+      if (!cartVersion) {
+        const cartRes = await getCartById(token, this.cartId as string);
+        if ('id' in cartRes) {
+          cartVersion = cartRes.version;
+        }
+      }
+      const res = await addToCart(
+        token,
+        this.cartId as string,
+        cartVersion as number,
+        e.detail,
+      );
+      if ('id' in res) {
+        this.header.userMenu.cart.setTextContent(
+          `cart(${res.totalLineItemQuantity})`,
+        );
+        this.cart = new CartPage(res);
+        this.checkRoute('/cart', this.cart.getNode());
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
   addListeners() {
     this.element.addEventListener('change-page', (e) => {
       this.changePageHandler(e as CustomEvent);
@@ -371,6 +457,9 @@ class App {
     });
     this.element.addEventListener('open-product', async (e) => {
       this.openProductHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('add-to-cart', async (e) => {
+      this.addToCartHandler(e as CustomEvent);
     });
   }
 }
