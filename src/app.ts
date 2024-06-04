@@ -11,6 +11,7 @@ import {
   getProductByKey,
   loginCustomer,
   searchProducts,
+  updateCart,
   updateCustomer,
 } from './modules/api/Api';
 import ErrMsg from './modules/components/ErrMsg';
@@ -393,22 +394,27 @@ class App {
     }
   }
 
+  async getCart(token: TokenResponse): Promise<number | null> {
+    let cartVersion: number | null = null;
+    if (!this.cartId) {
+      let cart;
+      if (this.customerId) {
+        cart = await createCart(token, this.customerId);
+      } else {
+        cart = await createCart(token);
+      }
+      if ('id' in cart) {
+        this.cartId = cart.id;
+        cartVersion = cart.version;
+      }
+    }
+    return cartVersion;
+  }
+
   async addToCartHandler(e: CustomEvent) {
     const token = await App.checkToken();
     if (token) {
-      let cartVersion: number | null = null;
-      if (!this.cartId) {
-        let cart;
-        if (this.customerId) {
-          cart = await createCart(token, this.customerId);
-        } else {
-          cart = await createCart(token);
-        }
-        if ('id' in cart) {
-          this.cartId = cart.id;
-          cartVersion = cart.version;
-        }
-      }
+      let cartVersion = await this.getCart(token);
       if (!cartVersion) {
         const cartRes = await getCartById(token, this.cartId as string);
         if ('id' in cartRes) {
@@ -427,6 +433,39 @@ class App {
         );
         this.cart = new CartPage(res);
         this.checkRoute('/cart', this.cart.getNode());
+      } else {
+        this.element.append(new ErrMsg(res.message).getNode());
+      }
+    }
+  }
+
+  async updateCartHandler(e: CustomEvent) {
+    const token = await App.checkToken();
+    if (token) {
+      let cartVersion = await this.getCart(token);
+      if (!cartVersion) {
+        const cartRes = await getCartById(token, this.cartId as string);
+        if ('id' in cartRes) {
+          cartVersion = cartRes.version;
+        }
+      }
+      const res = await updateCart(
+        token,
+        this.cartId as string,
+        cartVersion as number,
+        e.detail,
+      );
+      if ('id' in res) {
+        let cartTextHeader;
+        if (res.totalLineItemQuantity) {
+          cartTextHeader = `cart(${res.totalLineItemQuantity})`;
+        } else {
+          cartTextHeader = 'cart';
+        }
+        this.header.userMenu.cart.setTextContent(cartTextHeader);
+        this.cart = new CartPage(res);
+        this.checkRoute('/cart', this.cart.getNode());
+        this.router.changeRoute('/cart');
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -460,6 +499,9 @@ class App {
     });
     this.element.addEventListener('add-to-cart', async (e) => {
       this.addToCartHandler(e as CustomEvent);
+    });
+    this.element.addEventListener('update-cart', async (e) => {
+      this.updateCartHandler(e as CustomEvent);
     });
   }
 }
