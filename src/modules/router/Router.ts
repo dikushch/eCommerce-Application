@@ -31,10 +31,14 @@ export default class Router {
         (matchedRoute.path === '/login' || matchedRoute.path === '/register')
       ) {
         this.redirectToMain();
+      } else if (!this.isLogin && matchedRoute.path === '/profile') {
+        this.redirectToLogin();
       } else {
         this.currentRoute = matchedRoute.component;
         document.body.append(this.currentRoute);
       }
+    } else if (!this.isLogin && routePath === '/profile') {
+      this.redirectToLogin();
     } else {
       this.redirectToNotFound();
     }
@@ -59,6 +63,18 @@ export default class Router {
         this.currentRoute.remove();
       }
       this.currentRoute = main.component;
+      document.body.append(this.currentRoute);
+    }
+  }
+
+  redirectToLogin(): void {
+    window.history.replaceState({}, '', '/login');
+    const login = this.routes.find((route) => route.path === '/login');
+    if (login) {
+      if (this.currentRoute) {
+        this.currentRoute.remove();
+      }
+      this.currentRoute = login.component;
       document.body.append(this.currentRoute);
     }
   }
