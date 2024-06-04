@@ -1,0 +1,46 @@
+$c-err-bg: #ffdadc;
+
+.err-msg {
+  width: 100%;
+  max-width: 320px;
+  position: fixed;
+  z-index: 20;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 25px;
+  background-color: $c-err-bg;
+  border: 1px solid $c-err;
+
+  &__text {
+    text-align: center;
+  }
+
+  &__close {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &::before,
+    &::after {
+      content: "";
+      width: 100%;
+      height: 1px;
+      background-color: $c-black;
+    }
+    &::before {
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+}

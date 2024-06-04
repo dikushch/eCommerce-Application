@@ -1,0 +1,24 @@
+.nf {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+
+  &__text {
+    text-align: center;
+    font-size: 26px;
+    text-transform: uppercase;
+  }
+
+  &__link {
+    cursor: pointer;
+    padding: 5px 15px;
+    border: 1px solid $c-accent;
+    transition: background-color 0.2s ease-out;
+    &:hover {
+      background-color: $c-accent;
+    }
+  }
+}

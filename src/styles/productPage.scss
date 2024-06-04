@@ -1,0 +1,215 @@
+.product-page {
+  display: grid;
+  padding-bottom: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  grid-template-areas: "slider info";
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "slider" "info";
+    justify-items: center;
+  }
+}
+
+.product-container {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+}
+
+.product-name {
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 40px;
+}
+
+.product-description {
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.original-price {
+  font-size: 16px;
+  color: $c-err;
+  text-decoration: line-through;
+  align-self: end;
+}
+
+.no-discount {
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.sale-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: $c-accent;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.sale-price {
+  font-size: 20px;
+  color: $c-black;
+}
+
+.sale-label {
+  font-size: 16px;
+  color: $c-black;
+  background-color: $c-accent;
+  padding: 0px 5px 0px 5px;
+  width: 100%;
+}
+
+.add-to-cart {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  border: 1px solid $c-accent;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 500px;
+  height: 34px;
+
+  &:hover {
+    background-color: $c-accent;
+    color: $c-white;
+  }
+}
+
+.main-image {
+  object-fit: cover;
+  width: 100%;
+  height: 500px;
+  margin-bottom: 20px;
+  transition: opacity 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+.previews-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.preview {
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: $c-accent;
+  }
+}
+
+.slider-container {
+  grid-area: slider;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.images-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.slider-button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.prev-button,
+.next-button {
+  align-self: center;
+  position: relative;
+  width: 27px;
+  height: 25px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.prev-button::before,
+.next-button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: solid $c-accent;
+}
+
+.prev-button:hover,
+.next-button:hover {
+  opacity: 1;
+}
+
+.prev-button {
+  left: -15px;
+
+  &::before {
+    transform: rotate(-45deg);
+    border-width: 2px 0 0 2px;
+  }
+}
+
+.next-button {
+  right: 10px;
+
+  &::after {
+    transform: rotate(45deg);
+    border-width: 2px 2px 0 0;
+  }
+}
+
+@media (max-width: 1150px) {
+  .slider-button {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-image {
+    height: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-image {
+    height: 300px;
+  }
+}
+
+@media (max-width: 380px) {
+  .product-page {
+    flex-direction: column-reverse;
+  }
+}

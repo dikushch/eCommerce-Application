@@ -1,0 +1,15 @@
+.all-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 0;
+
+  &__item {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
