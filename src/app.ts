@@ -449,12 +449,15 @@ class App {
           cartVersion = cartRes.version;
         }
       }
+      const preload = new Preloader();
+      this.element.append(preload.getNode());
       const res = await updateCart(
         token,
         this.cartId as string,
         cartVersion as number,
         e.detail,
       );
+      preload.destroy();
       if ('id' in res) {
         let cartTextHeader;
         if (res.totalLineItemQuantity) {
