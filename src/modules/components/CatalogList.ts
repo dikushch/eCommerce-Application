@@ -16,15 +16,17 @@ export default class CatalogList extends BaseComponent {
   createProductsCards(data: ProductsResponse): void {
     const products = data.results.map((itemData) => new CatalogCard(itemData));
     this.products = products;
-    this.appendChildren(products);
+    this.appendChildren(this.products);
   }
 
   checkIfProductInCart(cartProducts: LineItem[]): void {
     if (cartProducts.length !== 0 && this.products.length !== 0) {
-      cartProducts.forEach((e) => {
-        const card = this.products.find((p) => p.id === e.productId);
-        if (card) {
-          card.changeAddBtnToAddState();
+      this.products.forEach((p) => {
+        const isInCart = cartProducts.find((e) => e.productId === p.id);
+        if (isInCart) {
+          p.changeAddBtnToAddState();
+        } else {
+          p.resetAddBtn();
         }
       });
     }

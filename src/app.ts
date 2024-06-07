@@ -28,7 +28,7 @@ import ProductPage from './modules/pages/ProductPage';
 import ProfilePage from './modules/pages/ProfilePage';
 import RegistrationPage from './modules/pages/RegPage';
 import Router from './modules/router/Router';
-import { RouteItem, TokenResponse } from './modules/types/Types';
+import { LineItem, RouteItem, TokenResponse } from './modules/types/Types';
 import './styles.scss';
 
 class App {
@@ -105,6 +105,7 @@ class App {
         if ('id' in res) {
           const imgs = res.masterVariant.images.map((img) => img.url);
           this.product = new ProductPage(
+            res.id,
             res.name['en-US'],
             res.description['en-US'],
             res.masterVariant.prices[0].value.centAmount,
@@ -134,6 +135,12 @@ class App {
       }
       if (cart && 'id' in cart) {
         this.catalog.catalogList?.checkIfProductInCart(cart.lineItems);
+        if (
+          this.product &&
+          cart.lineItems.find((e) => e.productId === this.product?.id)
+        ) {
+          this.product.showRemoveBtn();
+        }
       }
     }
   }
@@ -257,6 +264,18 @@ class App {
         this.element.append(new OkMsg('successful login').getNode());
         this.profile = new ProfilePage(res.customer);
         this.updateProfileRout();
+        if ('cart' in res) {
+          this.cartId = res.cart?.id as string;
+          this.cart = new CartPage(res.cart);
+          this.checkRoute('/cart', this.cart.getNode());
+          let cartTextHeader;
+          if (res.cart?.totalLineItemQuantity) {
+            cartTextHeader = `cart(${res.cart?.totalLineItemQuantity})`;
+          } else {
+            cartTextHeader = 'cart';
+          }
+          this.header.userMenu.cart.setTextContent(cartTextHeader);
+        }
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -291,6 +310,11 @@ class App {
 
   logoutHandler() {
     App.clearStorage();
+    this.cart = new CartPage();
+    this.checkRoute('/cart', this.cart.getNode());
+    this.header.userMenu.cart.setTextContent(`cart`);
+    this.cartId = null;
+    this.getProducts();
     this.authToken = null;
     this.customerId = null;
     this.isLogin = false;
@@ -399,16 +423,27 @@ class App {
       const preload = new Preloader();
       this.element.append(preload.getNode());
       const res = await getProductById(token, e.detail);
+      let cart = null;
+      if (this.cartId) {
+        cart = await getCartById(token, this.cartId);
+      }
       preload.destroy();
       if ('id' in res) {
         const imgs = res.masterVariant.images.map((img) => img.url);
         this.product = new ProductPage(
+          res.id,
           res.name['en-US'],
           res.description['en-US'],
           res.masterVariant.prices[0].value.centAmount,
           res.masterVariant.prices[0].discounted?.value.centAmount,
           imgs,
         );
+        if (cart && 'id' in cart) {
+          const inCart = cart.lineItems.find((i) => i.productId === res.id);
+          if (inCart) {
+            this.product.showRemoveBtn();
+          }
+        }
         const type = this.catalog.idsTypes.get(res.productType.id);
         const id = res.masterVariant.sku;
         this.checkRoute(`/catalog/${type}/${id}`, this.product.getNode());
@@ -420,8 +455,11 @@ class App {
     }
   }
 
-  async getCart(token: TokenResponse): Promise<number | null> {
+  async getCart(
+    token: TokenResponse,
+  ): Promise<{ cartVersion: number | null; cartProducts: LineItem[] }> {
     let cartVersion: number | null = null;
+    let cartProducts: LineItem[] = [];
     if (!this.cartId) {
       let cart;
       if (this.customerId) {
@@ -432,15 +470,16 @@ class App {
       if ('id' in cart) {
         this.cartId = cart.id;
         cartVersion = cart.version;
+        cartProducts = cart.lineItems;
       }
     }
-    return cartVersion;
+    return { cartVersion, cartProducts };
   }
 
   async addToCartHandler(e: CustomEvent) {
     const token = await App.checkToken();
     if (token) {
-      let cartVersion = await this.getCart(token);
+      let { cartVersion } = await this.getCart(token);
       if (!cartVersion) {
         const cartRes = await getCartById(token, this.cartId as string);
         if ('id' in cartRes) {
@@ -457,6 +496,7 @@ class App {
         this.header.userMenu.cart.setTextContent(
           `cart(${res.totalLineItemQuantity})`,
         );
+        this.catalog.catalogList?.checkIfProductInCart(res.lineItems);
         this.cart = new CartPage(res);
         this.checkRoute('/cart', this.cart.getNode());
       } else {
@@ -468,20 +508,31 @@ class App {
   async updateCartHandler(e: CustomEvent) {
     const token = await App.checkToken();
     if (token) {
-      let cartVersion = await this.getCart(token);
+      let { cartVersion, cartProducts } = await this.getCart(token);
       if (!cartVersion) {
         const cartRes = await getCartById(token, this.cartId as string);
         if ('id' in cartRes) {
           cartVersion = cartRes.version;
+          if ('delProductId' in e.detail) {
+            cartProducts = cartRes.lineItems;
+          }
         }
       }
+      const delData = [
+        {
+          action: 'removeLineItem',
+          lineItemId: cartProducts.find(
+            (i) => i.productId === e.detail.delProductId,
+          )?.id,
+        },
+      ];
       const preload = new Preloader();
       this.element.append(preload.getNode());
       const res = await updateCart(
         token,
         this.cartId as string,
         cartVersion as number,
-        e.detail,
+        'delProductId' in e.detail ? delData : e.detail,
       );
       preload.destroy();
       if ('id' in res) {
@@ -492,9 +543,12 @@ class App {
           cartTextHeader = 'cart';
         }
         this.header.userMenu.cart.setTextContent(cartTextHeader);
+        this.catalog.catalogList?.checkIfProductInCart(res.lineItems);
         this.cart = new CartPage(res);
         this.checkRoute('/cart', this.cart.getNode());
-        this.router.changeRoute('/cart');
+        if (window.location.pathname === '/cart') {
+          this.router.changeRoute('/cart');
+        }
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -537,4 +591,6 @@ class App {
 
 const app = new App();
 app.addListeners();
-// app.getProducts();
+if (!app.isLogin) {
+  app.getProducts();
+}
