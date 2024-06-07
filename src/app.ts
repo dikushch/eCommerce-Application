@@ -127,6 +127,11 @@ class App {
     }
     if ('limit' in data) {
       this.catalog.createProductsList(data);
+      if (data.total > data.limit) {
+        const pages = Math.ceil(data.total / data.limit);
+        const currentPage = data.offset / data.limit;
+        this.catalog.createPagination(pages, currentPage);
+      }
       if (cart && 'id' in cart) {
         this.catalog.catalogList?.checkIfProductInCart(cart.lineItems);
       }
@@ -365,7 +370,8 @@ class App {
     if (token) {
       const preload = new Preloader();
       this.element.append(preload.getNode());
-      const res = await searchProducts(token, e.detail);
+      const { searchParams, page } = e.detail;
+      const res = await searchProducts(token, searchParams, page);
       let cart = null;
       if (this.cartId) {
         cart = await getCartById(token, this.cartId);
@@ -373,6 +379,11 @@ class App {
       preload.destroy();
       if ('limit' in res) {
         this.catalog.createProductsList(res);
+        if (res.total > res.limit) {
+          const pages = Math.ceil(res.total / res.limit);
+          const currentPage = res.offset / res.limit;
+          this.catalog.createPagination(pages, currentPage);
+        }
         if (cart && 'id' in cart) {
           this.catalog.catalogList?.checkIfProductInCart(cart.lineItems);
         }

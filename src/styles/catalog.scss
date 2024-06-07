@@ -205,3 +205,29 @@
     }
   }
 }
+
+.c-pagination {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  &__btn {
+    padding: 5px 10px;
+    font: inherit;
+    color: inherit;
+    border: 1px solid $c-accent;
+    background-color: $c-bg;
+    transition: background-color 0.2s ease-out;
+    cursor: pointer;
+    &:hover {
+      background-color: $c-accent;
+    }
+    &.active {
+      pointer-events: none;
+      background-color: $c-accent;
+    }
+  }
+}
