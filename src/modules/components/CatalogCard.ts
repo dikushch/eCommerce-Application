@@ -58,6 +58,7 @@ export default class CatalogCard extends BaseComponent {
     this.addBtn.addListener('click', (e) => {
       e.stopPropagation();
       this.dispatchAddToCartEvent(this.id);
+      this.changeAddBtnToAddState();
     });
   }
 
@@ -84,5 +85,15 @@ export default class CatalogCard extends BaseComponent {
       detail: id,
     });
     this.getNode().dispatchEvent(event);
+  }
+
+  changeAddBtnToAddState() {
+    this.addBtn.addClass('in-cart');
+    this.addBtn.setTextContent('already in cart :)');
+  }
+
+  resetAddBtn() {
+    this.addBtn.removeClass('in-cart');
+    this.addBtn.setTextContent('add to cart');
   }
 }

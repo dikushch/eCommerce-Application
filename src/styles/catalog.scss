@@ -115,6 +115,12 @@
     &:hover {
       background-color: $c-accent;
     }
+
+    &.in-cart {
+      pointer-events: none;
+      background-color: rgba($color: $c-ok, $alpha: 0.3);
+      border-color: $c-ok;
+    }
   }
 }
 

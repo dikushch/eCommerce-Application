@@ -121,8 +121,15 @@ class App {
   async getProducts(): Promise<void> {
     const token = await App.checkToken();
     const data = await searchProducts(token, this.catalog.queryData);
+    let cart = null;
+    if (this.cartId) {
+      cart = await getCartById(token, this.cartId);
+    }
     if ('limit' in data) {
       this.catalog.createProductsList(data);
+      if (cart && 'id' in cart) {
+        this.catalog.catalogList?.checkIfProductInCart(cart.lineItems);
+      }
     }
   }
 
@@ -139,7 +146,8 @@ class App {
         this.router.changeRoute('/profile');
       }
 
-      this.checkCart(token, userInfo.id);
+      await this.checkCart(token, userInfo.id);
+      await this.getProducts();
     }
   }
 
@@ -358,9 +366,16 @@ class App {
       const preload = new Preloader();
       this.element.append(preload.getNode());
       const res = await searchProducts(token, e.detail);
+      let cart = null;
+      if (this.cartId) {
+        cart = await getCartById(token, this.cartId);
+      }
       preload.destroy();
       if ('limit' in res) {
         this.catalog.createProductsList(res);
+        if (cart && 'id' in cart) {
+          this.catalog.catalogList?.checkIfProductInCart(cart.lineItems);
+        }
       } else {
         this.element.append(new ErrMsg(res.message).getNode());
       }
@@ -511,4 +526,4 @@ class App {
 
 const app = new App();
 app.addListeners();
-app.getProducts();
+// app.getProducts();
