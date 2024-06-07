@@ -57,6 +57,7 @@ export default class CatalogCard extends BaseComponent {
 
     this.addBtn.addListener('click', (e) => {
       e.stopPropagation();
+      this.dispatchAddToCartEvent(this.id);
     });
   }
 
@@ -73,6 +74,14 @@ export default class CatalogCard extends BaseComponent {
     const event = new CustomEvent('open-product', {
       bubbles: true,
       detail: this.id,
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  dispatchAddToCartEvent(id: string): void {
+    const event = new CustomEvent('add-to-cart', {
+      bubbles: true,
+      detail: id,
     });
     this.getNode().dispatchEvent(event);
   }
