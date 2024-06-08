@@ -230,6 +230,7 @@ export async function getProductById(
 export async function searchProducts(
   token: TokenResponse,
   searchData: SearchProductsData,
+  offset = 0,
 ): Promise<ProductsResponse | ErrResponse> {
   const filters = [];
   if (searchData.color !== null) {
@@ -254,7 +255,7 @@ export async function searchProducts(
   }
   try {
     const response = await fetch(
-      `${host}/${projectKey}/product-projections/search?${filters.join('&')}`,
+      `${host}/${projectKey}/product-projections/search?limit=5&offset=${5 * offset}&${filters.join('&')}`,
       {
         method: 'GET',
         headers: {

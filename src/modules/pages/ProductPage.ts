@@ -3,6 +3,8 @@ import Button from '../components/Button';
 import ImgModal from '../components/ImgModal';
 
 export default class ProductPage extends BaseComponent {
+  id: string;
+
   name: string;
 
   descr: string;
@@ -13,7 +15,12 @@ export default class ProductPage extends BaseComponent {
 
   imgs?: string[];
 
+  addToCartButton: Button;
+
+  removeFromCartBtn: Button;
+
   constructor(
+    id: string,
     name: string,
     descr: string,
     price: number,
@@ -24,6 +31,7 @@ export default class ProductPage extends BaseComponent {
       tag: 'section',
       classes: ['product-page', 'container'],
     });
+    this.id = id;
     this.name = name;
     this.descr = descr;
     this.price = price;
@@ -97,12 +105,26 @@ export default class ProductPage extends BaseComponent {
     productContainer.append(productDescription);
     productContainer.append(priceContainer);
 
-    const addToCartButton = new Button({
+    this.addToCartButton = new Button({
       text: 'add to cart',
       classes: ['add-to-cart'],
     });
+    this.addToCartButton.addListener('click', () => {
+      this.dispatchAddToCartEvent(this.id);
+      this.showRemoveBtn();
+    });
 
-    productContainer.append(addToCartButton);
+    this.removeFromCartBtn = new Button({
+      text: 'remove from cart',
+      classes: ['remove-from-cart', 'hide'],
+    });
+    this.removeFromCartBtn.addListener('click', () => {
+      this.dispatchRemoveFromCartEvent(this.id);
+      this.showAddBtn();
+    });
+
+    productContainer.append(this.addToCartButton);
+    productContainer.append(this.removeFromCartBtn);
 
     this.append(productContainer);
 
@@ -205,5 +227,31 @@ export default class ProductPage extends BaseComponent {
   openModal(): void {
     const modal = new ImgModal(this.imgs as string[]);
     document.body.append(modal.getNode());
+  }
+
+  dispatchAddToCartEvent(id: string): void {
+    const event = new CustomEvent('add-to-cart', {
+      bubbles: true,
+      detail: id,
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  dispatchRemoveFromCartEvent(id: string): void {
+    const event = new CustomEvent('update-cart', {
+      bubbles: true,
+      detail: { delProductId: id },
+    });
+    this.getNode().dispatchEvent(event);
+  }
+
+  showRemoveBtn(): void {
+    this.removeFromCartBtn.removeClass('hide');
+    this.addToCartButton.addClass('hide');
+  }
+
+  showAddBtn(): void {
+    this.addToCartButton.removeClass('hide');
+    this.removeFromCartBtn.addClass('hide');
   }
 }
