@@ -22,7 +22,7 @@ export default class CartProductBlock extends BaseComponent {
     imgItem.setAttribute('src', `${item.variant.images[0].url}`);
 
     const nameItem = new BaseComponent({
-      classes: ['cart_item-h2'],
+      classes: ['cart_item-h3'],
       tag: 'h3',
       text: item.name['en-US'],
     });
