@@ -244,6 +244,14 @@ export interface Cart {
     centAmount: number;
     fractionDigits: number;
   };
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      type: 'centPrecision';
+      currencyCode: 'USD';
+      centAmount: number;
+      fractionDigits: number;
+    };
+  };
   totalLineItemQuantity?: number;
 }
 
