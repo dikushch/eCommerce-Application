@@ -2,7 +2,7 @@ import { LineItem } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 
-export default class CartProductBlock extends BaseComponent {
+export default class ProfileAddressBlock extends BaseComponent {
   minusOneBtn: Button;
 
   plusOneBtn: Button;
@@ -22,7 +22,7 @@ export default class CartProductBlock extends BaseComponent {
     imgItem.setAttribute('src', `${item.variant.images[0].url}`);
 
     const nameItem = new BaseComponent({
-      classes: ['cart_item-h3'],
+      classes: ['cart_item-h2'],
       tag: 'h3',
       text: item.name['en-US'],
     });
