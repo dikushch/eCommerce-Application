@@ -127,9 +127,9 @@
       }
 
       &.green {
-        background-color: rgba($color: $c-ok, $alpha: 0.7);
+        background-color: rgba($color: $c-ok, $alpha: 0.3);
         &:enabled:hover {
-          background-color: rgba($color: $c-ok, $alpha: 0.9);
+          background-color: rgba($color: $c-ok, $alpha: 0.6);
         }
       }
     }
