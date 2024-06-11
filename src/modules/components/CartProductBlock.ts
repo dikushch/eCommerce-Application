@@ -2,7 +2,7 @@ import { LineItem } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 
-export default class ProfileAddressBlock extends BaseComponent {
+export default class CartProductBlock extends BaseComponent {
   minusOneBtn: Button;
 
   plusOneBtn: Button;
