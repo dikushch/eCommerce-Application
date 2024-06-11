@@ -1,5 +1,7 @@
 import BaseComponent from '../components/BaseComponent';
+import CartPricesAndClearBtnBlock from '../components/CartPricesAndClearBtnBlock';
 import CartProductBlock from '../components/CartProductBlock';
+import CartPromocodeBlock from '../components/CartPromocodeBlock';
 import { Cart } from '../types/Types';
 
 export default class CartPage extends BaseComponent {
@@ -22,6 +24,8 @@ export default class CartPage extends BaseComponent {
 
       // add on page
       this.append(cartItemsDiv);
+      this.append(new CartPromocodeBlock());
+      this.append(new CartPricesAndClearBtnBlock(cartData));
     }
   }
 }
