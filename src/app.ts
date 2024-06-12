@@ -544,7 +544,11 @@ class App {
         }
         this.header.userMenu.cart.setTextContent(cartTextHeader);
         this.catalog.catalogList?.checkIfProductInCart(res.lineItems);
-        this.cart = new CartPage(res);
+        if (res.totalLineItemQuantity) {
+          this.cart = new CartPage(res);
+        } else {
+          this.cart = new CartPage();
+        }
         this.checkRoute('/cart', this.cart.getNode());
         if (window.location.pathname === '/cart') {
           this.router.changeRoute('/cart');
