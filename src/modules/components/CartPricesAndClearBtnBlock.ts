@@ -32,16 +32,21 @@ export default class CartPromocodeBlock extends BaseComponent {
     pricesDiv.appendChildren([totalPriceDiv]);
 
     if (cartData.discountOnTotalPrice) {
-      const dicountPrice = (
-        +(cartData.totalPrice.centAmount / 100) -
-        +(cartData.discountOnTotalPrice.discountedAmount.centAmount / 100)
-      ).toFixed(2);
+      const dicountPrice = (cartData.totalPrice.centAmount / 100).toFixed(2);
 
       const withPromocodePrice = new BaseComponent({
         classes: ['cart_price-h3', 'promocode'],
         tag: 'h3',
         text: `with promocode: ${dicountPrice} $`,
       });
+
+      totalPriceNumber.setTextContent(
+        (
+          (+cartData.totalPrice.centAmount +
+            +cartData.discountOnTotalPrice.discountedAmount.centAmount) /
+          100
+        ).toFixed(2),
+      );
 
       totalPriceNumber.addClass('line-through');
 
