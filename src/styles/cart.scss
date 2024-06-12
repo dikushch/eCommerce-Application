@@ -63,13 +63,8 @@
       background-color: $c-bg;
       border: 1px solid $c-accent;
       cursor: pointer;
-      
-      &:disabled {
-        background-color: rgba($color: $c-err, $alpha: 0.7);
-        cursor: default;
-      }
 
-      &:enabled:hover {
+      &:hover {
         background-color: $c-accent;
       }
 

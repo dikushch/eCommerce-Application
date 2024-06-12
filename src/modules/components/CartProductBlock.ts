@@ -90,14 +90,9 @@ export default class CartProductBlock extends BaseComponent {
       })),
     );
 
-    // disable minus for quentity == 1
-    if (item.quantity === 1) {
-      this.minusOneBtn.disable();
-    }
-
     // add listeners
     this.minusOneBtn.addListener('click', () => {
-      console.log('click minus');
+      this.minusOneBtn.disable();
 
       const cartMinusQuantData: ChangeQuantity = {
         action: 'changeLineItemQuantity',
@@ -108,7 +103,7 @@ export default class CartProductBlock extends BaseComponent {
       this.dispathUpdateEvent([cartMinusQuantData]);
     });
     this.plusOneBtn.addListener('click', () => {
-      console.log('click plus');
+      this.plusOneBtn.disable();
 
       const cartPlusQuantData: ChangeQuantity = {
         action: 'changeLineItemQuantity',
@@ -119,7 +114,7 @@ export default class CartProductBlock extends BaseComponent {
       this.dispathUpdateEvent([cartPlusQuantData]);
     });
     this.removeBtn.addListener('click', () => {
-      console.log('click remove');
+      this.removeBtn.disable();
 
       const cartRemoveItemData: RemoveLineItem = {
         action: 'removeLineItem',
