@@ -1,4 +1,4 @@
-import { Cart } from '../types/Types';
+import { Cart, CartActions, RemoveLineItem } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 
@@ -61,11 +61,29 @@ export default class CartPromocodeBlock extends BaseComponent {
 
     // add listeners
     this.clearCartBtn.addListener('click', () => {
-      console.log('clear cart btn click');
+      this.clearCartBtn.disable();
+
+      const clearCartData: RemoveLineItem[] = [];
+      cartData.lineItems.forEach((element) => {
+        clearCartData.push({
+          action: 'removeLineItem',
+          lineItemId: element.id,
+        });
+      });
+
+      this.dispatchUpdateEvent(clearCartData);
     });
 
     // add on page
     this.append(pricesDiv);
     this.append(this.clearCartBtn);
+  }
+
+  dispatchUpdateEvent(data: CartActions[]): void {
+    const event = new CustomEvent('update-cart', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
