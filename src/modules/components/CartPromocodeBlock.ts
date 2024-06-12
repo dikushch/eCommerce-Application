@@ -1,3 +1,4 @@
+import { CartActions, SetDiscount } from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 import Input from './Input';
@@ -49,8 +50,22 @@ export default class CartPromocodeBlock extends BaseComponent {
       }
       this.sendPromocodeBtn.disable();
     });
+
     this.sendPromocodeBtn.addListener('click', () => {
-      console.log('send promocode !!');
+      this.sendPromocodeBtn.disable();
+      const CartActionsData: SetDiscount = {
+        action: 'addDiscountCode',
+        code: this.promocodeInput.getValue(),
+      };
+      this.dispathUpdateEvent([CartActionsData]);
     });
+  }
+
+  dispathUpdateEvent(data: CartActions[]): void {
+    const event = new CustomEvent('update-cart', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
