@@ -1,4 +1,5 @@
 import BaseComponent from '../components/BaseComponent';
+import CartEmptyBlock from '../components/CartEmptyBlock';
 import CartPricesAndClearBtnBlock from '../components/CartPricesAndClearBtnBlock';
 import CartProductBlock from '../components/CartProductBlock';
 import CartPromocodeBlock from '../components/CartPromocodeBlock';
@@ -26,6 +27,14 @@ export default class CartPage extends BaseComponent {
       this.append(cartItemsDiv);
       this.append(new CartPromocodeBlock());
       this.append(new CartPricesAndClearBtnBlock(cartData));
+    } else {
+      const CartEmptyContainer = new BaseComponent(
+        {
+          classes: ['cart_empty-container'],
+        },
+        new CartEmptyBlock(),
+      );
+      this.append(CartEmptyContainer);
     }
   }
 }
