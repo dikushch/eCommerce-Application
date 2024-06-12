@@ -33,6 +33,15 @@ export default class CartPromocodeBlock extends BaseComponent {
     );
     this.sendPromocodeBtn.disable();
 
+    // add hint
+    this.append(
+      new BaseComponent({
+        tag: 'p',
+        text: 'Hint: input "summer"',
+        classes: ['cart_promocode-p'],
+      }),
+    );
+
     // add listeners
     this.promocodeInput.addListener('input', () => {
       if (this.promocodeInput.getValue().trim().length !== 0) {
