@@ -1,4 +1,9 @@
-import { LineItem } from '../types/Types';
+import {
+  CartActions,
+  ChangeQuantity,
+  LineItem,
+  RemoveLineItem,
+} from '../types/Types';
 import BaseComponent from './BaseComponent';
 import Button from './Button';
 
@@ -85,18 +90,54 @@ export default class CartProductBlock extends BaseComponent {
       })),
     );
 
+    // disable minus for quentity == 1
+    if (item.quantity === 1) {
+      this.minusOneBtn.disable();
+    }
+
     // add listeners
     this.minusOneBtn.addListener('click', () => {
       console.log('click minus');
+
+      const cartMinusQuantData: ChangeQuantity = {
+        action: 'changeLineItemQuantity',
+        lineItemId: item.id,
+        quantity: item.quantity - 1,
+      };
+
+      this.dispathUpdateEvent([cartMinusQuantData]);
     });
     this.plusOneBtn.addListener('click', () => {
       console.log('click plus');
+
+      const cartPlusQuantData: ChangeQuantity = {
+        action: 'changeLineItemQuantity',
+        lineItemId: item.id,
+        quantity: item.quantity + 1,
+      };
+
+      this.dispathUpdateEvent([cartPlusQuantData]);
     });
     this.removeBtn.addListener('click', () => {
       console.log('click remove');
+
+      const cartRemoveItemData: RemoveLineItem = {
+        action: 'removeLineItem',
+        lineItemId: item.id,
+      };
+
+      this.dispathUpdateEvent([cartRemoveItemData]);
     });
 
     this.append(cartImgNameDiv);
     this.append(cartPriceControlDiv);
+  }
+
+  dispathUpdateEvent(data: CartActions[]): void {
+    const event = new CustomEvent('update-cart', {
+      bubbles: true,
+      detail: data,
+    });
+    this.getNode().dispatchEvent(event);
   }
 }
