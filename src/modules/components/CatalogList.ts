@@ -29,6 +29,10 @@ export default class CatalogList extends BaseComponent {
           p.resetAddBtn();
         }
       });
+    } else if (this.products.length !== 0) {
+      this.products.forEach((p) => {
+        p.resetAddBtn();
+      });
     }
   }
 }
