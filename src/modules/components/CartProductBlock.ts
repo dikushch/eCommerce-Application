@@ -92,8 +92,6 @@ export default class CartProductBlock extends BaseComponent {
 
     // add listeners
     this.minusOneBtn.addListener('click', () => {
-      this.minusOneBtn.disable();
-
       const cartMinusQuantData: ChangeQuantity = {
         action: 'changeLineItemQuantity',
         lineItemId: item.id,
@@ -103,8 +101,6 @@ export default class CartProductBlock extends BaseComponent {
       this.dispathUpdateEvent([cartMinusQuantData]);
     });
     this.plusOneBtn.addListener('click', () => {
-      this.plusOneBtn.disable();
-
       const cartPlusQuantData: ChangeQuantity = {
         action: 'changeLineItemQuantity',
         lineItemId: item.id,
@@ -114,8 +110,6 @@ export default class CartProductBlock extends BaseComponent {
       this.dispathUpdateEvent([cartPlusQuantData]);
     });
     this.removeBtn.addListener('click', () => {
-      this.removeBtn.disable();
-
       const cartRemoveItemData: RemoveLineItem = {
         action: 'removeLineItem',
         lineItemId: item.id,

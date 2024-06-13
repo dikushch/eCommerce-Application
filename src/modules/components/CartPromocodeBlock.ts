@@ -52,7 +52,6 @@ export default class CartPromocodeBlock extends BaseComponent {
     });
 
     this.sendPromocodeBtn.addListener('click', () => {
-      this.sendPromocodeBtn.disable();
       const CartActionsData: SetDiscount = {
         action: 'addDiscountCode',
         code: this.promocodeInput.getValue(),
