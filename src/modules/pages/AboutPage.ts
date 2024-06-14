@@ -57,6 +57,7 @@ export default class AboutPage extends BaseComponent {
       role: 'developer',
       school: 'Student of the RSSchool',
       works: ['login page', 'catalog page', 'work with Api'],
+      avatarClass: 'avatar-dmitrii',
     });
 
     const aboutCard2 = new AboutCard({
@@ -65,6 +66,7 @@ export default class AboutPage extends BaseComponent {
       role: 'developer',
       school: 'Student of the RSSchool',
       works: ['register page', 'profile page', 'cart page'],
+      avatarClass: 'avatar-dzmitry',
     });
 
     const aboutCard3 = new AboutCard({
@@ -73,6 +75,7 @@ export default class AboutPage extends BaseComponent {
       role: 'developer',
       school: 'Student of the RSSchool',
       works: ['main page', 'product page', 'about page'],
+      avatarClass: 'avatar-jamol',
     });
 
     cardsContainer.append(aboutCard);
@@ -80,7 +83,6 @@ export default class AboutPage extends BaseComponent {
     cardsContainer.append(aboutCard3);
 
     this.append(textLogoContainer);
-    // this.append(textContainer);
     this.append(cardsContainer);
   }
 }

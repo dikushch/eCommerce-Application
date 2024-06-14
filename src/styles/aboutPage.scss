@@ -40,14 +40,30 @@
 .avatar {
   width: 150px;
   height: 150px;
-  background-color: #ccc;
   border-radius: 50%;
   margin: 10px auto;
 }
 
+.avatar-dmitrii {
+  background-image: url(/src/assets/dmitrii.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.avatar-dzmitry {
+  background-image: url(/src/assets/dzmitry.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.avatar-jamol {
+  background-image: url(/src/assets/jamol.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
 .work-list {
   list-style-type: disc;
-  // padding-left: 20px;
   align-self: center;
 }
 
@@ -60,10 +76,36 @@
   text-decoration: underline;
 }
 
+.card-github:hover {
+  color: $c-accent;
+}
+
 .rs-logo {
   width: 200px;
   height: 72px;
   background-image: url(/src/assets/rs-logo.png);
   background-size: cover;
   background-position: center;
+  transition: background-color 0.4s ease;
+}
+
+.rs-logo:hover {
+  background-color: $c-accent;
+  color: $c-white;
+}
+
+@media (max-width: 768px) {
+  .text-logo-container {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .text-container {
+    align-items: center;
+  }
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
