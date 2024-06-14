@@ -1,0 +1,69 @@
+.about {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-logo-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  border: 1px solid $c-accent;
+  padding: 5px;
+  gap: 5px;
+  text-align: center;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin: 10px auto;
+}
+
+.work-list {
+  list-style-type: disc;
+  // padding-left: 20px;
+  align-self: center;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.card-github {
+  text-decoration: underline;
+}
+
+.rs-logo {
+  width: 200px;
+  height: 72px;
+  background-image: url(/src/assets/rs-logo.png);
+  background-size: cover;
+  background-position: center;
+}
