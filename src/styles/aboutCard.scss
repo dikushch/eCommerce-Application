@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  border: 2px solid #f7a977;
+  padding: 5px;
+  gap: 5px;
+  text-align: center;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin: 10px auto;
+}
+
+.work-list {
+  list-style-type: disc;
+  // padding-left: 20px;
+  align-self: center;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.card-github {
+  text-decoration: underline;
+}
