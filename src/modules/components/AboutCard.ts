@@ -29,11 +29,13 @@ export default class AboutCard extends BaseComponent {
     const nameElement = new BaseComponent({
       tag: 'h2',
       text: this.name,
+      classes: ['card-name'],
     });
 
     const githubElement = new BaseComponent({
       tag: 'a',
       text: 'github',
+      classes: ['card-github'],
     });
     githubElement.setAttribute('href', this.githubUrl);
     githubElement.setAttribute('target', '_blank');

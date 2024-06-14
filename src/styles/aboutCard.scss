@@ -1,7 +1,10 @@
 .card {
+  display: flex;
+  flex-direction: column;
   width: 250px;
   border: 2px solid #f7a977;
-  padding: 10px;
+  padding: 5px;
+  gap: 5px;
   text-align: center;
 }
 
@@ -15,5 +18,15 @@
 
 .work-list {
   list-style-type: disc;
-  padding-left: 20px;
+  // padding-left: 20px;
+  align-self: center;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.card-github {
+  text-decoration: underline;
 }
