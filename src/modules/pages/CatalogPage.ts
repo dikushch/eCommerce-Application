@@ -1,6 +1,7 @@
 import BaseComponent from '../components/BaseComponent';
 import CatalogFiltersSorts from '../components/CatalogFiltersSorts';
 import CatalogList from '../components/CatalogList';
+import CatalogPagination from '../components/CatalogPagination';
 import CatalogProductTypes from '../components/CatalogProductsTypes';
 import {
   ProductsResponse,
@@ -10,6 +11,8 @@ import {
 
 export default class CatalogPage extends BaseComponent {
   catalogList: CatalogList | null = null;
+
+  catalogPagination: CatalogPagination | null = null;
 
   types: CatalogProductTypes;
 
@@ -102,8 +105,32 @@ export default class CatalogPage extends BaseComponent {
     if (this.catalogList) {
       this.catalogList.destroy();
     }
+    if (this.catalogPagination) {
+      this.catalogPagination.destroy();
+    }
     this.catalogList = new CatalogList(data);
     this.append(this.catalogList);
+  }
+
+  createPagination(pages: number, activeBtn: number): void {
+    this.catalogPagination = new CatalogPagination(pages, activeBtn);
+    this.catalogPagination.addListener('click', (e) => {
+      this.paginationHandler(e);
+    });
+    this.append(this.catalogPagination);
+  }
+
+  paginationHandler(e: Event): void {
+    if (e.target instanceof HTMLElement) {
+      const btn = e.target.closest('.c-pagination__btn');
+      if (btn) {
+        console.log('btn');
+        this.dispatchUpdateCatalogEvent(
+          this.queryData,
+          Number(btn.textContent) - 1,
+        );
+      }
+    }
   }
 
   typesHandler(e: Event): void {
@@ -132,10 +159,13 @@ export default class CatalogPage extends BaseComponent {
     this.query.resetState();
   }
 
-  dispatchUpdateCatalogEvent(searchParams: SearchProductsData): void {
+  dispatchUpdateCatalogEvent(
+    searchParams: SearchProductsData,
+    page: number = 0,
+  ): void {
     const event = new CustomEvent('update-catalog', {
       bubbles: true,
-      detail: searchParams,
+      detail: { searchParams, page },
     });
     this.getNode().dispatchEvent(event);
   }
