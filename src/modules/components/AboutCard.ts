@@ -17,6 +17,7 @@ export default class AboutCard extends BaseComponent {
     role: string;
     school: string;
     works: string[];
+    avatarClass: string;
   }) {
     super({ tag: 'div', classes: ['card'] });
 
@@ -43,7 +44,7 @@ export default class AboutCard extends BaseComponent {
 
     const avatarElement = new BaseComponent({
       tag: 'div',
-      classes: ['avatar'],
+      classes: ['avatar', data.avatarClass],
     });
 
     const roleElement = new BaseComponent({
