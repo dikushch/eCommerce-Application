@@ -10,6 +10,8 @@ import {
   ProductsResponse,
   OneProduct,
   SearchProductsData,
+  Cart,
+  CartActions,
 } from '../types/Types';
 
 const authUrl = 'https://auth.australia-southeast1.gcp.commercetools.com';
@@ -228,6 +230,7 @@ export async function getProductById(
 export async function searchProducts(
   token: TokenResponse,
   searchData: SearchProductsData,
+  offset = 0,
 ): Promise<ProductsResponse | ErrResponse> {
   const filters = [];
   if (searchData.color !== null) {
@@ -252,7 +255,7 @@ export async function searchProducts(
   }
   try {
     const response = await fetch(
-      `${host}/${projectKey}/product-projections/search?${filters.join('&')}`,
+      `${host}/${projectKey}/product-projections/search?limit=5&offset=${5 * offset}&${filters.join('&')}`,
       {
         method: 'GET',
         headers: {
@@ -287,6 +290,160 @@ export async function getProductByKey(
         },
       },
     );
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function createCart(
+  token: TokenResponse,
+  customerId?: string,
+): Promise<Cart | ErrResponse> {
+  const data: { [k: string]: string } = {
+    currency: 'USD',
+  };
+  if (customerId) {
+    data.customerId = customerId;
+  }
+  try {
+    const response = await fetch(`${host}/${projectKey}/carts`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function getCartById(
+  token: TokenResponse,
+  id: string,
+): Promise<Cart | ErrResponse> {
+  try {
+    const response = await fetch(`${host}/${projectKey}/carts/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function getCartByCustomerId(
+  token: TokenResponse,
+  id: string,
+): Promise<Cart | ErrResponse> {
+  try {
+    const response = await fetch(
+      `${host}/${projectKey}/carts/customer-id=${id}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function addToCart(
+  token: TokenResponse,
+  cartId: string,
+  cartVersion: number,
+  productId: string,
+): Promise<Cart | ErrResponse> {
+  const data = {
+    version: cartVersion,
+    actions: [
+      {
+        action: 'addLineItem',
+        productId,
+        variantId: 1,
+        quantity: 1,
+      },
+    ],
+  };
+  try {
+    const response = await fetch(`${host}/${projectKey}/carts/${cartId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const res = await response.json();
+      throw new Error(res.message, { cause: res });
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    return (e as Error).cause as ErrResponse;
+  }
+}
+
+export async function updateCart(
+  token: TokenResponse,
+  cartId: string,
+  cartVersion: number,
+  actions: CartActions[],
+): Promise<Cart | ErrResponse> {
+  const data = {
+    version: cartVersion,
+    actions,
+  };
+  try {
+    const response = await fetch(`${host}/${projectKey}/carts/${cartId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.token_type} ${token.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       const res = await response.json();

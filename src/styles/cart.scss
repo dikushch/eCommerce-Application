@@ -1,0 +1,210 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &_item {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    padding: 5px;
+    border: 1px solid $c-accent;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &-info_container {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    &-img_wrapper {
+      width: 100px;
+      height: 100px;
+    }
+
+    &-price {
+      white-space: nowrap;
+    }
+
+    &-btns_container {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    &-btn {
+      padding: 8px 10px 8px 10px;
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+
+      height: 40px;
+
+      color: black;
+      background-color: $c-bg;
+      border: 1px solid $c-accent;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $c-accent;
+      }
+
+      &.red {
+        background-color: rgba($color: $c-err, $alpha: 0.3);
+        &:hover {
+          background-color: rgba($color: $c-err, $alpha: 0.6);
+        }
+      }
+    }
+  }
+
+  &_promocode {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    padding: 5px;
+    border: 1px solid $c-accent;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &-input {
+      padding: 0px 5px;
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      height: 28px;
+
+      color: black;
+      border: 1px solid $c-accent;
+    }
+
+    &-btn {
+      padding: 8px 10px 8px 10px;
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+
+      height: 40px;
+
+      color: black;
+      background-color: $c-bg;
+      border: 1px solid $c-accent;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: default;
+      }
+
+      &:enabled:hover {
+        background-color: $c-accent;
+      }
+
+      &.green {
+        background-color: rgba($color: $c-ok, $alpha: 0.3);
+        &:enabled:hover {
+          background-color: rgba($color: $c-ok, $alpha: 0.6);
+        }
+      }
+    }
+  }
+
+  &_price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    padding: 5px;
+    border: 1px solid $c-accent;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &-h3.line-through{
+      text-decoration: line-through;
+    }
+    &-h3.promocode{
+      padding: 5px;
+      background-color: $c-accent;
+    }
+
+    &-container{
+      display: flex;
+      gap: 10px;
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      &_total_price{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        
+      }
+
+    }
+  }
+
+  &_empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    &-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+
+    &-btn{
+      padding: 8px 10px 8px 10px;
+
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+
+      height: 40px;
+
+      color: black;
+      background-color: $c-bg;
+      border: 1px solid $c-accent;
+      cursor: pointer;
+    
+      &:hover {
+        background-color: $c-accent;
+      }
+    }
+  }
+}
